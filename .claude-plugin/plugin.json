@@ -1,7 +1,7 @@
 {
   "name": "jpipe-skills",
   "version": "0.1.0",
-  "description": "EXPERIMENTAL research prototype, not a supported part of the jPipe toolchain. Skills for reviewing and operating jPipe justification models (.jd). Ships jpipe-review, which audits a model's argument for abstraction, atomicity, grounding, reuse, and convention. These skills review an argument a human wrote; they do not write assurance cases.",
+  "description": "EXPERIMENTAL research prototype, not a supported part of the jPipe toolchain. Skills for reviewing and operating jPipe justification models (.jd). Ships jpipe-review, which audits one model's argument for abstraction, atomicity, grounding, and convention. These skills review an argument a human wrote; they do not write assurance cases.",
   "author": {
     "name": "McSCert, McMaster University",
     "url": "https://github.com/jpipe-mcscert"

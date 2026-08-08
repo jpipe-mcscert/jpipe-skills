@@ -28,7 +28,7 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 
 | Skill | What it does | Needs |
 |---|---|---|
-| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model: whether its elements sit at the right level, rest on artifacts that exist, and fit the surrounding corpus. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
+| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model, one model at a time: whether its elements sit at the right level, rest on artifacts that exist, and follow the house style. Reads only the model you give it. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
 
 Each skill's directory has its own README.
 

@@ -11,13 +11,9 @@ diagnostic.
 |---|---|---|
 | `good/` | Models already at the right abstraction | **No findings.** These guard against false positives, which is the failure mode that makes a reviewer useless |
 | `bad/` | One smell per file, named in the header as `expect: JD-XNN` | Exactly that rule id, at that element |
-| `shared/` | A three-model corpus for the reuse pass | Exactly one `JD-S01` (s1 ⇄ s2) and **nothing** on the decoy (s3) |
 
-`shared/` is the sharper of the two guards. `s3_decoy.jd` shares most of its wording with
-`s1_fairness.jd` while denoting a different artifact, `config/train.yaml` rather than
-`data/train.csv`. A reviewer that clusters labels by string similarity will propose merging them and
-be wrong. Clustering by the artifact named is what `references/sharing.md` requires, and this fixture
-is how you find out whether it happened.
+Each fixture is reviewed **on its own**, which is the only way `jpipe-review` reviews anything. A
+finding stated in terms of a second fixture is a bug in the skill, not a finding.
 
 The `good/` and `bad/` fixtures are deliberately generic (a release, a build, a coverage report)
 rather than drawn from any one project, so they read the same to someone who has never seen the

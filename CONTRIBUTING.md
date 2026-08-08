@@ -64,7 +64,8 @@ the assertion, never the phrasing:
 4. A model with a broken `load` → caught, even though the fatal appears **only on stderr** and stdout
    is completely empty. *The bug most likely to ship.*
 5. A leaf naming a nonexistent file → one `JD-G01`, citing the searches it ran.
-6. `tests/corpus/shared/` → exactly one `JD-S01`, and **nothing** on the decoy.
+6. A directory of several models → N independent reviews, and **no finding stated in terms of a
+   second file**. *The scope boundary: the skill reads one model at a time.*
 7. `--apply`, answering *"1 and 3 only"* → exactly two edits, re-verified, nothing written to git.
 
 Record the outcome in `CHANGELOG.md` for the release.

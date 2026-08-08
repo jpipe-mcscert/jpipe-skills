@@ -1,7 +1,7 @@
 ---
 name: jpipe-review
-description: "Reviews the argument in an existing jPipe justification model (.jd). Checks abstraction (evidence supplies a datum, strategy licenses the inference, conclusion asserts the claim, i.e. Toulmin's grounds/warrant/claim), atomicity (one leaf, one fact), grounding (the artifacts the evidence names actually exist in the repository), reuse (facts argued twice across models that should share one unified node), and the corpus conventions. Emits a findings report with file:line and rule ids; edits are applied only after you approve them. Syntax and unresolved-symbol errors are left to `jpipe diagnostic` and the VS Code extension. Use when asked to review, audit, critique, sanity-check, or improve a .jd file, a justifications/ directory, or an assurance case. NOT for writing a new model from scratch, NOT for reviewing the jpipe-runner step library that implements the checks, NOT for reviewing the jPipe compiler's own source."
-argument-hint: "[path/to/model.jd | justifications/ | glob] [--corpus <dir>] [--no-grounding] [--apply]"
+description: "Reviews the argument in an existing jPipe justification model (.jd), one model at a time. Checks abstraction (evidence supplies a datum, strategy licenses the inference, conclusion asserts the claim, i.e. Toulmin's grounds/warrant/claim), atomicity (one leaf, one fact), grounding (the artifacts the evidence names actually exist in the repository), and the house style. Reads only the model it was given and the files it loads; never surveys other models. Emits a findings report with file:line and rule ids; edits are applied only after you approve them. Syntax and unresolved-symbol errors are left to `jpipe diagnostic` and the VS Code extension. Use when asked to review, audit, critique, sanity-check, or improve a .jd file, a justifications/ directory, or an assurance case. NOT for writing a new model from scratch, NOT for cross-model reuse or corpus-wide analysis, NOT for reviewing the jpipe-runner step library that implements the checks, NOT for reviewing the jPipe compiler's own source."
+argument-hint: "[path/to/model.jd | justifications/ | glob] [--no-grounding] [--apply]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
@@ -12,25 +12,24 @@ Syntax is the compiler's job. This reviews whether the argument *means* anything
 ## Usage
 
 ```
-jpipe-review <target> [--corpus <dir>] [--no-grounding] [--apply]
+jpipe-review <target> [--no-grounding] [--apply]
 ```
 
 **Target**: a `.jd` file, a directory (recurse `*.jd`), a glob, or nothing (the changed `.jd` files).
+A directory target is **N independent reviews**, not one review of a corpus.
 
-**Flags**: `--corpus <dir>` widens the reuse pass when the target is a single file.
-`--no-grounding` skips the repository-artifact pass. `--apply` continues into the fix loop.
+**Flags**: `--no-grounding` skips the repository-artifact pass. `--apply` continues into the fix loop.
 
 **References**: read on demand, not up front:
 
 | Read | When |
 |---|---|
-| `references/rules.md` | any time you cite a rule id (Steps 3–7) |
-| `references/abstraction.md` | Step 3, and Step 8 when writing a replacement label |
+| `references/rules.md` | any time you cite a rule id (Steps 3–6) |
+| `references/abstraction.md` | Step 3, and Step 7 when writing a replacement label |
 | `references/grounding.md` | Step 4 |
 | `references/conventions.md` | Step 5 |
-| `references/sharing.md` | Step 6 |
 | `references/language.md` | whenever a fix adds, moves, or re-ids an element, or touches a label that may unify |
-| `references/report-format.md` | Step 7 |
+| `references/report-format.md` | Step 6 |
 
 ## When to invoke
 
@@ -40,13 +39,20 @@ pre-merge check over a `justifications/` directory.
 ### Do NOT invoke for
 
 - Writing a new model from scratch.
+- **Cross-model questions**: is this fact argued twice elsewhere, will these two labels unify, does
+  anything load this model. All of them need a corpus, and this skill does not have one.
 - Reviewing the **step library** that implements the checks (`steps/`, `@jpipe_link` modules).
 - Reviewing the jPipe compiler's own source.
 - Rendering a diagram. That is one command: `jpipe process -m <model> -i <f> -f SVG -o <out>.svg`.
 
 ## Guardrails
 
-- **Read-only through Step 7.** Nothing is modified before the author approves a numbered fix list.
+- **One model at a time.** The world is the file under review plus the files it `load`s, and nothing
+  else. Never read, `grep`, harvest labels from, quote, or propose an edit to a `.jd` outside it, and
+  never widen the target set on your own. A finding that needs a second model to state is not a
+  finding this skill can make; say what is missing and stop. Given a directory, review each file on
+  its own terms and aggregate the reports. Do not correlate across them.
+- **Read-only through Step 6.** Nothing is modified before the author approves a numbered fix list.
 - **No version-control actions, ever.** Do not stage, commit, push, branch, merge, tag, or open a
   pull request. Report; the author integrates.
 - **Never re-report what the compiler already said.** Diagnostics are a gate, not findings.
@@ -62,12 +68,13 @@ pre-merge check over a `justifications/` directory.
 
 ### Step 1. Scope
 
-Resolve the target list. Run `jpipe --version` and record it for the report header; if `jpipe` is not
-on PATH, say so and stop, because the compile gate is not optional. Identify the entry-point
-model(s) and the `load` graph. Note the repository root (Step 4 needs it) and the corpus root
-(Step 6 needs it).
+Resolve the target list, and then treat it as closed: it is the complete set of files this review may
+read. Run `jpipe --version` and record it for the report header; if `jpipe` is not on PATH, say so and
+stop, because the compile gate is not optional. Per target, note the files it `load`s, which are in
+scope for compiling it and for nothing else. Note the repository root (Step 4 needs it).
 
-For more than 8 files, plan to batch Steps 3–6 and emit **one** consolidated report.
+For more than 8 files, plan to batch Steps 3–5 and emit **one** consolidated report, still one
+verdict per model.
 
 ### Step 2. Compile gate
 
@@ -79,7 +86,7 @@ reports **entirely on stderr, leaving stdout completely empty**, not even a Diag
 gate that reads stdout alone will call a broken file clean.
 
 On failure: record *that* the file does not build, keep the compiler's raw output verbatim for the
-report's **Not reviewed** section, and skip Steps 3–6 for that file. Do not explain, rank, or
+report's **Not reviewed** section, and skip Steps 3–5 for that file. Do not explain, rank, or
 catalogue the diagnostics.
 
 On success: keep the `=== Symbol Table ===` block. It maps every element id to `line:col`, and it is
@@ -91,8 +98,8 @@ Assign every element its Toulmin role and check it against its jPipe kind. Class
 leaf as a datum, a claim in a grounds slot, or two facts fused; check each `strategy` licenses an
 inference; check each `sub-conclusion` states what its leg establishes.
 
-Resolve fused leaves **first**: atomicity is a precondition for Step 6, and a leaf flagged `A05`
-blocks any reuse finding on it.
+Resolve fused leaves **first**: a fused leaf has no single artifact, so it also has nothing for Step 4
+to search for.
 
 Classify each file 🟢/🟡/🟠/⚪. → `references/abstraction.md`
 
@@ -105,55 +112,48 @@ grounding finding must state what was looked for and where, or it is an open que
 Skipped under `--no-grounding`, and when the models are not inside a project tree.
 → `references/grounding.md`
 
-### Step 5. Conventions *(across the corpus)*
+### Step 5. House style *(within this file)*
 
 First check whether the project states its own conventions (`CLAUDE.md`, `justifications/README.md`,
 a contributing guide). If it does, that document wins and this pass defers to it.
 
-Otherwise: leaves that restate another model's conclusion, refine placement, one entry point,
-conclusions at goal level, orphan models, provenance headers.
+Otherwise: refine placement, conclusions at goal level, provenance headers, and leaves carrying a
+requirement tag that suggests a refine. Every check here is decided from this file alone. If a
+convention would need a second model to check, it is not in this pass.
 → `references/conventions.md`
 
-### Step 6. Reuse *(across the corpus)*
-
-Survey before reading. One `grep` harvests every `<kind> <id> is "<label>"` in the corpus with its
-file and line; cluster on **the artifact each label names**, never on string similarity. Open full
-files only for clusters you are about to report.
-
-Same artifact + drifted labels → they will not unify. Identical labels + different artifacts → they
-will, and that is a defect. Same leg repeated → extract it.
-
-Needs a corpus: skip for a single-file target unless `--corpus <dir>` was given.
-→ `references/sharing.md`
-
-### Step 7. Report
+### Step 6. Report
 
 Emit the report in exactly the shape of `references/report-format.md`, including the **Open
-questions** and **Not reviewed** sections, which are where the review states its own limits.
+questions** and **Not reviewed** sections, which are where the review states its own limits. Name
+single-model scope among them, so no CLEAN verdict reads as a claim about the corpus.
 
 **Stop here** unless `--apply` was given.
 
-### Step 8. Propose and get approval
+### Step 7. Propose and get approval
 
 Present a numbered fix list. Each entry: the finding id, the exact before and after text, the blast
-radius, and any fix it depends on. Order by dependency, not by severity: atomicity splits before
-reuse alignment, label rewords before structural changes.
+radius, and any fix it depends on. Order by dependency, not by severity: atomicity splits before the
+findings that depend on them, label rewords before structural changes.
 
 Ask in prose which numbers to apply. Never act on silence or an ambiguous answer, and never widen
-beyond what was approved.
+beyond what was approved. Every edit lands in the file under review; a fix that would require
+touching another model is out of scope, so report it and leave it.
 
-### Step 9. Apply and re-verify
+### Step 8. Apply and re-verify
 
 `Edit` only the approved items. Then re-run the Step 2 gate on every touched file (all must pass)
 and `jpipe process -m <model> -i <file> -f SVG -o <tmp>` to prove the model still renders.
 
-If any applied fix created or destroyed a unified group, re-render the composed model and report the
-new `unified_N` numbering, so the author knows what shifted.
+If any applied fix could create, destroy, or rename a unified group, say so and name the hazard. The
+composed model that would renumber is a file this skill does not read, so the re-render is the
+author's to run, not yours to report on.
 
 Close with the delta: findings closed, findings remaining, anything newly introduced.
 
 ## Output contract
 
 The report is the product. Every finding carries a rule id, a `file:line:col`, the label quoted, the
-proposed replacement, and a blast-radius line. Verdicts: **CLEAN** · **FINDINGS** · **BLOCKED** (one
-or more files did not compile).
+proposed replacement, and a blast-radius line. Verdicts, **per model**: **CLEAN** · **FINDINGS** ·
+**BLOCKED** (did not compile). CLEAN means this model holds on its own terms; it says nothing about
+how the model sits with any other.

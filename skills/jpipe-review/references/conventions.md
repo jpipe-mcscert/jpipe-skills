@@ -1,30 +1,41 @@
-# Corpus conventions
+# House conventions
 
-**Authority: `house`.** McSCert practice for organising a corpus of justification files. The most
-local and most declinable of the three reference tiers. A project that does things differently is
-not wrong, it is different. Say so in the report rather than asserting these as rules.
+**Authority: `house`.** McSCert practice for writing a justification file. The most local and most
+declinable of the three reference tiers. A project that does things differently is not wrong, it is
+different. Say so in the report rather than asserting these as rules.
+
+These are the conventions a **single file** can be checked against. McSCert practice also covers how
+a corpus fits together, and those parts are deliberately absent here: this skill reads one model, so
+it cannot see them.
 
 Promoted from `jpipe-tutorial-2026/CLAUDE.md` §Justifications and
 `jpipe-tutorial-2026/justifications/README.md`. Read at Step 5.
 
 **Before raising any finding here, check whether the project has its own stated conventions**: a
 `CLAUDE.md`, a `justifications/README.md`, a contributing guide. If it does, that document wins, and
-these conventions are irrelevant. Only fall back on this file when the corpus has no stated practice
+these conventions are irrelevant. Only fall back on this file when the project has no stated practice
 of its own.
 
 ---
 
-## C01 · A leaf that restates another argument's conclusion should be a refine
+## C01 · A leaf tagged with a requirement should probably be a refine
 
-The signature case. An evidence leaf says something another model in the corpus already argues for.
-Written as a bare leaf, it asserts what could be established: the corpus contains a proof and
-declines to use it.
+The signature case. An evidence leaf asserts something that a requirement argument is supposed to
+establish. Written as a bare leaf, it asserts what could be proved.
 
-The house tell is a trailing requirement tag in the label: `"… is the full 27-cell identity grid (R22)"`
-where `r22.jd` exists and concludes exactly that.
+The house tell is visible in the label alone: a trailing requirement tag, as in
+`"… is the full 27-cell identity grid (R22)"`. The author has written down that R22 is what makes
+this true. If an argument for R22 exists, this leaf is declining to use it.
 
 The fix is `refine(base, refiner) { hook: "<leaf-id>" }`, which grafts the refiner's whole argument
 where the leaf was (`language.md` §6).
+
+**Report this as a question, not as a defect.** Whether `r22.jd` exists, and whether it concludes
+what this leaf assumes, is not visible from inside this file, and this skill does not go looking.
+Say what the tag implies and let the author confirm:
+
+> The leaf cites `(R22)`. If a requirement argument for R22 exists, this is the place to `refine`
+> against it rather than assert it. Does one?
 
 ## C02 · Store the refine in the requirement file, under the reused name
 
@@ -46,27 +57,14 @@ The alternative, binding the refine at the branch under a new name like `justifi
 each consuming branch must then know to use the refined name, and one that forgets silently gets the
 unrefined argument. jPipe permits it; the house does not do it.
 
-## C03 · Conclude at goal level, never requirement level
+## C05 · Conclude at goal level, never requirement level
 
 A goal justification assembles the requirement arguments that serve it, and concludes at the goal's
 own altitude. A requirement file concludes at its requirement. A goal file that concludes at
 requirement level has collapsed a layer.
 
-## C04 · One entry point
-
-Exactly one model is the root: the one that is compiled, rendered, and (when bindings exist)
-executed. Other goal models are sub-trees, compiled for viewing but never run separately.
-
-This is not tidiness. `assemble` renames elements under the parent namespace, so binding at the root
-means each node is renamed **once**; binding per-goal duplicates every shared node and multiplies the
-work. Two roots over the same sub-trees is the tell.
-
-## C05 · Orphan models
-
-A model that nothing loads, assembles, implements, or refines is dead. Usually one of: a draft left
-behind, a model whose consumer was renamed, or a genuine entry point that should be documented as
-such. Report it as a question rather than a defect, since you cannot tell which from the corpus
-alone.
+Which kind of file this is comes from the file itself: its provenance header (`C06`) and its name.
+A file that says it serves a goal and then concludes at a requirement is the finding.
 
 ## C06 · Source every file
 
@@ -106,24 +104,25 @@ Every structural finding carries a blast-radius line, and this is when it must s
 | Element ids | `c` / `s_*` / `sc_*` / `e_*` | kind is visible at a glance in the relation block |
 
 Element id conventions are the weakest item here. Do not raise a finding for id style alone unless
-the corpus is otherwise consistent and one file departs from it.
+this file is internally inconsistent, which is the only kind of inconsistency one file can show.
 
 ---
 
 ## Report shape
 
-Conventions are 🟡 **CONVENTION**: the model is fine on its own and sits oddly in the corpus. Two
-exceptions escalate: `C01` reaches 🟠 when the leaf is also `A01` (it restates a conclusion *and*
-is a verdict in a grounds slot), and `C07` is a property of a proposed fix rather than a finding, so
-it appears as a blast-radius line, never as its own entry.
+Conventions are 🟡 **CONVENTION**: the argument holds, and the file departs from house style. Two
+exceptions escalate: `C01` reaches 🟠 when the leaf is also `A01` (it asserts a tagged requirement
+*and* is a verdict in a grounds slot), and `C07` is a property of a proposed fix rather than a
+finding, so it appears as a blast-radius line, never as its own entry.
 
 Because this whole file is house practice, phrase findings as observations with a rationale, not as
-violations:
+violations. And keep the rationale inside this file: *"every other file under `requirements/` has
+one"* is a claim about a corpus this skill did not read.
 
 ```text
 **C1 · `[JD-C06 missing-header]` · requirements/r14.jd:1**
-No `/** */` provenance header. Every other file under `requirements/` has one tracing its
-argument to REQUIREMENTS.md and the decisions behind it; this one is the exception.
+No `/** */` provenance header, so nothing traces this argument to the requirement it serves or the
+decisions behind it.
 → Worth adding, and it is where the backing for `s_thresh`'s 0.8 threshold belongs: the
   warrant cites the number but nothing says what authorizes it.
 ```

@@ -122,15 +122,18 @@ Two reasons this is a defect, and the second is the one people miss.
 with an allowlist, *and* scan imports for GPU modules. If it fails, the report cannot say which. The
 pass/fail loses its referent.
 
-**It cannot be shared.** This is the deeper reason. A fused leaf is unique by construction: no other
-model in the corpus needs *exactly that pair*. Split it, and each atom is a fact other arguments
-already depend on: the Pipfile grounds every claim about the dependency environment, the source
-grounds every claim about what the code does. **The atom is the reusable unit**, and in jPipe sharing
-is mechanical: two atoms with identical labels unify into one `unified_N` node, so the check runs
-once and supports both goals (`language.md` §7).
+**It cannot be shared.** This is the deeper reason, and it reaches past the single file. A fused leaf
+is unique by construction: no other model needs *exactly that pair*. Split it, and each atom is a
+fact other arguments already depend on: the Pipfile grounds every claim about the dependency
+environment, the source grounds every claim about what the code does. **The atom is the reusable
+unit**, and in jPipe sharing is mechanical: two atoms with identical labels unify into one
+`unified_N` node, so the check runs once and supports both goals (`language.md` §7).
 
-So atomicity findings come **before** reuse findings, always. A fused leaf has no atom to match
-against the corpus; splitting it is what makes the match possible.
+Whether that sharing actually happens is a question about a corpus, which this skill does not read.
+Atomicity is what makes it *possible*, and that much is visible right here.
+
+So atomicity findings come **first**. A fused leaf also has no single artifact for the grounding pass
+to search for, so splitting it is what makes the rest of the review possible.
 
 ### Telling one fact from two
 
@@ -197,7 +200,7 @@ usually the strategy, which should say *how* rather than *what*.
 
 ### A05 · non-atomic-evidence
 
-§3. Blocks any reuse finding on that leaf until it is split.
+§3. Fix it before the grounding pass: a fused leaf names no single artifact to search for.
 
 ### A06 · unfalsifiable-warrant
 

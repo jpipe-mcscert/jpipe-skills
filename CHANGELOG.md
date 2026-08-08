@@ -27,10 +27,17 @@ individual skills are not, so per-skill changes are grouped under the headings b
 #### `jpipe-review`
 
 - New skill: reviews the *argument* in an existing `.jd` justification model and proposes
-  improvements. It compiles the model once as a gate and then checks five things no tool checks:
+  improvements. It compiles the model once as a gate and then checks four things no tool checks:
   **abstraction** (is each element at the right level?), **atomicity** (one leaf, one fact),
-  **grounding** (do the artifacts the evidence names exist in the repository?), **reuse** (is the
-  same fact argued twice under labels that will not unify?), and **corpus conventions**.
+  **grounding** (do the artifacts the evidence names exist in the repository?), and the **house
+  conventions** a single file can be held to.
+- **Reviews one model at a time.** The skill reads the model you give it and the files that model
+  `load`s, and never another `.jd`; a directory target is N independent reviews rather than one
+  review of a corpus. So a CLEAN verdict means *this model holds on its own terms*, and cross-model
+  questions are explicitly out of scope: whether the same fact is argued twice under labels that
+  will not unify, whether two identical labels merge under `assemble` into a node nobody wrote, and
+  whether anything still loads a given model. Every report names this limit in its **Not reviewed**
+  section rather than letting a narrow review read as a broad one.
 - Findings carry a rule id, a `file:line:col`, the proposed replacement text, and a blast-radius
   line. Nothing is edited until you approve a numbered fix list.
 - Every finding names the **authority** backing it: `language` (the compiler decides, not

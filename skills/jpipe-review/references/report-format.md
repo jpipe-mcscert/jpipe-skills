@@ -1,10 +1,10 @@
 # The findings report
 
-The report **is** the product. A fixed shape means two reviews of the same corpus are diffable, and
+The report **is** the product. A fixed shape means two reviews of the same target are diffable, and
 it enforces discipline: there is a slot for the rule id, the location, and the blast radius on every
 finding, so omitting one is visibly wrong rather than merely unmentioned.
 
-Emit this at Step 7 and stop, unless `--apply` was given.
+Emit this at Step 6 and stop, unless `--apply` was given.
 
 ---
 
@@ -19,8 +19,10 @@ Emit this at Step 7 and stop, unless `--apply` was given.
    is the line that tells the author whether the fix is two minutes or an afternoon.
 4. **Name the authority when it is not `language`.** A finding backed by Toulmin or by house practice
    is a proposal. Say so, and the author can disagree without arguing with a tool.
-5. **Never report a bare count.** "12 possible duplicates" is noise. A finding the author cannot act
+5. **Never report a bare count.** "3 questionable leaves" is noise. A finding the author cannot act
    on without redoing your analysis should be an open question or nothing.
+6. **Stay inside the file.** Every location, quote, and proposed edit belongs to the model under
+   review. A finding is never stated in terms of a second `.jd`, because this review never read one.
 
 ## Tone
 
@@ -39,8 +41,8 @@ their code. Two habits keep it useful:
 ```markdown
 # jPipe review: <target>
 
-jpipe <version> · <N> files · <M> nodes · **<a> UNSOUND · <b> ABSTRACTION · <c> REUSE · <d> CONVENTION**
-Compile gate: <p> pass, <q> skipped · Passes run: abstraction, grounding, reuse, conventions
+jpipe <version> · <N> models reviewed independently · <M> nodes · **<a> UNSOUND · <b> ABSTRACTION · <c> CONVENTION**
+Compile gate: <p> pass, <q> skipped · Passes run: abstraction, grounding, conventions
 <omit-note if any pass was skipped and why>
 
 ## 🔴 UNSOUND (<a>)
@@ -49,25 +51,22 @@ Compile gate: <p> pass, <q> skipped · Passes run: abstraction, grounding, reuse
 ## 🟠 ABSTRACTION (<b>)
 <findings: elements at the wrong rung>
 
-## 🔵 REUSE (<c>)
-<opportunities, always declinable>
-
-## 🟡 CONVENTION (<d>)
-<corpus fit: declinable, and irrelevant if the project states its own conventions>
+## 🟡 CONVENTION (<c>)
+<house style: declinable, and irrelevant if the project states its own conventions>
 
 ## Per-file verdict
 
-| File | Model | Nodes | 🔴 | 🟠 | 🔵 | 🟡 | Class |
-|---|---|--:|--:|--:|--:|--:|---|
+| File | Model | Nodes | 🔴 | 🟠 | 🟡 | Class |
+|---|---|--:|--:|--:|--:|---|
 
 ## Suggested fix order
 <dependency order, not importance order; see rules.md>
 
 ## Open questions
-<judgement calls, uncertain groundings, unclustered near-matches. Not findings.>
+<judgement calls, uncertain groundings, requirement tags that may want a refine. Not findings.>
 
 ## Not reviewed
-<skipped files and why; passes not run>
+<skipped files and why; passes not run; the single-model scope limit>
 ```
 
 The **Open questions** and **Not reviewed** sections are not optional padding. They are where the
@@ -80,10 +79,10 @@ review states its own limits, and a report without them implies a completeness i
 ```markdown
 # jPipe review: justifications/
 
-jpipe 2.3.1 · 4 files · 24 nodes · **2 UNSOUND · 3 ABSTRACTION · 1 REUSE · 1 CONVENTION**
-Compile gate: 3 pass, 1 skipped · Passes run: abstraction, grounding, reuse, conventions
+jpipe 2.3.1 · 5 models reviewed independently · 24 nodes · **1 UNSOUND · 3 ABSTRACTION · 1 CONVENTION**
+Compile gate: 4 pass, 1 skipped · Passes run: abstraction, grounding, conventions
 
-## 🔴 UNSOUND (2)
+## 🔴 UNSOUND (1)
 
 **U1 · `[JD-G02 artifact-stale]` · requirements/r3.jd:9:19 · `evidence e_split`**
 Leaf names *"The committed data/dev.csv split and its header row"*.
@@ -92,15 +91,6 @@ Nearest: `data/train.csv`, `data/test.csv`, `data/counterfactual.csv`.
 → Three splits exist and none is named `dev`. Likely a rename the label missed. Confirm which
   split R3 is about; the fix is label-only.
 Blast radius: one label, no id changes, no unification impact.
-
-**U2 · `[JD-S03 accidental-unification]` · g2_fates.jd:14:19 ⇄ g6_efficiency.jd:9:19**
-Both leaves are labelled *"The reported metrics"*, but they denote different artifacts:
-  g2_fates      → `model/v2/metrics.json` (fairness figures, per `s_flip`)
-  g6_efficiency → the CI timing report (per `s_runtime`)
-→ Under `assemble` these merge into one `unified_N`, and the composed model then claims one
-  artifact grounds both legs, which neither file says. Disambiguate both labels.
-Authority: language. This is what the compiler will do, not a matter of taste.
-Blast radius: two labels; **removes** a unified group, so later `unified_N` ids shift down.
 
 ## 🟠 ABSTRACTION (3)
 
@@ -113,8 +103,8 @@ cannot check both and a failure cannot say which half failed.
                  checked by "Confront the declared packages with the CPU-only allowlist"
   `e_source`: "The committed pipeline source: the src/ package and the run_v*.py entry points"
                  checked by "Scan the imports of every pipeline source file for a GPU or network module"
-Blast radius: +1 evidence, +1 strategy, +1 sub-conclusion, 4 new relations. **Unblocks R1 below**:
-  the split `e_pipfile` is the leaf that r14 also grounds on.
+Blast radius: +1 evidence, +1 strategy, +1 sub-conclusion, 4 new relations. Structural; recompile
+  and re-render after applying.
 
 **A2 · `[JD-A01 claim-as-evidence]` · requirements/r3.jd:14:19 · `evidence e_schema`**
 *"A schema check over each split passes"* is a Claim in a Grounds slot: it asserts the verdict
@@ -136,48 +126,33 @@ a failure cannot be localised to a leg.
 Blast radius: +3 sub-conclusions, +3 strategies, 9 relations rewired. Structural; apply last and
   re-render.
 
-## 🔵 REUSE (1)
-
-**R1 · `[JD-S01 duplicate-fact-not-unified]` · requirements/r9.jd:12:19 ⇄ requirements/r14.jd:15:19**
-Shared artifact: `Pipfile`.
-  r9  `e_env`   "The committed Pipfile and the pipeline source files"
-                *(after the A1 split: `e_pipfile`)*
-  r14 `e_deps`     "The dependency manifest as committed"
-→ Both denote the same file. Align r14 on r9's post-split wording, "The committed Pipfile and its
-  [packages] dependency table", and `assemble` will unify them, so the fact is stated once and both
-  goals share the node.
-Depends on: **A1** (r9's leaf must be split before there is an atom to match).
-Authority: house.
-Blast radius: one label edit, no id changes, **but it creates a unified group**, so every later
-  `unified_N` shifts. Re-render the composed model after applying.
-
 ## 🟡 CONVENTION (1)
 
 **C1 · `[JD-C06 missing-header]` · requirements/r14.jd:1**
-No `/** */` provenance header. Every other file under `requirements/` opens with one tracing its
-argument to REQUIREMENTS.md and the decisions behind it.
+No `/** */` provenance header, so nothing in the file traces this argument to the requirement it
+serves or the decisions behind it.
 → Worth adding, and it is where the backing for `s_thresh` belongs: the warrant confronts accuracy
-  with "the 0.8 threshold" but nothing in the corpus says what authorizes 0.8.
+  with "the 0.8 threshold" but nothing here says what authorizes 0.8.
 Authority: house.
 
 ## Per-file verdict
 
-| File | Model | Nodes | 🔴 | 🟠 | 🔵 | 🟡 | Class |
-|---|---|--:|--:|--:|--:|--:|---|
-| requirements/r9.jd | r9 | 8 | 0 | 1 | 1 | 0 | 🟡 single-leg split |
-| requirements/r3.jd | r3 | 3 | 1 | 1 | 0 | 0 | 🟡 single-leg reword |
-| requirements/r14.jd | r14 | 5 | 0 | 1 | 1 | 1 | 🟠 multi-leg |
-| g2_fates.jd | fates | 8 | 1 | 0 | 0 | 0 | 🟢 at abstraction |
-| g6_efficiency.jd | efficiency | n/a | n/a | n/a | n/a | n/a | ⏭ did not compile |
+| File | Model | Nodes | 🔴 | 🟠 | 🟡 | Class |
+|---|---|--:|--:|--:|--:|---|
+| requirements/r9.jd | r9 | 8 | 0 | 1 | 0 | 🟡 single-leg split |
+| requirements/r3.jd | r3 | 3 | 1 | 1 | 0 | 🟡 single-leg reword |
+| requirements/r14.jd | r14 | 5 | 0 | 1 | 1 | 🟠 multi-leg |
+| g2_fates.jd | fates | 8 | 0 | 0 | 0 | 🟢 at abstraction |
+| g6_efficiency.jd | efficiency | n/a | n/a | n/a | n/a | ⏭ did not compile |
 
 ## Suggested fix order
 
-1. **U1, U2**: the argument rests on a missing artifact and asserts an unintended merge. Nothing
-   else is trustworthy until these are settled.
-2. **A1**: the atomicity split. Before R1, because R1 needs the atom it produces.
+1. **U1**: the argument rests on a missing artifact. Nothing else in r3 is trustworthy until it is
+   settled.
+2. **A1**: the atomicity split, first among the 🟠. It produces the atoms the rest is written
+   against.
 3. **A2**: label-only reword, zero blast radius.
-4. **R1**: reuse alignment. Re-render afterwards; `unified_N` numbering shifts.
-5. **A3, C1**: structural and documentation. Recompile and re-render after A3.
+4. **A3, C1**: structural and documentation. Recompile and re-render after A3.
 
 ## Open questions
 
@@ -190,8 +165,16 @@ artifact intentional here?
 But R32 is literally about the test suite, so "the suite's last run record" may be the legitimate
 fact rather than a verdict in disguise. Judgement call; left alone. ⚪
 
+**O3 · requirements/r14.jd:15 · `evidence e_deps`**: the leaf cites `(R9)`. If a requirement argument
+for R9 exists, this is the place to `refine` against it rather than assert it. Does one? Not visible
+from inside this file.
+
 ## Not reviewed
 
+- **Anything outside these five files.** Each model was reviewed on its own, and no other `.jd` was
+  read. So: whether two of these leaves will unify under `assemble`, whether a fact argued here is
+  already argued elsewhere, and whether anything loads these models are all unanswered. A 🟢 above
+  means the model holds on its own terms, nothing more.
 - **g6_efficiency.jd**: does not compile; semantic passes skipped for this file. The compiler and
   the VS Code extension are the authority there. Its raw output:
   <details><summary>jpipe diagnostic</summary>
@@ -202,5 +185,5 @@ fact rather than a verdict in disguise. Judgement call; left alone. ⚪
   </details>
 
 - **justifications/steps/**: the Python step library is out of scope for this skill.
-- `--no-grounding` was not passed; the grounding pass ran on all 3 compiling files.
+- `--no-grounding` was not passed; the grounding pass ran on all 4 compiling files.
 ```
