@@ -46,10 +46,10 @@ pre-merge check over a `justifications/` directory.
 
 ## Guardrails
 
-- **One model at a time.** The world is the file under review plus the files it `load`s. Never read,
-  `grep`, quote, or propose an edit to any other `.jd`, and never widen the target set on your own. A
-  finding that needs a second model to state is not one this skill can make. Given a directory, review
-  each file on its own terms and aggregate; do not correlate across them.
+- **One model at a time.** Exactly one model is under review; the files it `load`s are dependencies
+  the compiler needs, not subjects. Never read, `grep`, quote, or propose an edit to any other `.jd`,
+  and never widen the target set. A finding that needs a second model to state is not one this skill
+  can make. Given a directory, review each file on its own terms; do not correlate across them.
 - **Read-only through Step 6.** Nothing is modified before the author approves a numbered fix list.
 - **No version-control actions, ever.** Do not stage, commit, push, branch, merge, tag, or open a
   pull request. Report; the author integrates.
@@ -66,10 +66,10 @@ pre-merge check over a `justifications/` directory.
 
 ### Step 1. Scope
 
-Resolve the target list, and then treat it as closed: it is the complete set of files this review may
-read. Run `jpipe --version` and record it for the report header; if `jpipe` is not on PATH, say so and
-stop, because the compile gate is not optional. Per target, note the files it `load`s, which are in
-scope for compiling it and for nothing else. Note the repository root (Step 4 needs it).
+Resolve the target list, and then treat it as closed: those models, and no others, are what this
+review is about. Run `jpipe --version` and record it for the report header; if `jpipe` is not on PATH,
+say so and stop, because the compile gate is not optional. Per target, note the files it `load`s: read
+so the target compiles, never reviewed, never the site of a finding. Note the repository root (Step 4).
 
 For more than 8 files, plan to batch Steps 3–5 and emit **one** consolidated report, still one
 verdict per model.
