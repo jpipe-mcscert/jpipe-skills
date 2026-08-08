@@ -1,0 +1,19 @@
+/**
+ * expect: JD-A03
+ * Three unrelated leaves wire straight into the top strategy. Each reaches its own verdict,
+ * none is written down, so the top warrant silently combines three judgements and a failing
+ * leg cannot be localised. Each leg needs its own sub-conclusion and strategy.
+ */
+justification flat_legs {
+    conclusion c is "The release is fit to ship"
+    strategy   s is "Every release gate holds"
+
+    evidence e_cov  is "The committed coverage report and its per-file figures"
+    evidence e_log  is "The committed CHANGELOG.md and its Unreleased section"
+    evidence e_lock is "The committed package-lock.json and its dependency table"
+
+    s supports c
+    e_cov  supports s
+    e_log  supports s
+    e_lock supports s
+}

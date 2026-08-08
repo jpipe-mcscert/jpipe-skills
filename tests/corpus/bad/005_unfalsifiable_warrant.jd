@@ -1,0 +1,15 @@
+/**
+ * expect: JD-A06
+ * The warrant has no observable pass/fail. Nobody can run it and nobody can dispute it,
+ * so the argument cannot fail, which is the only reason to write one.
+ * The leaf is a real artifact and the conclusion is a genuine claim, so A06 is the only
+ * smell here.
+ */
+justification unfalsifiable {
+    conclusion c is "The classifier is fit for deployment"
+    strategy   s is "The approach is methodologically sound and follows best practices"
+    evidence   e is "The committed model card and its intended-use section"
+
+    s supports c
+    e supports s
+}

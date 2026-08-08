@@ -1,0 +1,13 @@
+/**
+ * Expect: no findings. A minimal three-node argument at the right abstraction.
+ * The leaf names a committed artifact, the strategy states what is confronted with what,
+ * and the conclusion asserts something that could be false.
+ */
+justification minimal {
+    conclusion c is "Every user-facing change in this release is documented"
+    strategy   s is "Confront the CHANGELOG's Unreleased entries with the pull requests merged since the last tag; every user-facing change appears"
+    evidence   e is "The committed CHANGELOG.md and the list of pull requests merged since the last tag"
+
+    s supports c
+    e supports s
+}

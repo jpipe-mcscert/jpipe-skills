@@ -1,0 +1,14 @@
+/**
+ * expect: JD-A01
+ * The leaf asserts the verdict this leg exists to reach, so the argument proves itself.
+ * Single-leg case: the existing strategy can host the check once the leaf is reworded
+ * down to the artifact it should have named.
+ */
+justification claim_as_evidence {
+    conclusion c is "The data splits are well-formed"
+    strategy   s is "The schema check covers every split"
+    evidence   e is "The schema check over each split passes"
+
+    s supports c
+    e supports s
+}

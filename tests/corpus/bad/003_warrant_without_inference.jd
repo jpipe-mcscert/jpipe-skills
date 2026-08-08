@@ -1,0 +1,14 @@
+/**
+ * expect: JD-A02
+ * The strategy is a title, not a warrant. It names the topic of the argument instead of
+ * stating what is confronted with what, so nothing licenses the step from the ground to
+ * the claim.
+ */
+justification titled_warrant {
+    conclusion c is "The changed paths are covered by tests"
+    strategy   s is "Testing argument"
+    evidence   e is "The committed coverage report and the diff of the release branch"
+
+    s supports c
+    e supports s
+}

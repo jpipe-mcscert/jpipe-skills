@@ -1,0 +1,14 @@
+/**
+ * expect: JD-A04
+ * The conclusion and the strategy beneath it say the same thing in different words, so the
+ * strategy does no work. A warrant must say *how* the claim is reached, not restate *what*
+ * is claimed.
+ */
+justification restated {
+    conclusion c is "The test suite covers every changed path"
+    strategy   s is "Every changed path is covered by the test suite"
+    evidence   e is "The committed coverage report and the diff of the release branch"
+
+    s supports c
+    e supports s
+}
