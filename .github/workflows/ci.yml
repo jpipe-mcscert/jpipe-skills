@@ -36,32 +36,26 @@ jobs:
           distribution: temurin
           java-version: "25"
 
-      # The PPA is the supported channel. It can lag a new Ubuntu series, so
-      # fall back to the release archive rather than letting CI go red for a
-      # packaging reason that has nothing to do with this repository.
-      - name: Install jpipe
+      # Graphviz is what the compiler shells out to for SVG and PNG. The
+      # diagnostic pass below does not render, but a jpipe install without it is
+      # half an install, and `jpipe doctor` reports it missing.
+      - name: Install graphviz
+        run: sudo apt-get update -qq && sudo apt-get install -y graphviz
+
+      # The release exposes the CLI jar directly, and setup-java above already
+      # provides a runtime, so this is the whole install.
+      - name: Install jpipe from the latest release
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          if sudo add-apt-repository -y ppa:mcscert/ppa \
-             && sudo apt-get update -qq \
-             && sudo apt-get install -y jpipe; then
-            echo "installed from PPA"
-          else
-            echo "PPA unavailable; falling back to the release archive"
-            tag=$(curl -fsSL https://api.github.com/repos/jpipe-mcscert/jpipe-compiler/releases/latest \
-                  | python3 -c 'import json,sys; print(json.load(sys.stdin)["tag_name"])')
-            version=${tag#v}
-            curl -fsSL -o /tmp/jpipe.zip \
-              "https://github.com/jpipe-mcscert/jpipe-compiler/releases/download/${tag}/jpipe-${version}.zip"
-            unzip -q /tmp/jpipe.zip -d /tmp/jpipe-dist
-            jar=$(find /tmp/jpipe-dist -name '*.jar' | head -1)
-            test -n "$jar" || { echo "no jar in the release archive" >&2; exit 1; }
-            sudo tee /usr/local/bin/jpipe >/dev/null <<EOF
+          gh release download --repo jpipe-mcscert/jpipe-compiler \
+            --pattern 'jpipe-cli-*.jar' --output "$HOME/jpipe-cli.jar"
+          sudo tee /usr/local/bin/jpipe >/dev/null <<EOF
           #!/bin/sh
-          exec java -jar "$jar" "\$@"
+          exec java -jar "$HOME/jpipe-cli.jar" "\$@"
           EOF
-            sudo chmod +x /usr/local/bin/jpipe
-          fi
+          sudo chmod +x /usr/local/bin/jpipe
           jpipe --version
 
       # Every .jd this repository publishes -- fenced examples in the skill's
