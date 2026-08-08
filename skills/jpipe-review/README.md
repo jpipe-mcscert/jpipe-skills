@@ -2,10 +2,13 @@
 
 Reviews the *argument* in an existing jPipe justification model (`.jd`).
 
-> [!WARNING]
-> Experimental, and not part of jPipe core. See the [repository README](../../README.md). Findings
-> are a language model's judgement, documented so you can check them. Nothing is edited without your
-> approval.
+> [!DANGER]
+> This skill reviews an argument **you** wrote. It does not author assurance cases, and generative
+> AI should not be used to write one: text that reads like an argument, produced without anyone
+> having reasoned about the system, is worse than no argument at all. Findings here are a language
+> model's judgement, documented so you can check them, and nothing is edited without your approval.
+> The responsibility for the case stays with you. Experimental, and not part of jPipe core: see the
+> [repository README](../../README.md).
 
 ## What it does
 
@@ -66,9 +69,8 @@ The `references/` are written to be read by people too, not only loaded by the s
 Mapping jPipe onto Toulmin is **this repository's contribution**, not a claim about the language
 designers' intent, and neither Toulmin nor GSN is referenced anywhere else in the ecosystem. It
 earns its place by making the rules explainable instead of merely asserted: *"this leaf is bad"*
-becomes
-*"this is a Claim written into a Grounds slot"*, which tells you what to do about it. It also
-replaces the concept's previous informal name, *altitude*.
+becomes *"this is a Claim written into a Grounds slot"*, which tells you what to do about it. It
+also replaces the concept's previous informal name, *altitude*.
 
 Worth knowing up front: jPipe's own documentation uses `evidence e is "Test suite passes"` in its
 worked example, which this reading flags. Optimising a language tour for brevity is fair; it just

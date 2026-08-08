@@ -10,9 +10,14 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ### Added
 
+- **Stated scope: these skills review arguments, they do not write them.** Generative AI should not
+  be used to author a safety case. An assurance case is a claim somebody is accountable for, and
+  text that merely reads like an argument persuades without anyone having reasoned about the system.
+  Everything here is built to review an argument a human wrote and to propose changes that author
+  accepts or rejects. Stated in the README, in the skill's own README, and in the plugin description
+  shown at install time.
 - **Status: experimental.** This repository is a research exploration and is **not** a supported part
-  of the jPipe toolchain. No stability guarantee; conventions here may change or be abandoned. Stated
-  in the README, in the skill's own README, and in the plugin description shown at install time.
+  of the jPipe toolchain. No stability guarantee; conventions here may change or be abandoned.
 - **Installable as a Claude Code plugin.** `/plugin marketplace add jpipe-mcscert/jpipe-skills`
   followed by `/plugin install jpipe-skills@jpipe`, which keeps itself updated. `/plugin` is a
   terminal CLI command and does not exist in the VS Code or JetBrains extensions, so the README also

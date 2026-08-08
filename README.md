@@ -3,7 +3,14 @@
 Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 [jPipe](https://www.jpipe.org), the justification / assurance-case language.
 
-> [!CAUTION]
+> [!DANGER]
+> **Do not use generative AI to write a safety case.** An assurance case is a claim somebody is
+> accountable for. Text that merely reads like an argument is worse than no argument at all, because
+> it persuades without anyone having reasoned about the system, and a reviewer cannot tell the two
+> apart by reading. These skills are built to **review an argument a human wrote**, never to author
+> one, and every finding is a proposal you accept or reject. The responsibility for the case stays
+> with its author.
+>
 > **Experimental, and not part of jPipe core.** This repository is a research exploration of what
 > LLM-based agents can usefully do with justification models. It is **not** a supported component of
 > the jPipe toolchain, carries no stability guarantee, and its conventions may change or be abandoned
@@ -11,10 +18,19 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 > [compiler](https://github.com/jpipe-mcscert/jpipe-compiler), the
 > [VS Code extension](https://github.com/jpipe-mcscert/jpipe-vscode), and the
 > [runner](https://github.com/jpipe-mcscert/jpipe-runner).
->
-> These skills read and propose edits to your models. Nothing is written without your approval, and
-> the reasoning behind every finding is documented, but the judgement is a language model's, and it
-> is yours to check.
+
+## Authors
+
+- Principal Investigator:
+  - [Sébastien Mosser](https://mosser.github.io/), McSCert, McMaster University.
+
+## Skills
+
+| Skill | What it does | Needs |
+|---|---|---|
+| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model: whether its elements sit at the right level, rest on artifacts that exist, and fit the surrounding corpus. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
+
+Each skill's directory has its own README.
 
 ## Install
 
@@ -56,19 +72,6 @@ instead and pick up changes with a `git pull`.
 Start a new session for a newly installed skill to be picked up.
 
 </details>
-
-## Skills
-
-| Skill | What it does | Needs |
-|---|---|---|
-| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model: whether its elements sit at the right level, rest on artifacts that exist, and fit the surrounding corpus. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
-
-Each skill's directory has its own README.
-
-## Authors
-
-- Principal Investigator:
-  - [Sébastien Mosser](https://mosser.github.io/), McSCert, McMaster University.
 
 ## Contributing
 

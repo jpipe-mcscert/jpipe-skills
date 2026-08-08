@@ -12,7 +12,7 @@
     {
       "name": "jpipe-skills",
       "source": "./",
-      "description": "EXPERIMENTAL, not part of jPipe core. Skills for reviewing, authoring, and operating jPipe justification models (.jd).",
+      "description": "EXPERIMENTAL, not part of jPipe core. Skills for reviewing and operating jPipe justification models (.jd). These review an argument a human wrote; they do not write assurance cases.",
       "version": "0.1.0",
       "homepage": "https://www.jpipe.org",
       "repository": "https://github.com/jpipe-mcscert/jpipe-skills",
