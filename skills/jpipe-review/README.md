@@ -14,7 +14,7 @@ Reviews the *argument* in an existing jPipe justification model (`.jd`).
 
 The compiler and the VS Code extension already catch syntax, unresolved symbols, cycles, and missing
 operator keys, with better line numbers than a language model will produce. This skill deliberately
-does none of that. It compiles the model once as a **gate**, and if it builds, asks the five
+does none of that. It compiles the model once as a **gate**, and if it builds, asks the four
 questions no tool asks:
 
 | | |
@@ -22,17 +22,28 @@ questions no tool asks:
 | **Abstraction** | Is each element at the right level? `evidence` should supply a datum, `strategy` should license an inference, `conclusion` should assert the claim. A leaf reading *"a schema check passes"* asserts the verdict its own leg exists to reach, so the argument proves itself |
 | **Atomicity** | One leaf, one fact. *"The Pipfile and the pipeline source"* is two facts fused: one check cannot test both, and neither half can be shared |
 | **Grounding** | Does the repository actually contain what the evidence names? A renamed file leaves an argument that still compiles, still renders, and is quietly false |
-| **Reuse** | Is the same fact argued twice under different words? jPipe merges identical labels into one node, so sharing is mechanical: worded alike, a check runs once and supports two goals; worded differently, the work is done twice |
-| **Conventions** | Does the model sit right in the surrounding corpus? |
+| **Conventions** | Does the file follow the house style: provenance header, refine placement, concluding at its own altitude? |
 
 Nothing is edited until you approve a numbered fix list. Every finding carries a rule id, a
 `file:line:col`, the proposed replacement, and a blast-radius line, because a one-word label edit
 can renumber every `unified_N` downstream.
 
+## Scope: one model at a time
+
+The review reads the model you gave it and the files that model `load`s. **It never reads another
+`.jd`**, and a directory target is N independent reviews rather than one review of a corpus.
+
+That boundary is deliberate, and it costs something worth knowing about. Cross-model questions are
+outside it: whether the same fact is argued twice under labels that will not unify, whether two
+identical labels will merge under `assemble` into a node nobody wrote, whether anything still loads a
+given model. Those need a corpus, and a per-model reviewer that guesses at them from one file guesses
+wrong. So a **CLEAN** verdict here means *this model holds on its own terms* and says nothing about
+how it sits with any other. The report says so too, in its **Not reviewed** section.
+
 ## Usage
 
 ```
-jpipe-review <target> [--corpus <dir>] [--no-grounding] [--apply]
+jpipe-review <target> [--no-grounding] [--apply]
 ```
 
 `<target>` is a `.jd` file, a directory, a glob, or nothing (the `.jd` files changed in your working
@@ -47,7 +58,7 @@ Every finding says what backs it, so you can tell a fact from an opinion:
 
 - **`language`**: the compiler decides. Not negotiable.
 - **`argument`**: the Toulmin reading below. Declinable, with a rationale.
-- **`house`**: McSCert corpus practice, and *irrelevant* if your project states its own conventions
+- **`house`**: McSCert house practice, and *irrelevant* if your project states its own conventions
   in a `CLAUDE.md` or a `justifications/README.md`. Those win.
 
 ## Reference material
@@ -59,8 +70,7 @@ The `references/` are written to be read by people too, not only loaded by the s
 | [`language.md`](references/language.md) | The jPipe language, objectively: elements, the `supports` relation and its legal pairings, `load`, templates, the two operators, and the `unified_N` renumbering hazard |
 | [`abstraction.md`](references/abstraction.md) | The argument model: Toulmin's claim / grounds / warrant mapped onto jPipe's kinds, the fact → check → verdict ladder, atomicity, and the category errors |
 | [`grounding.md`](references/grounding.md) | Checking evidence against the tree, and the discipline that keeps it from crying wolf |
-| [`sharing.md`](references/sharing.md) | Finding facts argued twice, and why clustering by artifact beats clustering by string |
-| [`conventions.md`](references/conventions.md) | McSCert corpus practice: refine placement, one entry point, provenance headers |
+| [`conventions.md`](references/conventions.md) | McSCert house practice, the part a single file can be checked against: refine placement, altitude, provenance headers |
 | [`rules.md`](references/rules.md) | The rule catalogue: id, authority, trigger, fix |
 | [`report-format.md`](references/report-format.md) | The findings report's shape, with a worked example |
 
