@@ -33,7 +33,6 @@ REQUIRED_FRONTMATTER = ("name", "description", "argument-hint", "allowed-tools")
 # textual, so it is linted textually.
 FORBIDDEN = (
     "$ARGUMENTS",
-    "AskUserQuestion",
     "git commit",
     "git push",
     "git add",
@@ -43,7 +42,16 @@ FORBIDDEN = (
 
 KNOWN_TOOLS = {
     "Bash", "Read", "Write", "Edit", "Grep", "Glob", "WebFetch", "WebSearch",
-    "Task", "Agent", "NotebookEdit", "TodoWrite", "AskUserQuestion",
+    "Task", "Agent", "NotebookEdit", "TodoWrite",
+}
+
+# Tools that exist but that skills here must not declare. Enforced only at the
+# declaration site: a skill cannot call what it does not declare, so scanning
+# prose for the name as well would just stop the documentation from explaining
+# the rule.
+DISALLOWED_TOOLS = {
+    "AskUserQuestion": "ask in prose, which also works in a headless run where "
+                       "an interactive picker cannot be answered",
 }
 
 
@@ -103,7 +111,14 @@ def check_skill(skill_dir: Path, errors: list[str]) -> None:
         errors.append(f"{rel}/SKILL.md: description must contain at least one 'NOT for'")
 
     for tool in (t.strip() for t in fm.get("allowed-tools", "").split(",")):
-        if tool and not tool.startswith("mcp__") and tool not in KNOWN_TOOLS:
+        if not tool or tool.startswith("mcp__"):
+            continue
+        if tool in DISALLOWED_TOOLS:
+            errors.append(
+                f"{rel}/SKILL.md: '{tool}' must not be declared in allowed-tools; "
+                f"{DISALLOWED_TOOLS[tool]}"
+            )
+        elif tool not in KNOWN_TOOLS:
             errors.append(f"{rel}/SKILL.md: unknown tool '{tool}' in allowed-tools")
 
     body_lines = text.count("\n") + 1

@@ -35,6 +35,10 @@ Keep `SKILL.md` to procedure (the workflow, the guardrails, the output contract)
 everything with a "read this when…" trigger into `references/`. A reference the model loads on every
 invocation regardless of need is just an expensive part of `SKILL.md`.
 
+Do not declare `AskUserQuestion` in `allowed-tools`; the linter rejects it. When a skill needs a
+decision, ask for it in prose. That reads the same in every host and still works in a headless run,
+where an interactive picker cannot be answered and an approval step built on one would deadlock.
+
 ### Shared reference material
 
 Skills cannot share a `references/` directory; each must be self-contained so that copying one
