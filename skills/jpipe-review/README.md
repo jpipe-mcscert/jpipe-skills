@@ -2,7 +2,7 @@
 
 Reviews the *argument* in an existing jPipe justification model (`.jd`).
 
-> [!DANGER]
+> [!CAUTION]
 > This skill reviews an argument **you** wrote. It does not author assurance cases, and generative
 > AI should not be used to write one: text that reads like an argument, produced without anyone
 > having reasoned about the system, is worse than no argument at all. Findings here are a language

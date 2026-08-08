@@ -3,7 +3,7 @@
 Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 [jPipe](https://www.jpipe.org), the justification / assurance-case language.
 
-> [!DANGER]
+> [!CAUTION]
 > **Do not use generative AI to write a safety case.** An assurance case is a claim somebody is
 > accountable for. Text that merely reads like an argument is worse than no argument at all, because
 > it persuades without anyone having reasoned about the system, and a reviewer cannot tell the two
