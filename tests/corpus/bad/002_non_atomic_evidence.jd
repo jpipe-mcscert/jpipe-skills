@@ -1,0 +1,14 @@
+/**
+ * expect: JD-A05
+ * One leaf, two independent artifacts. An allowlist comparison and an import scan share
+ * nothing but the word "and", so one warrant cannot check both and a failure cannot say
+ * which half failed. Neither half can be shared with another model until it is split.
+ */
+justification non_atomic {
+    conclusion c is "The pipeline runs CPU-only, with no GPU and no network access"
+    strategy   s is "Confront the declared environment and the invoked code with the CPU-only allowlist"
+    evidence   e is "The committed Pipfile and the pipeline source files"
+
+    s supports c
+    e supports s
+}

@@ -1,0 +1,19 @@
+{
+  "name": "jpipe-skills",
+  "version": "0.1.0",
+  "description": "Skills for reviewing, authoring, and operating jPipe justification models (.jd). Ships jpipe-review, which audits a model's argument for abstraction, atomicity, grounding, reuse, and convention.",
+  "author": {
+    "name": "McSCert — jPipe",
+    "url": "https://github.com/jpipe-mcscert"
+  },
+  "homepage": "https://www.jpipe.org",
+  "repository": "https://github.com/jpipe-mcscert/jpipe-skills",
+  "license": "MIT",
+  "keywords": [
+    "jpipe",
+    "justification",
+    "assurance-case",
+    "toulmin",
+    "jd"
+  ]
+}

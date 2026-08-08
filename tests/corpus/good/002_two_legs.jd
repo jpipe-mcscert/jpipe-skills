@@ -1,0 +1,25 @@
+/**
+ * Expect: no findings. Two fact -> check -> verdict legs combined by a top strategy that states
+ * why the legs are jointly sufficient rather than merely conjoining them. Modelled on the
+ * r9 exemplar in jpipe-tutorial-2026.
+ */
+justification two_legs {
+    conclusion     c          is "The build runs offline, reaching neither a package registry nor the network"
+    strategy       s          is "A build reaches the network only through a capability that is both declared in the environment and invoked by the build script, so closing either path suffices"
+
+    sub-conclusion sc_env     is "The declared build environment offers no network capability"
+    strategy       s_allow    is "Confront the lockfile's declared packages with the offline allowlist; none lies outside it"
+    evidence       e_lock     is "The committed package-lock.json and its dependency table"
+
+    sub-conclusion sc_script  is "The build script invokes no network capability"
+    strategy       s_scan     is "Scan every build script for an invocation of curl, wget, or a package-manager fetch"
+    evidence       e_scripts  is "The committed build scripts under scripts/ and the Makefile"
+
+    s supports c
+    sc_env    supports s
+    sc_script supports s
+    s_allow supports sc_env
+    e_lock  supports s_allow
+    s_scan    supports sc_script
+    e_scripts supports s_scan
+}
