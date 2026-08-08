@@ -14,8 +14,8 @@ jobs:
     name: Lint skills and manifests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       # No dependencies by design: the linter is stdlib-only so it stays
@@ -27,13 +27,19 @@ jobs:
     name: Compile published .jd examples
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      # The deb depends on openjdk-25-jre-headless and graphviz, so apt brings
-      # the runtime and the renderer with it. No setup-java step, and this is
-      # the same install path the README gives users.
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "25"
+
+      # The same install path the README gives users, so a packaging problem
+      # surfaces here rather than in someone's first `apt install jpipe`. The
+      # deb pulls graphviz with it, which is what the compiler shells out to for
+      # SVG and PNG.
       - name: Install jpipe
         run: |
           set -euo pipefail
