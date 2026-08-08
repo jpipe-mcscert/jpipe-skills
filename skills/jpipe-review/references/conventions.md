@@ -121,7 +121,8 @@ one"* is a claim about a corpus this skill did not read.
 
 ```text
 **C1 · `[JD-C06 missing-header]` · requirements/r14.jd:1**
-No `/** */` provenance header, so nothing traces this argument to the requirement it serves or the
+*No provenance header tracing the argument to what it serves.*
+There is no `/** */` block, so nothing traces this argument to the requirement it serves or the
 decisions behind it.
 → Worth adding, and it is where the backing for `s_thresh`'s 0.8 threshold belongs: the
   warrant cites the number but nothing says what authorizes it.

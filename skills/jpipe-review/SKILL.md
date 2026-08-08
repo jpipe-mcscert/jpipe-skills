@@ -16,9 +16,8 @@ jpipe-review <target> [--no-grounding] [--apply]
 ```
 
 **Target**: a `.jd` file, a directory (recurse `*.jd`), a glob, or nothing (the changed `.jd` files).
-A directory target is **N independent reviews**, not one review of a corpus.
-
-**Flags**: `--no-grounding` skips the repository-artifact pass. `--apply` continues into the fix loop.
+A directory target is **N independent reviews**, not one review of a corpus. **Flags**:
+`--no-grounding` skips the repository-artifact pass. `--apply` continues into the fix loop.
 
 **References**: read on demand, not up front:
 
@@ -47,11 +46,10 @@ pre-merge check over a `justifications/` directory.
 
 ## Guardrails
 
-- **One model at a time.** The world is the file under review plus the files it `load`s, and nothing
-  else. Never read, `grep`, harvest labels from, quote, or propose an edit to a `.jd` outside it, and
-  never widen the target set on your own. A finding that needs a second model to state is not a
-  finding this skill can make; say what is missing and stop. Given a directory, review each file on
-  its own terms and aggregate the reports. Do not correlate across them.
+- **One model at a time.** The world is the file under review plus the files it `load`s. Never read,
+  `grep`, quote, or propose an edit to any other `.jd`, and never widen the target set on your own. A
+  finding that needs a second model to state is not one this skill can make. Given a directory, review
+  each file on its own terms and aggregate; do not correlate across them.
 - **Read-only through Step 6.** Nothing is modified before the author approves a numbered fix list.
 - **No version-control actions, ever.** Do not stage, commit, push, branch, merge, tag, or open a
   pull request. Report; the author integrates.
@@ -132,9 +130,9 @@ single-model scope among them, so no CLEAN verdict reads as a claim about the co
 
 ### Step 7. Propose and get approval
 
-Present a numbered fix list. Each entry: the finding id, the exact before and after text, the blast
-radius, and any fix it depends on. Order by dependency, not by severity: atomicity splits before the
-findings that depend on them, label rewords before structural changes.
+Present a numbered fix list. Each entry: the finding id **with its rule description**, the exact
+before and after text, the blast radius, and any fix it depends on. Order by dependency, not severity:
+atomicity splits before what depends on them, label rewords before structural changes.
 
 Ask in prose which numbers to apply. Never act on silence or an ambiguous answer, and never widen
 beyond what was approved. Every edit lands in the file under review; a fix that would require
@@ -153,7 +151,9 @@ Close with the delta: findings closed, findings remaining, anything newly introd
 
 ## Output contract
 
-The report is the product. Every finding carries a rule id, a `file:line:col`, the label quoted, the
-proposed replacement, and a blast-radius line. Verdicts, **per model**: **CLEAN** · **FINDINGS** ·
-**BLOCKED** (did not compile). CLEAN means this model holds on its own terms; it says nothing about
-how the model sits with any other.
+The report is the product. Every finding carries a rule id **and that rule's description quoted from
+`rules.md`**, a `file:line:col`, the label quoted, the proposed replacement, and a blast-radius line:
+a bare `JD-A01` is a lookup key, not a finding.
+
+Verdicts, **per model**: **CLEAN** · **FINDINGS** · **BLOCKED** (did not compile). CLEAN means the
+model holds on its own terms, and nothing about how it sits with any other.
