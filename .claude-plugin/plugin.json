@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "EXPERIMENTAL research prototype, not a supported part of the jPipe toolchain. Skills for reviewing, authoring, and operating jPipe justification models (.jd). Ships jpipe-review, which audits a model's argument for abstraction, atomicity, grounding, reuse, and convention.",
   "author": {
-    "name": "McSCert — jPipe",
+    "name": "McSCert, McMaster University",
     "url": "https://github.com/jpipe-mcscert"
   },
   "homepage": "https://www.jpipe.org",

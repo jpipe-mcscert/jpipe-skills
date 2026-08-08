@@ -3,8 +3,8 @@
 Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 [jPipe](https://www.jpipe.org), the justification / assurance-case language.
 
-> [!WARNING]
-> **Experimental — not part of jPipe core.** This repository is a research exploration of what
+> [!DANGER]
+> **Experimental, and not part of jPipe core.** This repository is a research exploration of what
 > LLM-based agents can usefully do with justification models. It is **not** a supported component of
 > the jPipe toolchain, carries no stability guarantee, and its conventions may change or be abandoned
 > without notice. The supported tools are the
@@ -13,7 +13,7 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 > [runner](https://github.com/jpipe-mcscert/jpipe-runner).
 >
 > These skills read and propose edits to your models. Nothing is written without your approval, and
-> the reasoning behind every finding is documented — but the judgement is a language model's, and it
+> the reasoning behind every finding is documented, but the judgement is a language model's, and it
 > is yours to check.
 
 ## Install
@@ -30,7 +30,7 @@ Each directory under `skills/` is self-contained, so plain copying works too:
 
 | Skill | What it does | Needs |
 |---|---|---|
-| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model — whether its elements sit at the right level, rest on artifacts that exist, and fit the surrounding corpus. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
+| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model: whether its elements sit at the right level, rest on artifacts that exist, and fit the surrounding corpus. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
 
 Each skill's directory has its own README.
 
@@ -47,7 +47,7 @@ pre-release checklist.
 ## Sponsors
 
 We acknowledge the support of the _Natural Sciences and Engineering Research Council of Canada_
-(NSERC), as well as McMaster _Excellence in Research Award_ (EREA) from the Faculty of Engineering.
+(NSERC) to support this research.
 
 <div align="center">
   <img alt="NSERC logo" src="./docs/sponsors/nserc.svg" width="300">
@@ -55,4 +55,4 @@ We acknowledge the support of the _Natural Sciences and Engineering Research Cou
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

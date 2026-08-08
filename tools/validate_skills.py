@@ -190,6 +190,20 @@ def check_manifests(root: Path, errors: list[str]) -> None:
         )
 
 
+def check_house_style(root: Path, errors: list[str]) -> None:
+    """No em dashes anywhere. House style: use a colon, a comma, parentheses, or
+    a second sentence instead. Enforced rather than remembered, because a single
+    stray one in a pull request is easy to wave through."""
+    targets = sorted(root.glob("*.md"))
+    targets += sorted(root.glob("skills/**/*.md"))
+    targets += sorted(root.glob("tests/**/*.md"))
+    targets += sorted(root.glob(".claude-plugin/*.json"))
+    for path in targets:
+        for lineno, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if "—" in line:
+                errors.append(f"{path.relative_to(root)}:{lineno}: em dash; rephrase")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parent.parent)
@@ -204,6 +218,7 @@ def main() -> int:
     for skill_dir in skill_dirs:
         check_skill(skill_dir, errors)
     check_manifests(args.root, errors)
+    check_house_style(args.root, errors)
 
     if errors:
         print(f"validate_skills: {len(errors)} error(s)\n", file=sys.stderr)
