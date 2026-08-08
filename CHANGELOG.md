@@ -10,6 +10,9 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ### Added
 
+- **Status: experimental.** This repository is a research exploration and is **not** a supported part
+  of the jPipe toolchain. No stability guarantee; conventions here may change or be abandoned. Stated
+  in the README, in the skill's own README, and in the plugin description shown at install time.
 - **Installable as a Claude Code plugin.** `/plugin marketplace add jpipe-mcscert/jpipe-skills`
   followed by `/plugin install jpipe-skills@jpipe`. Each directory under `skills/` is self-contained,
   so plain copying into `~/.claude/skills/` works too.

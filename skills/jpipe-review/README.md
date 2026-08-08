@@ -2,6 +2,11 @@
 
 Reviews the *argument* in an existing jPipe justification model (`.jd`).
 
+> [!WARNING]
+> Experimental, and not part of jPipe core — see the [repository README](../../README.md). Findings
+> are a language model's judgement, documented so you can check them. Nothing is edited without your
+> approval.
+
 ## What it does
 
 The compiler and the VS Code extension already catch syntax, unresolved symbols, cycles, and missing
