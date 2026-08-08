@@ -3,7 +3,7 @@
 Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 [jPipe](https://www.jpipe.org), the justification / assurance-case language.
 
-> [!DANGER]
+> [!CAUTION]
 > **Experimental, and not part of jPipe core.** This repository is a research exploration of what
 > LLM-based agents can usefully do with justification models. It is **not** a supported component of
 > the jPipe toolchain, carries no stability guarantee, and its conventions may change or be abandoned
@@ -18,13 +18,44 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 
 ## Install
 
+Install as a plugin, which keeps itself updated:
+
 ```
 /plugin marketplace add jpipe-mcscert/jpipe-skills
 /plugin install jpipe-skills@jpipe
 ```
 
-Each directory under `skills/` is self-contained, so plain copying works too:
-`cp -r skills/jpipe-review ~/.claude/skills/`.
+> [!NOTE]
+> `/plugin` is a command of the `claude` terminal CLI. The VS Code and JetBrains extensions do not
+> have it and answer `/plugin isn't available in this environment`. Install by hand there.
+
+<details>
+<summary>Installing by hand (works in every host)</summary>
+
+Each directory under `skills/` is self-contained, so installing one means copying it where Claude
+Code looks for skills.
+
+For yourself, in every project:
+
+```bash
+git clone https://github.com/jpipe-mcscert/jpipe-skills.git
+mkdir -p ~/.claude/skills
+cp -r jpipe-skills/skills/jpipe-review ~/.claude/skills/
+```
+
+For one project, committed so that everyone who clones it gets the skill too:
+
+```bash
+mkdir -p <your-project>/.claude/skills
+cp -r jpipe-skills/skills/jpipe-review <your-project>/.claude/skills/
+```
+
+Substitute `ln -s "$PWD/jpipe-skills/skills/jpipe-review"` for `cp -r` to track the repository
+instead and pick up changes with a `git pull`.
+
+Start a new session for a newly installed skill to be picked up.
+
+</details>
 
 ## Skills
 

@@ -14,8 +14,10 @@ individual skills are not, so per-skill changes are grouped under the headings b
   of the jPipe toolchain. No stability guarantee; conventions here may change or be abandoned. Stated
   in the README, in the skill's own README, and in the plugin description shown at install time.
 - **Installable as a Claude Code plugin.** `/plugin marketplace add jpipe-mcscert/jpipe-skills`
-  followed by `/plugin install jpipe-skills@jpipe`. Each directory under `skills/` is self-contained,
-  so plain copying into `~/.claude/skills/` works too.
+  followed by `/plugin install jpipe-skills@jpipe`, which keeps itself updated. `/plugin` is a
+  terminal CLI command and does not exist in the VS Code or JetBrains extensions, so the README also
+  documents installing by hand: each directory under `skills/` is self-contained, and copying or
+  symlinking one into `~/.claude/skills/` or a project's `.claude/skills/` works in every host.
 
 #### `jpipe-review`
 
