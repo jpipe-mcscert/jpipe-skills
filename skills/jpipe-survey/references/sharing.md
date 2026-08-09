@@ -35,9 +35,11 @@ anchored alternatives, elements and the model headers standing above them:
 grep -rEn '^[[:space:]]*(justification|template)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*|^[[:space:]]*(evidence|sub-conclusion|strategy|conclusion)[[:space:]]+[A-Za-z_][A-Za-z0-9_:]*[[:space:]]+is[[:space:]]+' <files> --include='*.jd'
 ```
 
-That yields `file:line: kind id is "label"` for every element and `file:line: justification X is
-assemble(a, b)` for every model, at a cost that does not scale with file size. Everything in this pass
-runs on that table. Open full files **only** for clusters you are about to report or ask about.
+That yields `file:line: kind id is "label"` for every element, and for every model its header line as
+written: `justification X {` for one whose argument is spelled out, `justification X is assemble(a, b) {`
+or `is refine(...)` for a composed one, `implements T` for one over a template. Cost does not scale with
+file size. Everything in this pass runs on that table. Open full files **only** for clusters you are
+about to report or ask about.
 
 The header rows earn their place twice over:
 
@@ -45,8 +47,9 @@ The header rows earn their place twice over:
   claim about *two models* is really a claim about two `file:line`s, which is the same thing only while
   every file holds exactly one model. It is also what keeps the boundary honest under `-m`, where one
   file can hold a model in the closure and a model outside it. → `scope.md` §5
-- **The graph.** Those same rows carry `is assemble(...)`, `is refine(...)` and `implements`, so the
-  composition graph falls out of this harvest instead of costing a read.
+- **The graph.** Whatever a header carries after the model name is an edge: `assemble` and `refine`
+  sources, an `implements` template. A header that carries nothing is a leaf, which is equally an answer,
+  so the composition graph falls out of this harvest instead of costing a read.
 
 ### 2. Cluster by the artifact, not by the string
 

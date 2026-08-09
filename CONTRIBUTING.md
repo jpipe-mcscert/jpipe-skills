@@ -108,8 +108,8 @@ Then `jpipe-survey`, whose failure modes are different because it compares files
     file with no `-m`: the same `JD-R01`, and the two identical `"The reported metrics"` leaves as an
     **open question** rather than a `JD-R03`. *The reason `-m` exists. A merge happens inside a
     composition, and nothing composes `r3` with `efficiency`, so a 🔴 there would be plainly false.*
-12. `goals.jd -m nosuchmodel` → an error that lists the models the file does declare. `-m fairness`
-    together with `--global` → an error. Neither picks one and carries on.
+12. `corpora/scoped_model/goals.jd -m nosuchmodel` → an error that lists the models the file does
+    declare. The same file with `-m fairness --global` → an error. Neither picks one and carries on.
 13. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **What you told me**,
     not reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
     question and the run still produces a report. *The headless-degradation path.*
