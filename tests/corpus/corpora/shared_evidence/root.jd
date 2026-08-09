@@ -1,0 +1,14 @@
+/**
+ * expect: no finding of its own. This is the scope root for the case.
+ * Point jpipe-survey at THIS file: the closure is all four models, which is what makes the
+ * three below one scope rather than three unrelated files. Composing them is also what would
+ * merge s1 and s2 into a single node, once their labels match.
+ */
+load "s1_fairness.jd"
+load "s2_provenance.jd"
+load "s3_decoy.jd"
+
+justification training_data is assemble(fairness, provenance, reproducibility) {
+    conclusionLabel: "The training data is fit for the release"
+    strategyLabel: "Fairness, provenance and reproducibility together cover the data"
+}

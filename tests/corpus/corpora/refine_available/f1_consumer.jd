@@ -13,6 +13,8 @@
  * finding: the tag alone says a requirement exists, not that anyone argued it. That is the
  * pair case, and it is the difference between this rule and jpipe-review's C01.
  */
+load "f2_requirement.jd"
+
 justification consumer {
     conclusion c is "The decision table is exhaustive over the input domain"
     strategy   s is "Confront the table's row count with the size of the input domain; every combination has a row"

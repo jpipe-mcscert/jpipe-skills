@@ -1,6 +1,6 @@
 # The survey report
 
-Emit this at Step 5 and stop, unless `--apply` was given.
+Emit this at Step 5. The fix list at Step 6 follows it, and edits wait for approval.
 
 ## Who reads this
 
@@ -306,8 +306,8 @@ a re-run will act on it.
 
 - **Whether any single model is a good argument.** This survey only compared models with each other.
   Whether a leaf states a verdict where it should name a fact, or names a file that does not exist,
-  is `jpipe-review`'s job, one model at a time. A clean survey and a clean review are different
-  claims, and a corpus wants both.
+  is `jpipe-review`'s job, which examines elements rather than comparing models. A clean survey and a
+  clean review are different claims, and a corpus wants both.
 - **Anything outside `justifications/`.** A model composed by a script elsewhere, or a step library
   referring to shared-node ids, would not show up here. Finding 4 is stated with that limit.
 - **Whether any of this compiles.** Nothing was built, because nothing was edited. `jpipe diagnostic`

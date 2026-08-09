@@ -10,6 +10,40 @@ not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-08-09
+
+### Changed
+
+- **Both skills now take exactly one `.jd` file as their scope**, together with everything that file
+  transitively `load`s. That closure is the object of study, because a goal assembled from four
+  requirement files is one argument rather than four, and reviewing or surveying half an argument tells
+  you little. **Breaking**: passing a directory, a glob, or nothing at all used to work and is now an
+  error, as is passing more than one file. Pass `--global` to scope either skill to every `.jd` in the
+  repository instead.
+- **`jpipe-review` now reports findings in loaded files.** Previously the files a model loaded were read
+  for context only and "never the site of a finding", so getting findings on a requirement file meant
+  invoking the skill again on that file. Point it at your top-level goal and it now reviews the whole
+  tree beneath it, once, with each element examined a single time even under `--global`.
+- One consequence worth having: `C01` (a leaf tagged with a requirement that should be a `refine`) can
+  now be a **finding** rather than always a question, when the model that proves the requirement is in
+  the closure. It stays a question when it is not, because inventing an answer is that rule's own
+  failure mode.
+- **The `--apply` flag is gone.** It was ceremony: the prose approval step is what protects you, so the
+  fix list now always follows the report and still edits nothing until you name the numbers. `jpipe` on
+  `PATH` is needed only once you approve something.
+- `jpipe-survey` needs two or more models in scope, so a file that loads nothing is reported as a scope
+  of one with `--global` suggested, rather than surveyed alone.
+
+### Fixed
+
+- `jpipe-survey`'s output contract still described the pre-0.1.3 finding shape, asking for a rule
+  description and a `file:line:col` that no longer exists. It now matches the report format the rest of
+  the skill was rewritten to.
+- `jpipe-survey` had no guardrail bounding what it reads. "Corpus" and "target" were used
+  interchangeably without ever being equated, so the harvest step could reach past whatever was passed
+  in. The two words are now defined as the same set, and the harvest is told to pass the scope's files
+  explicitly rather than a directory.
+
 ## [0.1.3] - 2026-08-09
 
 ### Changed
@@ -207,6 +241,7 @@ not, so per-skill changes are grouped under the headings below.
   actually fetch a new version.
 
 [Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
-[0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...main
+[0.1.4]: https://github.com/jpipe-mcscert/jpipe-skills/compare/00295157ff39c658efd568b0b245fda1847a9df6...main
+[0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...00295157ff39c658efd568b0b245fda1847a9df6
 [0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/compare/15c57b9f650c121b39bcd8a4ef28367bf8264e99...c0bef5968ed24e6da8eef07df9053d55340ee776
 [0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commit/15c57b9f650c121b39bcd8a4ef28367bf8264e99

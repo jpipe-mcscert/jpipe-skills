@@ -1,6 +1,6 @@
 # The findings report
 
-Emit this at Step 5 and stop, unless `--apply` was given.
+Emit this at Step 5. The fix list at Step 6 follows it, and edits wait for approval.
 
 ## Who reads this
 

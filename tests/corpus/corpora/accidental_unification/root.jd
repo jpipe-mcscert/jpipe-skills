@@ -1,0 +1,13 @@
+/**
+ * expect: no finding of its own. This is the scope root for the case.
+ * Point jpipe-survey at THIS file. Composing the two models is precisely what merges their
+ * byte-identical "The reported metrics" leaves into one node, so this root is not scaffolding:
+ * it is the operator that makes the defect real.
+ */
+load "u1_fairness.jd"
+load "u2_efficiency.jd"
+
+justification release is assemble(fairness, efficiency) {
+    conclusionLabel: "The release meets its fairness and efficiency targets"
+    strategyLabel: "Fairness and efficiency are independent and both hold"
+}

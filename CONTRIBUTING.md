@@ -84,32 +84,33 @@ the assertion, never the phrasing:
    positives, which are what make a reviewer useless.*
 3. A model that does not compile → **still reviewed**, and the report does not claim it builds, does
    not re-explain the compiler's diagnostics, and does not refuse. *Nothing is compiled before an edit.*
-4. `--apply` on a model with a broken `load` → the post-edit check catches it, even though the fatal
-   appears **only on stderr** with stdout completely empty. *The bug most likely to ship: a verifier
-   reading stdout alone calls a broken file clean.*
+4. Approving a fix on a model with a broken `load` → the post-edit check catches it, even though the
+   fatal appears **only on stderr** with stdout completely empty. *The bug most likely to ship: a
+   verifier reading stdout alone calls a broken file clean.*
 5. A leaf naming a nonexistent file → one `JD-G01`, citing the searches it ran.
-6. A directory of several models → N independent reviews, and **no finding stated in terms of a
-   second file**. *The scope boundary: the skill reads one model at a time.*
-7. `--apply`, answering *"1 and 3 only"* → exactly two edits, re-verified, nothing written to git.
+6. A goal file that loads three requirement files → **one** review of all four, with findings landing in
+   the loaded files too. Then no file, and two files: both are errors that stop. *The scope contract.*
+7. Answering *"1 and 3 only"* to the fix list → exactly two edits, re-verified, nothing written to git.
 
 Then `jpipe-survey`, whose failure modes are different because it compares files:
 
-8. `tests/corpus/corpora/shared_evidence/` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the
-   decoy. *The single most important case in the repository: the decoy is the closest label to s1 by
-   wording and the wrong answer, so this fails the moment clustering falls back to string similarity.*
-9. `tests/corpus/corpora/accidental_unification/` → one `JD-R03`, 🔴, **without a question being
-   asked**. The merge is what the compiler will do, so there is nothing to confirm.
-10. `tests/corpus/corpora/refine_available/` → one `JD-F01`. Then remove `f2_requirement.jd` and rerun:
-    it must become an **open question**, not a finding. *The tag says a requirement exists, not that
-    anyone argued it, and this is the whole difference from `jpipe-review`'s `C01`.*
+8. `corpora/shared_evidence/root.jd` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the decoy.
+   *The single most important case in the repository: the decoy is the closest label to s1 by wording
+   and the wrong answer, so this fails the moment clustering falls back to string similarity.*
+9. `corpora/accidental_unification/root.jd` → one `JD-R03`, 🔴, **without a question being asked**. The
+   merge is what the compiler will do, so there is nothing to confirm.
+10. `corpora/refine_available/f1_consumer.jd` → one `JD-F01`, since the model it should refine against is
+    in the closure. Then drop the `load` line and rerun: it must become an **open question**, because the
+    tag says a requirement exists, not that anyone argued it. *That pair is the whole difference between
+    this rule and `jpipe-review`'s `C01`, which now behaves the same way when the refiner is in scope.*
 11. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **Decisions**, not
     reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
     question and the run still produces a report. *The headless-degradation path.*
 12. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
     rather than vanishing.
-13. A corpus where one file does not compile → surveyed like any other, since a declaration clusters
-    whether or not its file parses. With `--apply`, the post-edit check must not blame that file's
-    pre-existing breakage on the edit.
+13. A scope where one file does not compile → surveyed like any other, since a declaration clusters
+    whether or not its file parses. After an approved fix, the post-edit check must not blame that
+    file's pre-existing breakage on the edit.
 14. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
     non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
 

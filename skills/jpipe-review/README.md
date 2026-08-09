@@ -44,31 +44,33 @@ Proposed labels are kept short (under 10 words for a fact, 15 for a check) for t
 labels are the node text in a rendered diagram, and jPipe unifies shared nodes by exact string match,
 so a long label is both unreadable and unshareable.
 
-## Scope: one model at a time
+## Scope: one file, and everything it loads
 
-The review reads the model you gave it and the files that model `load`s. **It never reads another
-`.jd`**, and a directory target is N independent reviews rather than one review of a corpus.
+You point the review at **one `.jd` file**. Its scope is that file plus everything the file
+transitively `load`s, because a goal assembled from four requirement files is one argument rather than
+four, and reviewing half an argument tells you very little. **Findings can land in any file in that
+closure**, so pointing at your top-level goal reviews the whole tree beneath it.
 
-That boundary is deliberate, and it costs something worth knowing about. Cross-model questions are
-outside it: whether the same fact is argued twice under labels that will not unify, whether two
-identical labels will merge under `assemble` into a node nobody wrote, whether anything still loads a
-given model. Those need a corpus, and a per-model reviewer that guesses at them from one file guesses
-wrong. So a **CLEAN** verdict here means *this model holds on its own terms* and says nothing about
-how it sits with any other. The report says so too, in its **Not looked at** section.
+Passing no file, or more than one, is an error rather than a guess. A review of something you did not
+name is a review of the wrong thing.
 
-Those questions are [`jpipe-survey`](../jpipe-survey/)'s, which reads the whole corpus at once and asks
-you to confirm what the files cannot settle. A corpus wants both skills: they make different claims.
+What stays outside: **how your models relate to each other.** Whether the same fact is argued twice
+under wordings that will not match, whether two labels merge when composed into a claim nobody wrote,
+whether anything still loads a given file. Those compare arguments rather than examine one, and they
+are [`jpipe-survey`](../jpipe-survey/)'s. So a **CLEAN** verdict means *this argument holds on its own
+terms*; the report says as much in its **Not looked at** section. A corpus wants both skills, because
+they make different claims.
 
 ## Usage
 
 ```
-jpipe-review <target> [--no-grounding] [--apply]
+jpipe-review <path/to/model.jd> [--global] [--no-grounding]
 ```
 
-`<target>` is a `.jd` file, a directory, a glob, or nothing (the `.jd` files changed in your working
-tree). Without `--apply` it reports and stops.
+`--global` scopes the review to every `.jd` in the repository instead, examining each element once, so
+a requirement file used by three goals is still reviewed once.
 
-Reporting needs no tools at all. `--apply` needs
+Reporting needs no tools at all. Approving a fix needs
 [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` (`brew install jpipe`,
 `apt install jpipe`, or `scoop install mcscert/jpipe`), because an edit it cannot verify is worse than
 a finding it merely reported: after editing it recompiles and re-renders every file it touched.

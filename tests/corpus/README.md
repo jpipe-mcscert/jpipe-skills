@@ -15,9 +15,20 @@ The tree splits by what a fixture *is*: a single model, or a corpus.
 | `bad/` | `jpipe-review` | One smell per file, named in the header as `expect: JD-XNN` | Exactly that rule id, at that element |
 | `corpora/<case>/` | `jpipe-survey` | Two or more models whose relationship is the subject | Named in each file's header. Findings **must** be stated across files here |
 
-Files under `good/` and `bad/` are reviewed **on their own**, which is the only way `jpipe-review`
-reviews anything: a finding there stated in terms of a second fixture is a bug in the skill. Under
-`corpora/` the opposite holds, and a finding that could have been made from one file is out of scope.
+**Each `corpora/` case is rooted**, so it is exercised the way a real corpus is: point the skill at the
+case's root file and its scope is that file plus everything it loads. No flags. `shared_evidence/` and
+`accidental_unification/` have a `root.jd` that composes the case with `assemble`; in
+`refine_available/`, `f1_consumer.jd` loads the requirement it should refine against, so it is the root
+itself.
+
+The roots are not scaffolding. `assemble` is the operator that would actually merge two identical
+labels, so `accidental_unification/root.jd` is what makes that case's defect real rather than
+hypothetical.
+
+Files under `good/` and `bad/` load nothing, so each is a scope of one and a finding stated in terms of
+a second fixture is a bug in the skill. Under `corpora/` the opposite holds: the root's closure is the
+scope, findings are expected to span its files, and a finding that could have been made from a single
+file is out of scope.
 
 Fixtures are deliberately generic (a release, a build, a coverage report) rather than drawn from any
 one project, so they read the same to someone who has never seen the tutorial corpus.

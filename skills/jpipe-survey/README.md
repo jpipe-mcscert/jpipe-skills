@@ -12,8 +12,8 @@ Surveys a whole corpus of jPipe justification models (`.jd`) for what no single 
 
 ## What it does
 
-[`jpipe-review`](../jpipe-review/) reads one model at a time, deliberately. That leaves a class of
-question it cannot answer, because the evidence is spread across files:
+[`jpipe-review`](../jpipe-review/) examines the elements of one argument. That leaves a class of
+question it does not answer, because it is about how separate arguments relate:
 
 | | |
 |---|---|
@@ -69,14 +69,17 @@ an open question and nothing is applied.
 ## Usage
 
 ```
-jpipe-survey <target> [--no-refine] [--questions N] [--apply]
+jpipe-survey <path/to/model.jd> [--global] [--no-refine] [--questions N]
 ```
 
-`<target>` is a directory, a glob, or nothing (the repository root). It needs **two or more** models,
-since every rule compares models. Without `--apply` it reports and stops.
+**Scope** is one `.jd` file plus everything it transitively `load`s. Pass `--global` instead to take
+every `.jd` in the repository. Passing no file, or more than one, is an error rather than a guess.
+
+Every rule compares models, so the scope needs two or more of them. A file that loads nothing gives a
+scope of one, and `--global` is the invocation for a corpus that is not rooted in a single model.
 
 Reporting needs no tools at all: the survey runs on a `grep` over label declarations, which works
-whether or not the corpus parses. `--apply` needs
+whether or not the files parse. Approving a fix needs
 [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` (`brew install jpipe`,
 `apt install jpipe`, or `scoop install mcscert/jpipe`), to recompile and re-render what it edited.
 
