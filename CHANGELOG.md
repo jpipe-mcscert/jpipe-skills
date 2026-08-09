@@ -2,11 +2,59 @@
 
 All notable changes to this project are documented here.
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
-to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The plugin is versioned as a whole;
-individual skills are not, so per-skill changes are grouped under the headings below.
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions read as
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html) triples. While the repository is
+experimental it stays on `0.1.x`, so a patch bump here can carry a new skill or a changed report
+format; read the entry, not the number. The plugin is versioned as a whole and individual skills are
+not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
+
+## [0.1.3] - 2026-08-09
+
+### Changed
+
+#### Both skills
+
+- **Reports are now written for the engineer who built the system**, not for a safety specialist. If
+  you have never heard of Toulmin, never read this skill, and have no idea what `A05` means, nothing in
+  a report should require you to look anything up. Findings are phrased in terms of your system, and
+  give you three things in order: **what's wrong** about the element in front of you, **why it matters**
+  (what goes undetected, what a reader is wrongly reassured about, what breaks silently later), and
+  **your options**, usually more than one, with the trade-off named and a recommendation. You choose.
+- The internal vocabulary is gone from the output. No "a Claim in a Grounds slot", no "wrong level of
+  abstraction", no `UNSOUND`/`ABSTRACTION`/`CONVENTION` headings, no "authority: argument". Sections now
+  say what they mean: *the argument does not hold*, *the argument will not tell you when it breaks*,
+  *suggestions*. Rule ids still appear, once, at the end of each finding, because people cite them in
+  review threads and script against them; they are a reference number, never the explanation.
+- In `jpipe-survey` the same rule reaches further, because its **questions** are the most reader-facing
+  text either skill produces. They now ask *"Are these the same file?"* rather than *"Same artifact?"*,
+  and explain the consequence in terms of the reader's system: two boxes instead of one when the models
+  are composed, so a check that runs twice. Compiler vocabulary is out, `unify` included, since it names
+  a pass nobody invokes; `assemble` and `refine` stay, because those are keywords the reader writes.
+  The report's `Decisions` section is now called **What you told me**.
+- Survey section headings say what they mean too: *composing these models makes a claim nobody wrote*,
+  *an argument the corpus already contains is being asserted instead*, *the same work is being done
+  twice*, *suggestions*.
+
+#### `jpipe-review`
+
+- **Decomposition is now the recommendation, not one option among two.** Where an element does two jobs,
+  the review leads with splitting it into legs, and gives the reason that matters to you: a split
+  argument tells you *which* half failed, and each half can be checked on its own. Reworking a label in
+  place is offered second, for the case where a leg genuinely rests on one thing.
+- **New rule `JD-A07`, non-atomic-strategy.** Atomicity previously covered evidence only, so a strategy
+  running two checks at once ("check the packages against the allowlist **and** scan the imports")
+  passed unremarked while producing exactly the defect `A05` describes: one pass/fail for two questions.
+  It usually pairs with `A05`, and one decomposition fixes both.
+- **Proposed labels are short**: under 10 words for a fact, 15 for a check. Two mechanical reasons, both
+  new to the guidance: labels are the node text in a rendered diagram, so a 25-word label produces a
+  diagram nobody reads; and unification is exact string equality, so long labels accumulate incidental
+  wording and never collide, which is what shared nodes need. A long label is also usually a *structural*
+  tell rather than a writing one, since the words are long because the element is doing two jobs.
+- `jpipe-survey` holds proposed labels to the same limits, where the reason is sharper still: a label is
+  shared only when two files match it **exactly**, so a long canonical wording is a merge that quietly
+  never happens.
 
 ## [0.1.2] - 2026-08-09
 
@@ -159,5 +207,6 @@ individual skills are not, so per-skill changes are grouped under the headings b
   actually fetch a new version.
 
 [Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
-[0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
-[0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
+[0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...main
+[0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/compare/15c57b9f650c121b39bcd8a4ef28367bf8264e99...c0bef5968ed24e6da8eef07df9053d55340ee776
+[0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commit/15c57b9f650c121b39bcd8a4ef28367bf8264e99

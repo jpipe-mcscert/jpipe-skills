@@ -20,13 +20,29 @@ It asks the four questions no tool asks:
 | | |
 |---|---|
 | **Abstraction** | Is each element at the right level? `evidence` should supply a datum, `strategy` should license an inference, `conclusion` should assert the claim. A leaf reading *"a schema check passes"* asserts the verdict its own leg exists to reach, so the argument proves itself |
-| **Atomicity** | One leaf, one fact. *"The Pipfile and the pipeline source"* is two facts fused: one check cannot test both, and neither half can be shared |
+| **Atomicity** | One leaf, one fact; one strategy, one check. *"The Pipfile and the pipeline source"* is two facts fused, so a single pass/fail covers two questions and cannot say which failed. The recommendation is to **split it into legs**, not to reword it |
 | **Grounding** | Does the repository actually contain what the evidence names? A renamed file leaves an argument that still compiles, still renders, and is quietly false |
 | **Conventions** | Does the file follow the house style: provenance header, refine placement, concluding at its own altitude? |
 
-Nothing is edited until you approve a numbered fix list. Every finding carries a rule id, a
-`file:line:col`, the proposed replacement, and a blast-radius line, because a one-word label edit
-can renumber every `unified_N` downstream.
+Nothing is edited until you approve a numbered fix list.
+
+## The report is written for you, not for a safety auditor
+
+Findings are phrased for **the engineer who built the system**. No Toulmin vocabulary, no internal rule
+names, no severity jargon: if you have never heard of a warrant, nothing in a report should require you
+to look it up. Each finding gives you three things:
+
+1. **What's wrong**, concretely, about the element in front of you.
+2. **Why it matters**, in terms of your system: what goes undetected, what a reader is wrongly
+   reassured about, what breaks silently later.
+3. **Your options**, usually more than one, with the trade-off named and a recommendation. You choose.
+
+Rule ids still appear, once, at the end of each finding, because people cite them in review threads.
+They are a reference number, never the explanation.
+
+Proposed labels are kept short (under 10 words for a fact, 15 for a check) for two mechanical reasons:
+labels are the node text in a rendered diagram, and jPipe unifies shared nodes by exact string match,
+so a long label is both unreadable and unshareable.
 
 ## Scope: one model at a time
 
@@ -38,7 +54,7 @@ outside it: whether the same fact is argued twice under labels that will not uni
 identical labels will merge under `assemble` into a node nobody wrote, whether anything still loads a
 given model. Those need a corpus, and a per-model reviewer that guesses at them from one file guesses
 wrong. So a **CLEAN** verdict here means *this model holds on its own terms* and says nothing about
-how it sits with any other. The report says so too, in its **Not reviewed** section.
+how it sits with any other. The report says so too, in its **Not looked at** section.
 
 Those questions are [`jpipe-survey`](../jpipe-survey/)'s, which reads the whole corpus at once and asks
 you to confirm what the files cannot settle. A corpus wants both skills: they make different claims.
@@ -57,14 +73,15 @@ Reporting needs no tools at all. `--apply` needs
 `apt install jpipe`, or `scoop install mcscert/jpipe`), because an edit it cannot verify is worse than
 a finding it merely reported: after editing it recompiles and re-renders every file it touched.
 
-## Authority: which findings you can argue with
+## Which findings you can argue with
 
-Every finding says what backs it, so you can tell a fact from an opinion:
+Every finding says, in plain words, how much room you have to disagree. There are three kinds:
 
-- **`language`**: the compiler decides. Not negotiable.
-- **`argument`**: the Toulmin reading below. Declinable, with a rationale.
-- **`house`**: McSCert house practice, and *irrelevant* if your project states its own conventions
-  in a `CLAUDE.md` or a `justifications/README.md`. Those win.
+- **The compiler decides.** Not a matter of taste: the tool will do this whether or not you agree.
+- **A judgement about the argument.** Declinable with a rationale. Most findings are these, and a
+  report saying so is telling you it has an opinion rather than a fact.
+- **A convention.** Take it or leave it, and *irrelevant* if your project states its own conventions in
+  a `CLAUDE.md` or a `justifications/README.md`. Those win, and the review defers to them.
 
 ## Reference material
 
@@ -84,13 +101,17 @@ The `references/` are written to be read by people too, not only loaded by the s
 the skill directory stays self-contained and copyable on its own. Edit the canon, not the copy:
 see [Shared reference material](../../CONTRIBUTING.md#shared-reference-material).
 
-## On the argument model
+## On the argument model (internal)
 
 Mapping jPipe onto Toulmin is **this repository's contribution**, not a claim about the language
-designers' intent, and neither Toulmin nor GSN is referenced anywhere else in the ecosystem. It
-earns its place by making the rules explainable instead of merely asserted: *"this leaf is bad"*
-becomes *"this is a Claim written into a Grounds slot"*, which tells you what to do about it. It
-also replaces the concept's previous informal name, *altitude*.
+designers' intent, and neither Toulmin nor GSN is referenced anywhere else in the ecosystem. It earns
+its place by making the rules derivable instead of merely asserted: *"this leaf is bad"* becomes *"this
+is a Claim written into a Grounds slot"*, which says what to do about it. It also replaces the concept's
+previous informal name, *altitude*.
+
+**None of that vocabulary reaches you.** It is the lens the skill reasons with, documented here because
+the rules should be checkable rather than taken on trust. A report says *"this says the check passed,
+which is what this part is trying to establish"*, which is the same finding without the homework.
 
 Worth knowing up front: jPipe's own documentation uses `evidence e is "Test suite passes"` in its
 worked example, which this reading flags. Optimising a language tour for brevity is fair; it just

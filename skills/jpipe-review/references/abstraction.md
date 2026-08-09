@@ -30,7 +30,7 @@ jPipe's own design documentation reaches for this vocabulary without naming it:
 *"An argument"*.
 
 The mapping is not decoration. It converts a vague complaint (*"this evidence is bad"*) into a
-precise one (*"this is a Claim written into a Grounds slot"*), which tells the author exactly what to
+precise one (*"this is a Claim written into a Grounds slot"*), which tells **you** exactly what to
 do about it.
 
 ### What jPipe cannot express
@@ -72,7 +72,8 @@ is concrete:
   committed Pipfile and its `[packages]` dependency table."* Someone who disagrees with the whole
   argument still agrees the Pipfile is there.
 - **strategy = a check.** The reasoning applied to that fact, where the pass/fail lives. *"Confront
-  the Pipfile's declared packages with the CPU-only allowlist; none lies outside it."*
+  declared packages with the CPU-only allowlist."* The verdict it reaches belongs to the rung above,
+  which is why the label does not end with *"; none lies outside it"* (§3b).
 - **sub-conclusion = a verdict.** What the leg establishes, which then becomes a fact for the leg
   above. *"The declared dependency environment offers no GPU or network capability."*
 
@@ -96,8 +97,8 @@ Rewritten, the same three nodes carry real weight:
 ```jd
 justification splits {
   conclusion c is "The data splits are well-formed"
-  strategy   s is "Confront each split's column set with the schema in SPECS section 2; every split matches"
-  evidence   e is "The committed train.csv, test.csv and counterfactual.csv, and their header rows"
+  strategy   s is "Confront each split's columns with the SPECS section 2 schema"
+  evidence   e is "The committed train.csv, test.csv and counterfactual.csv"
   s supports c
   e supports s
 }
@@ -108,15 +109,26 @@ argument can fail, which is the only reason to write one.
 
 ---
 
-## §3 Atomicity: one leaf, one fact
+## §3 Atomicity: one element, one job
 
-**An evidence leaf names exactly one artifact.**
+**An evidence leaf names exactly one artifact. A strategy performs exactly one check.**
 
 ```text
 evidence e_env is "The committed Pipfile and the pipeline source files"    ← two facts fused
+strategy s    is "Check the packages against the allowlist and scan the imports for GPU modules"
+                                                                           ← two checks fused
 ```
 
-Two reasons this is a defect, and the second is the one people miss.
+**When an element does two jobs, the fix is nearly always to decompose, not to compress.** That is the
+default this skill argues for: give each job its own leg, and let the structure carry what a longer
+label was trying to. A leg is one `sub-conclusion`, one `strategy`, one `evidence`, and it is the unit
+that can pass, fail, and be pointed at.
+
+Decomposition costs nodes and buys three things a fused element cannot give you: a failure that says
+*which* half failed, a check that can be automated separately, and a fact another argument can reuse.
+Compressing, by contrast, only ever hides the second job.
+
+Two reasons fusion is a defect, and the second is the one people miss.
 
 **It cannot be checked.** One warrant now has to do two unrelated things: confront declared packages
 with an allowlist, *and* scan imports for GPU modules. If it fails, the report cannot say which. The
@@ -148,6 +160,57 @@ Not every conjunction is a fusion. The test is whether the parts are checked **b
 
 Ask: *would splitting this force me to write two different checks?* If yes, it was two facts.
 
+For a strategy, the same question runs the other way: *would this check still make sense if I deleted
+half of it?* Two checks joined by "and", a semicolon, or a "then" are two strategies.
+
+### The length tell
+
+A long label is usually not a writing problem. It is a **structural** problem wearing a writing
+problem's clothes: the words are long because the element is doing two jobs and the label is carrying
+the seam. Before proposing a shorter wording, check whether you are looking at a fusion. If you are,
+decompose, and each half comes out short on its own.
+
+---
+
+## §3b Labels are names, not sentences
+
+Every label this skill proposes must be **short**. Not terse to the point of vagueness: short because
+a label is a name for a thing, and the argument's structure says the rest.
+
+| Kind | Aim for | Hard stop |
+|---|---|---|
+| `evidence` | under 10 words | it names one artifact and stops |
+| `strategy` | under 15 words | it names one comparison and stops |
+| `conclusion` / `sub-conclusion` | under 15 words | it states one claim and stops |
+
+Two reasons, both mechanical rather than aesthetic:
+
+1. **Labels are the node text in a rendered diagram.** `jpipe process -f SVG` puts the label in the
+   box. A 25-word label produces a diagram nobody can read, and an unreadable diagram is a case nobody
+   reviews. The rendering is not a side effect of the model; for most readers it *is* the model.
+2. **Unification is exact string equality** (`language.md` §7). Long labels accumulate incidental
+   wording (*"as committed"*, *"in the repository"*, *"which we verified"*) and two authors never
+   arrive at the same long string. Short labels collide on purpose; long ones never do.
+
+### What to cut
+
+- **The outcome clause.** *"Confront each split's column set with the schema; every split matches"* →
+  *"Confront each split's column set with the schema"*. The conclusion above already states what holds.
+- **Hedges and provenance.** *"as committed"*, *"currently"*, *"we believe"*, *"in this repository"*.
+- **The kind of the element.** *"Evidence that the Pipfile…"*, *"A strategy confronting…"*. The
+  keyword already said it.
+- **Restatement of the parent.** If the strategy repeats the conclusion, that is `A04`, not verbosity.
+
+### What never to cut
+
+The artifact and the comparison. *"The training data"* is shorter than *"The committed
+`data/train.csv` and its header row"* and worse: it no longer names a thing anyone can open. Concision
+that costs identifiability is not concision, it is `A01`/`G03` reintroduced.
+
+**The tension with `A06` is only apparent.** A warrant must be falsifiable, and a *comparison* is
+falsifiable by construction: naming what is confronted with what is enough, and the explicit
+*"and it holds"* is redundant with the conclusion. Name the comparison; drop the verdict.
+
 ---
 
 ## §4 Category errors
@@ -171,14 +234,17 @@ false by inspection. If deciding it needs a judgement, it is a verdict.
 
 **Two rewrites, and choosing between them is the actual work.**
 
-*Single-leg*: the model already has a strategy that can host the check. Reword the leaf down to its
-artifact and move the judgement up into the existing strategy. No new nodes, no id changes, no
-unification impact. This is the cheap and common case.
+*Decompose (prefer this)*: the verdict rests on several independent things, so the leg needs its own
+`sub-conclusion`, its own `strategy`, and one artifact as `evidence` beneath each. See §5. More nodes,
+and worth it: each part can now fail on its own and say so.
 
-*Multi-leg*: the verdict is one of several independent legs that must combine. Then the leg needs
-its own `sub-conclusion`, its own `strategy`, and the artifact as `evidence` beneath. See §5.
+*Reword*: the leg genuinely rests on **one** thing, and the model already has a strategy that can host
+the check. Move the judgement up into that strategy and reword the leaf down to its artifact. No new
+nodes, no id changes, no unification impact.
 
-Decide by asking how many independent things the conclusion depends on. One → reword. More → split.
+Decide by counting what the verdict actually depends on. **More than one → decompose. Exactly one →
+reword.** When it is arguable, decompose: an argument split too fine is verbose, while one fused too
+coarse cannot tell you what broke, and only the second failure matters when something does break.
 
 ### A02 · warrant-without-inference
 
@@ -200,13 +266,29 @@ usually the strategy, which should say *how* rather than *what*.
 
 ### A05 · non-atomic-evidence
 
-§3. Fix it before the grounding pass: a fused leaf names no single artifact to search for.
+§3. Fix it before the grounding pass: a fused leaf names no single artifact to search for. Decompose
+into one leg per artifact rather than rewording; there is no wording that makes one leaf two facts.
 
 ### A06 · unfalsifiable-warrant
 
 The check has no observable pass/fail: *"the approach is sound"*, *"best practices are followed"*.
-Nobody can run it and nobody can dispute it. Name the artifact, the comparison, and the outcome that
-would count as failure.
+Nobody can run it and nobody can dispute it. Name the artifact and the comparison; that is what makes
+a warrant falsifiable, and per §3b it is also enough, so do not append the verdict.
+
+### A07 · non-atomic-strategy
+
+§3, on the warrant side. One strategy performs two or more independent checks: *"Check the packages
+against the allowlist **and** scan the imports for GPU modules"*. The tell is a conjunction joining
+two verbs, and the consequence is the same as `A05`'s: one pass/fail for two questions, so a failure
+cannot say which check failed and neither check can be automated on its own.
+
+The fix is always decomposition, never rewording. Each check becomes a leg: its own `strategy`, its own
+`sub-conclusion` stating what that check establishes, and its own `evidence` beneath. The parent
+strategy then says why the legs are **jointly** sufficient, which is a real inference and usually the
+one nobody had written down.
+
+Often paired with `A05`: a strategy doing two checks is normally sitting on a leaf naming two
+artifacts, and one decomposition fixes both. Split the leaf first, then the checks follow it.
 
 ---
 
@@ -217,16 +299,16 @@ combined by a top warrant. This is what "at the right abstraction" looks like in
 
 ```jd
 justification r9 {
-    conclusion     c          is "The pipeline runs CPU-only, with no GPU and no network access (R9)"
-    strategy       s          is "A run reaches a GPU or the network only through a capability that is both present in the environment and invoked by the code"
+    conclusion     c          is "The pipeline runs CPU-only, with no GPU or network (R9)"
+    strategy       s          is "A capability must be both declared and invoked to be reachable"
 
-    sub-conclusion sc_stack   is "The declared dependency environment offers no GPU or network capability"
-    strategy       s_allow    is "Confront the Pipfile's declared packages with the CPU-only allowlist; none lies outside it"
-    evidence       e_pipfile  is "The committed Pipfile and its [packages] dependency table"
+    sub-conclusion sc_stack   is "The declared environment offers no GPU or network capability"
+    strategy       s_allow    is "Confront declared packages with the CPU-only allowlist"
+    evidence       e_pipfile  is "The committed Pipfile and its [packages] table"
 
     sub-conclusion sc_imports is "The pipeline code invokes no GPU or network capability"
-    strategy       s_scan     is "Scan the imports of every pipeline source file for a GPU or network module"
-    evidence       e_source   is "The committed pipeline source: the src/ package and the run_v*.py entry points"
+    strategy       s_scan     is "Scan pipeline source imports for GPU or network modules"
+    evidence       e_source   is "The pipeline source under src/ and run_v*.py"
 
     s supports c
     sc_stack   supports s

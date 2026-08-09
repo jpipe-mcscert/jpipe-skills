@@ -172,17 +172,35 @@ become visible. Worth mentioning, rarely worth a structural change.
 
 ## Report shape
 
+Follow `report-format.md`: what is wrong, why it matters to the person who built the system, and their
+options. Note what the word *unify* becomes when you write it down for them, since it names a compiler
+pass they never invoke: say that the two stay separate boxes and the check runs twice.
+
 ```text
-**R1 · `[JD-R01 duplicate-fact-not-unified]` · r13.jd:11:19 ⇄ r20.jd:9:19**
-*Two leaves name the same artifact but will not unify.*
-Shared artifact: `data/train.csv`, confirmed in answer to question 1.
-  r13 `e_train`  "The committed training split"
-  r20 `e_data`   "The train.csv split as committed"
-→ Align both on "The committed data/train.csv split and its header row". `assemble` will then unify
-  them into one node, and the check runs once for both goals.
-Authority: house.
-Blast radius: two label edits, no id changes, **but this creates a new unified group**, so every later
-  `unified_N` shifts. Re-render the composed model after applying.
+### 3. r13 and r20 are both about data/train.csv, worded differently
+
+`requirements/r13.jd:11` `e_train` · "The committed training split"
+`requirements/r20.jd:9` `e_data` · "The train.csv split as committed"
+
+**What's wrong.** Both are `data/train.csv`, which you confirmed when I asked. The wordings differ, so
+nothing connects them.
+
+**Why it matters.** Sharing in jPipe happens by exact label match, so as written these stay two
+separate boxes when the models are composed, and whatever checks the training split runs twice. If you
+automate it you will wire it twice, and can update one and forget the other.
+
+**Options.**
+  **a.** Put both on one wording. Neither names the file today, so fix that at the same time:
+     `r13.jd` `e_train` → "The committed data/train.csv and its header row"
+     `r20.jd` `e_data`  → "The committed data/train.csv and its header row"
+  **b.** Leave them. One duplicated check, small today, growing with each requirement that touches
+     the training data.
+  (a), and the two strategies stay as they are: r13 checks the column set, r20 a checksum.
+
+Cost: two labels, no ids change. Creates a shared node, so later shared-node ids shift
+  ·  Reference: `[JD-R01]`
 ```
 
-Severity: `R01`, `R02`, `R04` are 🔵 **REUSE**, always declinable. `R03` is 🔴 **UNSOUND**.
+Where these land: `R01`, `R02` and `R04` go under **the same work is being done twice**, always
+declinable. `R03` goes under **composing these models makes a claim nobody wrote**, and is the one
+finding here nobody can decline.

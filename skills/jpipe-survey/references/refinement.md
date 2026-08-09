@@ -124,19 +124,37 @@ resist it. A naming finding is the lowest-value thing this skill can say.
 
 ## Report shape
 
+Follow `report-format.md`. `refine` and `assemble` are worth naming as themselves, since they are
+keywords the reader writes; *"the refiner's conclusion merges with the hooked element"* is not, since
+that describes compiler internals nobody asked about.
+
 ```text
-**F1 · `[JD-F01 should-be-refine]` · requirements/r20.jd:11:19 · `evidence e_grid`**
-*A leaf asserts what another model in the corpus proves.*
-Leaf: "The identity grid is the full 27-cell one (R22)".
-Proved by: `requirements/r22.jd:4` `conclusion c` "The identity grid is the full 27-cell one (R22)".
-→ Refine against it rather than asserting it, per house practice storing the refine in r20.jd:
-    load "r22.jd"
-    justification r20_base { … }
-    justification r20 is refine(r20_base, r22) { hook: "e_grid" }
-Authority: house.
-Blast radius: r20.jd only; every branch that assembles `r20` picks up the refined form unchanged.
-  Structural: recompile and re-render.
+### 2. r20 states something r22 already proves
+
+`requirements/r20.jd:11` `e_grid` · "The identity grid is the full 27-cell one (R22)"
+`requirements/r22.jd:4` `c` · "The identity grid is the full 27-cell one (R22)"
+
+**What's wrong.** r20 takes this as a given. r22 is a whole argument that establishes it, and it
+concludes the same sentence.
+
+**Why it matters.** The two are connected only by the `(R22)` you typed in the label. If r22's
+argument stops holding, r20 carries on asserting its conclusion as a fact and nothing tells you. The
+connection is also invisible in both diagrams.
+
+**Options.**
+  **a.** Point r20 at r22's argument with `refine`, grafting r22's tree where the leaf is. This
+     conventionally lives in r20's own file under the same name, so nothing using r20 has to change:
+       load "r22.jd"
+       justification r20_base { ... }
+       justification r20 is refine(r20_base, r22) { hook: "e_grid" }
+  **b.** Leave the leaf and treat the tag as the link, which keeps the link invisible to the compiler
+     and the diagram.
+  (a). It is the reason `refine` exists, and it is one file's change.
+
+Cost: r20.jd only. Everything composing `r20` picks up the fuller argument unchanged. Structural,
+  so recompile and re-render  ·  Reference: `[JD-F01]`
 ```
 
-Conventions are 🟡, `F01` is 🟠. Because this whole file is house practice, phrase findings as
-observations with a rationale, not as violations.
+Where these land: `F01` goes under **an argument the corpus already contains is being asserted
+instead**; `F02` to `F04` go under **suggestions**. Because this whole file is house practice, phrase
+them as observations with a rationale, and say they are declinable.
