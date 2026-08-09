@@ -29,6 +29,11 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 | Skill | What it does | Needs |
 |---|---|---|
 | [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model, one model at a time: whether its elements sit at the right level, rest on artifacts that exist, and follow the house style. Reads only the model you give it. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
+| [**jpipe-survey**](skills/jpipe-survey/) | Surveys a *corpus* for what no single file shows: the same fact argued twice under labels that will not unify, labels identical enough to merge into a claim nobody wrote, and leaves that assert what another model already proves. Asks you to confirm what the files cannot settle | same |
+
+The split is deliberate. **`jpipe-review` reads one model properly; `jpipe-survey` reads how many models
+fit together.** A clean review and a clean survey are different claims, and a corpus wants both: the
+reviewer never opens a second `.jd`, and the surveyor never judges whether one argument is any good.
 
 Each skill's directory has its own README.
 
@@ -75,7 +80,7 @@ A hand install is a copy, so it does not update. Re-copy over it, from a fresh c
 
 ```bash
 git -C jpipe-skills pull --ff-only
-cp -r jpipe-skills/skills/jpipe-review ~/.claude/skills/
+cp -r jpipe-skills/skills/jpipe-review jpipe-skills/skills/jpipe-survey ~/.claude/skills/
 ```
 
 If you symlinked instead of copying, the `git pull` is the whole update.
@@ -92,14 +97,15 @@ If you symlinked instead of copying, the `git pull` is the whole update.
 <summary>Installing by hand (works in every host)</summary>
 
 Each directory under `skills/` is self-contained, so installing one means copying it where Claude
-Code looks for skills.
+Code looks for skills. Shared reference text is vendored into each skill rather than linked between
+them, which is what makes copying just one work.
 
 For yourself, in every project:
 
 ```bash
 git clone https://github.com/jpipe-mcscert/jpipe-skills.git
 mkdir -p ~/.claude/skills
-cp -r jpipe-skills/skills/jpipe-review ~/.claude/skills/
+cp -r jpipe-skills/skills/jpipe-review jpipe-skills/skills/jpipe-survey ~/.claude/skills/
 ```
 
 For one project, committed so that everyone who clones it gets the skill too:
@@ -107,10 +113,11 @@ For one project, committed so that everyone who clones it gets the skill too:
 ```bash
 mkdir -p <your-project>/.claude/skills
 cp -r jpipe-skills/skills/jpipe-review <your-project>/.claude/skills/
+cp -r jpipe-skills/skills/jpipe-survey <your-project>/.claude/skills/
 ```
 
-Substitute `ln -s "$PWD/jpipe-skills/skills/jpipe-review"` for `cp -r` to track the repository
-instead and pick up changes with a `git pull`.
+Substitute `ln -s "$PWD/jpipe-skills/skills/<name>"` for `cp -r` to track the repository instead and
+pick up changes with a `git pull`.
 
 Start a new session for a newly installed skill to be picked up.
 

@@ -200,7 +200,7 @@ from inside this file.
 - **Anything outside these five files.** Each model was reviewed on its own, and no other `.jd` was
   read. So: whether two of these leaves will unify under `assemble`, whether a fact argued here is
   already argued elsewhere, and whether anything loads these models are all unanswered. A 🟢 above
-  means the model holds on its own terms, nothing more.
+  means the model holds on its own terms, nothing more. `jpipe-survey` answers those.
 - **g6_efficiency.jd**: does not compile; semantic passes skipped for this file. The compiler and
   the VS Code extension are the authority there. Its raw output:
   <details><summary>jpipe diagnostic</summary>

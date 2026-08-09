@@ -40,6 +40,9 @@ given model. Those need a corpus, and a per-model reviewer that guesses at them 
 wrong. So a **CLEAN** verdict here means *this model holds on its own terms* and says nothing about
 how it sits with any other. The report says so too, in its **Not reviewed** section.
 
+Those questions are [`jpipe-survey`](../jpipe-survey/)'s, which reads the whole corpus at once and asks
+you to confirm what the files cannot settle. A corpus wants both skills: they make different claims.
+
 ## Usage
 
 ```

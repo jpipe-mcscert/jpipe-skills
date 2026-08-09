@@ -1,6 +1,6 @@
 ---
 name: jpipe-review
-description: "Reviews the argument in an existing jPipe justification model (.jd), one model at a time. Checks abstraction (evidence supplies a datum, strategy licenses the inference, conclusion asserts the claim, i.e. Toulmin's grounds/warrant/claim), atomicity (one leaf, one fact), grounding (the artifacts the evidence names actually exist in the repository), and the house style. Reads only the model it was given and the files it loads; never surveys other models. Emits a findings report with file:line and rule ids; edits are applied only after you approve them. Syntax and unresolved-symbol errors are left to `jpipe diagnostic` and the VS Code extension. Use when asked to review, audit, critique, sanity-check, or improve a .jd file, a justifications/ directory, or an assurance case. NOT for writing a new model from scratch, NOT for cross-model reuse or corpus-wide analysis, NOT for reviewing the jpipe-runner step library that implements the checks, NOT for reviewing the jPipe compiler's own source."
+description: "Reviews the argument in an existing jPipe justification model (.jd), one model at a time. Checks abstraction (evidence supplies a datum, strategy licenses the inference, conclusion asserts the claim, i.e. Toulmin's grounds/warrant/claim), atomicity (one leaf, one fact), grounding (the artifacts the evidence names actually exist in the repository), and the house style. Emits a findings report with file:line and rule ids; edits are applied only after you approve them. Syntax and unresolved-symbol errors are left to `jpipe diagnostic` and the VS Code extension. Use when asked to review, audit, critique, sanity-check, or improve a .jd file, a justifications/ directory, or an assurance case. NOT for writing a new model from scratch, NOT for cross-model reuse or corpus-wide analysis, which is jpipe-survey's, NOT for reviewing the jpipe-runner step library that implements the checks, NOT for reviewing the jPipe compiler's own source."
 argument-hint: "[path/to/model.jd | justifications/ | glob] [--no-grounding] [--apply]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
@@ -39,7 +39,7 @@ pre-merge check over a `justifications/` directory.
 
 - Writing a new model from scratch.
 - **Cross-model questions**: is this fact argued twice elsewhere, will these two labels unify, does
-  anything load this model. All of them need a corpus, and this skill does not have one.
+  anything load this model. Those need a corpus, so they are `jpipe-survey`'s.
 - Reviewing the **step library** that implements the checks (`steps/`, `@jpipe_link` modules).
 - Reviewing the jPipe compiler's own source.
 - Rendering a diagram. That is one command: `jpipe process -m <model> -i <f> -f SVG -o <out>.svg`.

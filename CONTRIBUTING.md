@@ -91,6 +91,26 @@ the assertion, never the phrasing:
    second file**. *The scope boundary: the skill reads one model at a time.*
 7. `--apply`, answering *"1 and 3 only"* → exactly two edits, re-verified, nothing written to git.
 
+Then `jpipe-survey`, whose failure modes are different because it compares files:
+
+8. `tests/corpus/corpora/shared_evidence/` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the
+   decoy. *The single most important case in the repository: the decoy is the closest label to s1 by
+   wording and the wrong answer, so this fails the moment clustering falls back to string similarity.*
+9. `tests/corpus/corpora/accidental_unification/` → one `JD-R03`, 🔴, **without a question being
+   asked**. The merge is what the compiler will do, so there is nothing to confirm.
+10. `tests/corpus/corpora/refine_available/` → one `JD-F01`. Then remove `f2_requirement.jd` and rerun:
+    it must become an **open question**, not a finding. *The tag says a requirement exists, not that
+    anyone argued it, and this is the whole difference from `jpipe-review`'s `C01`.*
+11. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **Decisions**, not
+    reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
+    question and the run still produces a report. *The headless-degradation path.*
+12. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
+    rather than vanishing.
+13. A corpus where one file does not compile → that file is excluded from every cluster, listed under
+    **Not reviewed** verbatim, and the survey still runs on the rest.
+14. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
+    non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
+
 Record the outcome in `CHANGELOG.md` for the release.
 
 ## Releasing
