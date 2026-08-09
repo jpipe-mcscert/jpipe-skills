@@ -1,30 +1,33 @@
 # Rule catalogue
 
-The lookup table. Every finding cites an id from here **and quotes its description**, because a bare
-`JD-A01` means nothing to an author who has not read this file, and a report they cannot read without
-a lookup table is a report they will not read. Every id also carries an **authority** saying what
-backs it, which decides whether the author can decline it.
-
-The **Description** column is the line the report quotes: short enough for a header, and phrased so
-the finding is comprehensible without opening this catalogue. **Trigger** is for you, deciding whether
-the rule fires at all.
+**This file is for you, not for the reader of the report.** It is the lookup table that decides whether
+a rule fires and what to propose. Almost none of its vocabulary belongs in a report: the person reading
+that is the engineer who built the system, and they have no reason to know what a warrant is or what
+`A05` means. → `report-format.md`, which is about writing for them.
 
 Every rule here is decidable from **one model**: the file under review and the files it `load`s. A
 question that needs a second model is not in this catalogue, by construction.
 
-| Authority | Backed by | Declinable? |
-|---|---|---|
-| `language` | the grammar and the compiler | No; the model will not build, or already claims something unintended |
-| `argument` | Toulmin's model of argument (`abstraction.md`) | Yes, with a rationale |
-| `house` | McSCert house practice (`conventions.md`) | Yes, and irrelevant if the project states its own conventions |
+| Column | For |
+|---|---|
+| **Trigger** | you, deciding whether the rule fires |
+| **Description** | you, as the one-line summary of what the rule is about. Do not paste it at the reader as an explanation; say what is wrong with *their* element instead |
+| **Typical fix** | the starting point for the options you offer. **Where it says decompose, decomposing is the recommendation**, not one alternative among two |
 
-Severity is about whether the argument survives, not about how much work the fix is:
+| Authority | Backed by | Declinable? | Say to the reader |
+|---|---|---|---|
+| `language` | the grammar and the compiler | No | "the compiler will do this whether or not you agree" |
+| `argument` | Toulmin's model of argument (`abstraction.md`) | Yes, with a rationale | "this is a judgement about the argument; disagree and it stands" |
+| `house` | McSCert house practice (`conventions.md`) | Yes, and irrelevant if the project states its own conventions | "a convention, take it or leave it" |
 
-| | | |
+Severity is about whether the argument survives, not about how much work the fix is. The right-hand
+column is what a report says out loud; the middle column never appears in one:
+
+| | Internal | In the report |
 |---|---|---|
-| 🔴 | **UNSOUND** | The argument does not support its claim, or asserts something nobody wrote |
-| 🟠 | **ABSTRACTION** | It holds, but an element sits at the wrong rung |
-| 🟡 | **CONVENTION** | The argument is fine; the file departs from house style |
+| 🔴 | UNSOUND | **The argument does not hold.** Someone could read this and be reassured by nothing |
+| 🟠 | ABSTRACTION | **The argument will not tell you when it breaks.** It holds today and cannot report its own failure |
+| 🟡 | CONVENTION | **Suggestions.** The argument is fine; this would make it easier to live with |
 
 ---
 
@@ -32,12 +35,13 @@ Severity is about whether the argument survives, not about how much work the fix
 
 | Id | Name | Description | Trigger | Typical fix | Sev |
 |---|---|---|---|---|---|
-| A01 | claim-as-evidence | A leaf asserts a verdict where it should name an artifact | A leaf asserts a judgement rather than naming an artifact: *"a … check passes"*, *"… confirms …"*, *"… is computed correctly"*, *"X is a Y"*. Test: could it be false in a way that needs reasoning to discover? | Single-leg: reword the leaf down to its artifact, move the judgement into the existing strategy. Multi-leg: give the leg its own `sub-conclusion` + `strategy` | 🟠 |
+| A01 | claim-as-evidence | A leaf asserts a verdict where it should name an artifact | A leaf asserts a judgement rather than naming an artifact: *"a … check passes"*, *"… confirms …"*, *"… is computed correctly"*, *"X is a Y"*. Test: could it be false in a way that needs reasoning to discover? | Rests on more than one thing: **decompose** into a leg per thing, each with its own `sub-conclusion` + `strategy`. Rests on exactly one: reword the leaf down to its artifact and move the judgement into the existing strategy | 🟠 |
 | A02 | warrant-without-inference | A strategy that does not license the step it sits on | A strategy names an artifact, restates the claim, or gives a title (*"Testing argument"*) instead of licensing a step | State what is confronted with what, and what would have to hold | 🟠 |
 | A03 | missing-intermediate-claim | A leg reaches a verdict that nothing writes down | Independent legs wire straight into the top strategy with no `sub-conclusion`; a failing leg cannot be localised | Add one `sub-conclusion` per leg, each with its own strategy | 🟠 |
 | A04 | claim-restates-warrant | A conclusion and its strategy say the same thing | A conclusion and the strategy beneath it say the same thing | Rewrite the strategy to say *how*, not *what* | 🟠 |
-| A05 | non-atomic-evidence | One leaf names two independent facts | One leaf names two or more independent artifacts. Test: would splitting force two different checks? | Split into one leg per artifact. Fix before grounding: a fused leaf has no single artifact to search for | 🟠 |
-| A06 | unfalsifiable-warrant | A check with no observable pass or fail | The check has no observable pass/fail: *"the approach is sound"* | Name the artifact, the comparison, and what would count as failure | 🟠 |
+| A05 | non-atomic-evidence | One leaf names two independent facts | One leaf names two or more independent artifacts. Test: would splitting force two different checks? | **Decompose** into one leg per artifact; no wording makes one leaf two facts. Fix before grounding: a fused leaf has no single artifact to search for | 🟠 |
+| A06 | unfalsifiable-warrant | A check with no observable pass or fail | The check has no observable pass/fail: *"the approach is sound"* | Name the artifact and the comparison; a comparison is falsifiable by construction, so do not append the verdict | 🟠 |
+| A07 | non-atomic-strategy | One strategy performs two independent checks | Two checks joined by "and", a semicolon or a "then". Test: would this check still make sense with half of it deleted? | **Decompose**: one leg per check, and the parent strategy then states why the legs are jointly sufficient | 🟠 |
 
 ## JD-G · grounding, *authority: argument* → `grounding.md`
 
@@ -99,8 +103,8 @@ can recognise and stay off it.
 Within the report, order by severity, then by blast radius ascending. The suggested **fix** order is
 different, and it is a dependency order rather than an importance order:
 
-1. 🔴 UNSOUND: nothing else is trustworthy while the argument rests on a hole
-2. **A05 atomicity splits**: first among the 🟠, because the atoms they produce are what the other
-   findings are then written against
-3. zero-blast-radius rewords: A01 single-leg, A02, A04
-4. structural: A03, C01/C02; recompile and re-render after each
+1. 🔴 first: nothing else is trustworthy while the argument rests on a hole
+2. **Decompositions, A05 then A07**: first among the 🟠, because the legs they produce are what every
+   other finding is then written against. A05 before A07: split the leaf, and the checks follow it
+3. zero-blast-radius rewords: A01 where it rests on one thing, A02, A04, A06
+4. remaining structure: A03, C01/C02; recompile and re-render after each

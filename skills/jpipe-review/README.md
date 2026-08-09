@@ -20,13 +20,29 @@ It asks the four questions no tool asks:
 | | |
 |---|---|
 | **Abstraction** | Is each element at the right level? `evidence` should supply a datum, `strategy` should license an inference, `conclusion` should assert the claim. A leaf reading *"a schema check passes"* asserts the verdict its own leg exists to reach, so the argument proves itself |
-| **Atomicity** | One leaf, one fact. *"The Pipfile and the pipeline source"* is two facts fused: one check cannot test both, and neither half can be shared |
+| **Atomicity** | One leaf, one fact; one strategy, one check. *"The Pipfile and the pipeline source"* is two facts fused, so a single pass/fail covers two questions and cannot say which failed. The recommendation is to **split it into legs**, not to reword it |
 | **Grounding** | Does the repository actually contain what the evidence names? A renamed file leaves an argument that still compiles, still renders, and is quietly false |
 | **Conventions** | Does the file follow the house style: provenance header, refine placement, concluding at its own altitude? |
 
-Nothing is edited until you approve a numbered fix list. Every finding carries a rule id, a
-`file:line:col`, the proposed replacement, and a blast-radius line, because a one-word label edit
-can renumber every `unified_N` downstream.
+Nothing is edited until you approve a numbered fix list.
+
+## The report is written for you, not for a safety auditor
+
+Findings are phrased for **the engineer who built the system**. No Toulmin vocabulary, no internal rule
+names, no severity jargon: if you have never heard of a warrant, nothing in a report should require you
+to look it up. Each finding gives you three things:
+
+1. **What's wrong**, concretely, about the element in front of you.
+2. **Why it matters**, in terms of your system: what goes undetected, what a reader is wrongly
+   reassured about, what breaks silently later.
+3. **Your options**, usually more than one, with the trade-off named and a recommendation. You choose.
+
+Rule ids still appear, once, at the end of each finding, because people cite them in review threads.
+They are a reference number, never the explanation.
+
+Proposed labels are kept short (under 10 words for a fact, 15 for a check) for two mechanical reasons:
+labels are the node text in a rendered diagram, and jPipe unifies shared nodes by exact string match,
+so a long label is both unreadable and unshareable.
 
 ## Scope: one model at a time
 
@@ -84,13 +100,17 @@ The `references/` are written to be read by people too, not only loaded by the s
 the skill directory stays self-contained and copyable on its own. Edit the canon, not the copy:
 see [Shared reference material](../../CONTRIBUTING.md#shared-reference-material).
 
-## On the argument model
+## On the argument model (internal)
 
 Mapping jPipe onto Toulmin is **this repository's contribution**, not a claim about the language
-designers' intent, and neither Toulmin nor GSN is referenced anywhere else in the ecosystem. It
-earns its place by making the rules explainable instead of merely asserted: *"this leaf is bad"*
-becomes *"this is a Claim written into a Grounds slot"*, which tells you what to do about it. It
-also replaces the concept's previous informal name, *altitude*.
+designers' intent, and neither Toulmin nor GSN is referenced anywhere else in the ecosystem. It earns
+its place by making the rules derivable instead of merely asserted: *"this leaf is bad"* becomes *"this
+is a Claim written into a Grounds slot"*, which says what to do about it. It also replaces the concept's
+previous informal name, *altitude*.
+
+**None of that vocabulary reaches you.** It is the lens the skill reasons with, documented here because
+the rules should be checkable rather than taken on trust. A report says *"this says the check passed,
+which is what this part is trying to establish"*, which is the same finding without the homework.
 
 Worth knowing up front: jPipe's own documentation uses `evidence e is "Test suite passes"` in its
 worked example, which this reading flags. Optimising a language tour for brevity is fair; it just

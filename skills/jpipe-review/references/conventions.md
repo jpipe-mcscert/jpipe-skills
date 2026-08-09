@@ -90,7 +90,7 @@ Not a property of the model, but a property of a **fix you are proposing**. Any 
 destroys, or renames a unified group renumbers every later `unified_N` (`language.md` §7), and those
 ids may be referenced by a step library this skill does not read.
 
-Every structural finding carries a blast-radius line, and this is when it must say so explicitly.
+Every structural finding carries a cost line, and this is when it must say so explicitly.
 
 ---
 
@@ -110,20 +110,31 @@ this file is internally inconsistent, which is the only kind of inconsistency on
 
 ## Report shape
 
-Conventions are 🟡 **CONVENTION**: the argument holds, and the file departs from house style. Two
-exceptions escalate: `C01` reaches 🟠 when the leaf is also `A01` (it asserts a tagged requirement
-*and* is a verdict in a grounds slot), and `C07` is a property of a proposed fix rather than a
-finding, so it appears as a blast-radius line, never as its own entry.
+These go under 🟡 **Suggestions**: the argument holds and the file departs from house style. Two
+exceptions. `C01` moves up to **will not tell you when it breaks** when the leaf is also `A01`, since
+it then both asserts a tagged requirement and states a verdict where a fact belongs. `C07` is a
+property of a proposed fix rather than a finding, so it appears as a cost line, never its own entry.
 
-Because this whole file is house practice, phrase findings as observations with a rationale, not as
-violations. And keep the rationale inside this file: *"every other file under `requirements/` has
-one"* is a claim about a corpus this skill did not read.
+Because this whole file is house practice, phrase findings as observations with a rationale rather than
+violations, and say plainly that they are declinable. Keep the rationale inside this file too:
+*"every other file under `requirements/` has one"* is a claim about a corpus this skill did not read.
 
 ```text
-**C1 · `[JD-C06 missing-header]` · requirements/r14.jd:1**
-*No provenance header tracing the argument to what it serves.*
-There is no `/** */` block, so nothing traces this argument to the requirement it serves or the
-decisions behind it.
-→ Worth adding, and it is where the backing for `s_thresh`'s 0.8 threshold belongs: the
-  warrant cites the number but nothing says what authorizes it.
+### 5. This file does not say which requirement it serves
+
+`requirements/r14.jd:1` · file header
+
+**What's wrong.** No comment block at the top. Nothing connects this model to REQUIREMENTS.md or to
+the decisions behind it.
+
+**Why it matters.** Mostly for whoever picks this up in a year, including you. It is also the natural
+home for something missing elsewhere: `s_thresh` confronts accuracy with "the 0.8 threshold", and
+nothing in the file says where 0.8 came from or who agreed to it.
+
+**Options.**
+  **a.** Add a header naming the requirement, the goals it serves, and the decision that fixed 0.8.
+  **b.** Leave it, and record the 0.8 rationale wherever your project keeps that instead.
+  A convention rather than a defect: take it or leave it.
+
+Cost: a comment  ·  Reference: `[JD-C06]`
 ```

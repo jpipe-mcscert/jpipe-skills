@@ -8,6 +8,35 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ## [Unreleased]
 
+### Changed
+
+#### `jpipe-review`
+
+- **Reports are now written for the engineer who built the system**, not for a safety specialist. If
+  you have never heard of Toulmin, never read this skill, and have no idea what `A05` means, nothing in
+  a report should require you to look anything up. Findings are phrased in terms of your system, and
+  give you three things in order: **what's wrong** about the element in front of you, **why it matters**
+  (what goes undetected, what a reader is wrongly reassured about, what breaks silently later), and
+  **your options**, usually more than one, with the trade-off named and a recommendation. You choose.
+- The internal vocabulary is gone from the output. No "a Claim in a Grounds slot", no "wrong level of
+  abstraction", no `UNSOUND`/`ABSTRACTION`/`CONVENTION` headings, no "authority: argument". Sections now
+  say what they mean: *the argument does not hold*, *the argument will not tell you when it breaks*,
+  *suggestions*. Rule ids still appear, once, at the end of each finding, because people cite them in
+  review threads and script against them; they are a reference number, never the explanation.
+- **Decomposition is now the recommendation, not one option among two.** Where an element does two jobs,
+  the review leads with splitting it into legs, and gives the reason that matters to you: a split
+  argument tells you *which* half failed, and each half can be checked on its own. Reworking a label in
+  place is offered second, for the case where a leg genuinely rests on one thing.
+- **New rule `JD-A07`, non-atomic-strategy.** Atomicity previously covered evidence only, so a strategy
+  running two checks at once ("check the packages against the allowlist **and** scan the imports")
+  passed unremarked while producing exactly the defect `A05` describes: one pass/fail for two questions.
+  It usually pairs with `A05`, and one decomposition fixes both.
+- **Proposed labels are short**: under 10 words for a fact, 15 for a check. Two mechanical reasons, both
+  new to the guidance: labels are the node text in a rendered diagram, so a 25-word label produces a
+  diagram nobody reads; and unification is exact string equality, so long labels accumulate incidental
+  wording and never collide, which is what shared nodes need. A long label is also usually a *structural*
+  tell rather than a writing one, since the words are long because the element is doing two jobs.
+
 ## [0.1.2] - 2026-08-09
 
 ### Added

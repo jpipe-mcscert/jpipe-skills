@@ -130,16 +130,29 @@ r14.jd:10 strategy s_thresh is "Confront the measured accuracy with the 0.8 thre
 
 ## Report shape
 
-Every grounding finding carries the searches. Minimum:
+Follow `report-format.md`: what is wrong, why it matters to the person who built the system, and their
+options. What this pass adds is that **the searches are part of "what's wrong"**. A reader has to be
+able to re-run them, or the finding is unfalsifiable in exactly the way the model was.
 
 ```text
-**U1 · `[JD-G02 artifact-stale]` · requirements/r3.jd:9:19 · `evidence e_split`**
-Leaf names *"the data/dev.csv split"*.
-Searched: `data/dev.csv`, `**/dev.csv`. No match.
-Nearest: `data/train.csv`, `data/test.csv`, `data/counterfactual.csv`.
-→ Likely a stale label from a rename. Confirm which split is meant; the fix is label-only.
+### 1. This argument rests on a file that is not in the repository
+
+`requirements/r3.jd:9` · `evidence e_split` · "The committed data/dev.csv split and its header row"
+
+**What's wrong.** There is no `data/dev.csv`. Searched that exact path and `**/dev.csv`; the splits
+that exist are `data/train.csv`, `data/test.csv` and `data/counterfactual.csv`.
+
+**Why it matters.** The model compiles, renders and looks complete, so a reader concludes R3 was
+checked against a dev split. If this was a rename, the argument has been quietly false since it landed.
+
+**Options.**
+  **a.** If R3 is about one of the three that exist, correct the name.
+  **b.** If a dev split should exist, the fix is in the repository, not the model.
+  I cannot tell which from here, and guessing makes it confidently wrong rather than obviously broken.
+
+Cost: one label, nothing else moves  ·  Reference: `[JD-G02]`
 ```
 
-Severity: `G01`, `G02` and `G04` are 🔴 **UNSOUND**: the argument rests on something that is not
-there, or is not what the check needs. `G03` is 🟠 **ABSTRACTION**, because the real problem is that
-the leaf was never a fact.
+Where these land: `G01`, `G02` and `G04` go in **the argument does not hold**, since it rests on
+something absent or unusable. `G03` goes in **will not tell you when it breaks**, because the real
+problem is that the leaf was never a fact.

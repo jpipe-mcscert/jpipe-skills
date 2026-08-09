@@ -37,11 +37,10 @@ pre-merge check over a `justifications/` directory.
 
 ### Do NOT invoke for
 
-- Writing a new model from scratch.
+- Writing a new model from scratch, or reviewing the **step library** (`steps/`, `@jpipe_link`
+  modules) or the jPipe compiler's own source.
 - **Cross-model questions**: is this fact argued twice elsewhere, will these two labels unify, does
   anything load this model. Those need a corpus, so they are `jpipe-survey`'s.
-- Reviewing the **step library** that implements the checks (`steps/`, `@jpipe_link` modules).
-- Reviewing the jPipe compiler's own source.
 - Rendering a diagram. That is one command: `jpipe process -m <model> -i <f> -f SVG -o <out>.svg`.
 
 ## Guardrails
@@ -53,13 +52,15 @@ pre-merge check over a `justifications/` directory.
 - **Read-only through Step 5.** Nothing is modified before the author approves a numbered fix list.
 - **No version-control actions, ever.** Do not stage, commit, push, branch, merge, tag, or open a
   pull request. Report; the author integrates.
-- **Never re-report what the compiler already said.** Diagnostics are a gate, not findings.
-- **Never open a file under `steps/`** or any `@jpipe_link` binding module. Out of scope, and its
-  contents can never be a finding.
+- **Never re-report what the compiler already said**, and never open a file under `steps/` or any
+  `@jpipe_link` module: out of scope, and its contents can never be a finding.
 - **Never silently re-id or renumber.** `assemble` unification is positional; a one-line label edit
   can shift every downstream `unified_N`.
-- **Name the authority on every finding** that is not `language`. Toulmin (`argument`) and house
-  practice (`house`) are proposals the author may decline.
+- **Write the report for the engineer who built the system.** No Toulmin vocabulary, no severity
+  words, no rule id standing in for an explanation. Say what is wrong, why it matters to them, and
+  what their options are. → `references/report-format.md`
+- **Every label you propose is short**: under 10 words for a fact, under 15 for a check. Labels are
+  diagram node text, and unification is exact string equality. → `references/abstraction.md` §3b
 - **Prefer an open question to a shaky finding.** Two false positives and the author stops reading.
 
 ## Workflow
@@ -70,23 +71,23 @@ Resolve the target list, and then treat it as closed: those models, and no other
 review is about. Per target, note the files it `load`s: read for context, never reviewed, never the
 site of a finding. Note the repository root (Step 3).
 
-**Do not compile anything yet.** Whether a file builds is the compiler's answer to give, and the
-author already has it from `jpipe diagnostic` and the editor. An argument's shape is legible long
-before it parses, so refusing to look is friction, not rigour. Compilation belongs at Step 7, where it
-verifies work this skill did. Locations therefore come from the file as read: `file:line`, plus the
-column of the label's opening quote when you can point at it.
+**Do not compile anything yet.** An argument's shape is legible long before it parses, the author
+already knows whether the file builds, and compilation belongs at Step 7 where it verifies work this
+skill did. Locations therefore come from the file as read: `file:line`.
 
 For more than 8 files, plan to batch Steps 2–4 and emit **one** consolidated report, still one
 verdict per model.
 
-### Step 2. Abstraction & atomicity *(within each model)*
+### Step 2. Roles and atomicity *(within each model)*
 
-Assign every element its Toulmin role and check it against its jPipe kind. Classify each `evidence`
-leaf as a datum, a claim in a grounds slot, or two facts fused; check each `strategy` licenses an
-inference; check each `sub-conclusion` states what its leg establishes.
+Assign every element its role and check it against its jPipe kind. Classify each `evidence` leaf as a
+fact, a verdict in a fact's place, or two facts fused; check each `strategy` licenses one inference and
+performs **one** check; check each `sub-conclusion` states what its leg establishes.
 
-Resolve fused leaves **first**: a fused leaf has no single artifact, so it also has nothing for Step 3
-to search for.
+**Count the jobs per element, and where there are two, decompose.** One leg per fact and per check is
+the recommendation this skill leads with, not a fallback: a split argument reports *which* half failed.
+Do the fused elements first, since the legs they produce are what later findings are written against,
+and a fused leaf gives Step 3 nothing to search for.
 
 Classify each file 🟢/🟡/🟠/⚪. → `references/abstraction.md`
 
@@ -102,30 +103,34 @@ Skipped under `--no-grounding`, and when the models are not inside a project tre
 ### Step 4. House style *(within this file)*
 
 First check whether the project states its own conventions (`CLAUDE.md`, `justifications/README.md`,
-a contributing guide). If it does, that document wins and this pass defers to it.
-
-Otherwise: refine placement, conclusions at goal level, provenance headers, and leaves carrying a
-requirement tag that suggests a refine. Every check here is decided from this file alone. If a
-convention would need a second model to check, it is not in this pass.
-→ `references/conventions.md`
+a contributing guide). If it does, that document wins and this pass defers to it. Otherwise: refine
+placement, conclusions at goal level, provenance headers, and leaves carrying a requirement tag that
+suggests a refine. Every check is decided from this file alone; one needing a second model is not in
+this pass. → `references/conventions.md`
 
 ### Step 5. Report
 
-Emit the report in exactly the shape of `references/report-format.md`, including the **Open
-questions** and **Not reviewed** sections, which are where the review states its own limits. Name
-single-model scope among them, so no CLEAN verdict reads as a claim about the corpus.
+Emit the report in exactly the shape of `references/report-format.md`. Read that file before writing
+a word of it: the reader is **the engineer who built the system**, not a safety specialist, and every
+finding owes them three things in order, *what is wrong*, *why it matters to them*, and *the options*.
+
+Nothing internal to this skill appears there: no Toulmin vocabulary, no severity words, no rule id
+doing an explanation's work. Ids appear once per finding, at the end, as a reference number.
+
+Keep **Open questions** and **Not looked at**: they state the review's own limits, and single-model
+scope is one, so no clean report reads as a claim about the corpus.
 
 **Stop here** unless `--apply` was given.
 
 ### Step 6. Propose and get approval
 
-Present a numbered fix list. Each entry: the finding id **with its rule description**, the exact
-before and after text, the blast radius, and any fix it depends on. Order by dependency, not severity:
-atomicity splits before what depends on them, label rewords before structural changes.
+Present a numbered fix list in the report's voice, not the catalogue's. Each entry: which finding it
+closes, the exact before and after text, what it costs, and any fix it depends on. Order by dependency,
+not severity (`rules.md`): decompositions first, then rewords, then structure.
 
-Ask in prose which numbers to apply. Never act on silence or an ambiguous answer, and never widen
-beyond what was approved. Every edit lands in the file under review; a fix that would require
-touching another model is out of scope, so report it and leave it.
+Ask in prose which numbers to apply. Never act on silence or an ambiguous answer, and never widen beyond
+what was approved. Every edit lands in the file under review; a fix needing another model is out of
+scope, so report it and leave it.
 
 ### Step 7. Apply and verify
 
@@ -138,22 +143,17 @@ Then `jpipe process -m <model> -i <file> -f SVG -o <tmp>` to prove it still rend
 If `jpipe` is not on PATH, say so and stop **before editing**: an unverifiable edit to an assurance
 case is worse than a reported finding. Everything through Step 6 runs without the compiler.
 
-A file that did not build **before** your edit still must build after it. If it did not compile going
-in, say so plainly rather than claiming the edit broke it, and hand the compiler's raw output back
-without re-explaining it.
-
-If any applied fix could create, destroy, or rename a unified group, say so and name the hazard. The
-composed model that would renumber is a file this skill does not read, so the re-render is the
-author's to run, not yours to report on.
-
-Close with the delta: findings closed, findings remaining, anything newly introduced.
+A file that did not build before your edit still must build after it; if it did not compile going in,
+say so rather than claiming the edit broke it. If any applied fix could create, destroy or rename a
+unified group, name the hazard: the composed model that would renumber is one this skill does not read,
+so that re-render is the author's to run. Close with the delta: findings closed, findings remaining,
+anything newly introduced.
 
 ## Output contract
 
-The report is the product. Every finding carries a rule id **and that rule's description quoted from
-`rules.md`**, a `file:line`, the label quoted, the proposed replacement, and a blast-radius line: a
-bare `JD-A01` is a lookup key, not a finding.
+The report is the product, and it is written for the engineer who built the system. Every finding
+gives them a `file:line`, the label quoted, what is wrong, why it matters to them, their options with
+the trade-off named, and what the edit costs. The rule id goes last, as a reference number.
 
-Verdicts, **per model**: **CLEAN** · **FINDINGS**. CLEAN means the model holds on its own terms, and
-nothing about how it sits with any other. Neither verdict says the file compiles, which this skill
-does not check until it has edited something.
+Verdicts, **per model**: **CLEAN** · **FINDINGS**. CLEAN means the model holds on its own terms, says
+nothing about how it sits with any other, and says nothing about whether the file compiles.
