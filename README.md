@@ -31,9 +31,13 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 | [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument*: whether its elements sit at the right level, rest on artifacts that exist, and follow the house style. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | nothing to report; [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` to apply fixes |
 | [**jpipe-survey**](skills/jpipe-survey/) | Surveys how models *relate*: the same fact argued twice under wordings that will not match, labels identical enough to merge into a claim nobody wrote, and leaves that assert what another model already proves. Asks you to confirm what the files cannot settle | same |
 
-Both take the same scope: **one `.jd` file plus everything it transitively `load`s**, since a goal
+Both take the same scope by default: **one `.jd` file plus everything it transitively `load`s**, since a goal
 assembled from four requirement files is one argument rather than four. Pass `--global` to scope either
 to every `.jd` in the repository. No file, or more than one, is an error rather than a guess.
+
+A file can hold more than one argument, though, because a `load` makes a model's name available without
+making it part of any particular one. `jpipe-survey` takes **`-m <model>`** for that case, narrowing its
+scope to one model in the file plus the models it is built from.
 
 The split between them is deliberate. **`jpipe-review` examines the elements of one argument;
 `jpipe-survey` compares separate arguments with each other.** A clean review and a clean survey are

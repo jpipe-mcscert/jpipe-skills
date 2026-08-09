@@ -1,6 +1,6 @@
 # The interview: asking instead of guessing
 
-Read this at Step 5. It is the step that makes this skill trustworthy, and the one most likely to make
+Read this at Step 4. It is the step that makes this skill trustworthy, and the one most likely to make
 it obnoxious.
 
 ---

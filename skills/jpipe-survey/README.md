@@ -69,7 +69,7 @@ an open question and nothing is applied.
 ## Usage
 
 ```
-jpipe-survey <path/to/model.jd> [--global] [--no-refine] [--questions N]
+jpipe-survey <path/to/model.jd> [-m <model>] [--global] [--no-refine] [--questions N]
 ```
 
 **Scope** is one `.jd` file plus everything it transitively `load`s. Pass `--global` instead to take
@@ -77,6 +77,32 @@ every `.jd` in the repository. Passing no file, or more than one, is an error ra
 
 Every rule compares models, so the scope needs two or more of them. A file that loads nothing gives a
 scope of one, and `--global` is the invocation for a corpus that is not rooted in a single model.
+
+### `-m`: one argument out of a file that holds several
+
+A `load` makes a model's name available. It does not make that model part of your argument. So a file
+that loads eight requirements and composes two goals from four each has eight models in scope and two
+arguments in the file, and surveying it whole compares models you never put together:
+
+```text
+justification fairness   is assemble(r13, r20) { ... }
+justification efficiency is assemble(r31, r32) { ... }
+```
+
+`-m fairness` scopes the survey to `fairness` and the models it is built from, following `assemble`,
+`refine` and `implements` sources as far as they go. `r31` and `r32` are then out, and the report says
+so by name.
+
+It is jPipe's own flag, spelled the same as in `jpipe process -m <model> -i <file>`, and it changes two
+findings rather than just narrowing the search:
+
+- Identical labels in two models only merge when something composes them, so under `-m` a merge hazard
+  is a fact about your argument instead of a possibility about two files that may never meet.
+- Files nothing loads, and corpora with two roots, stop being reportable: you named the root, so
+  everything in scope is reachable from it. Run without `-m` when that is the question you have.
+
+`-m` and `--global` contradict each other and passing both is an error, as is naming a model the file
+does not declare.
 
 Reporting needs no tools at all: the survey runs on a `grep` over label declarations, which works
 whether or not the files parse. Approving a fix needs

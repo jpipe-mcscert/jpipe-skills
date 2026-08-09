@@ -1,0 +1,13 @@
+/**
+ * expect: JD-R01 (with r2_columns.jd). In fairness's closure, so it is in scope either way.
+ * e_train denotes data/train.csv, and so does r2's e_data under a drifted label. Neither label
+ * says so, which is why a survey has to ask before reporting it.
+ */
+justification r1 {
+    conclusion c is "The training split is the frozen committed one"
+    strategy   s is "Confront the split's checksum with the one recorded at freeze time; they match"
+    evidence   e_train is "The committed training split"
+
+    s supports c
+    e_train supports s
+}

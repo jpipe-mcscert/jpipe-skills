@@ -3,7 +3,7 @@
 **Authority: `house`, except `R03` which is `language`.** Findings here are opportunities the author
 may decline, with one exception that is a genuine defect.
 
-Read this at Steps 4 and 5.
+Read this at Steps 2 to 4.
 
 ---
 
@@ -28,15 +28,28 @@ finds it.
 
 ### 1. Survey labels without opening files
 
-Never read a corpus to find duplicates. Harvest the declarations and cluster those:
+Never read a corpus to find duplicates. Harvest the declarations and cluster those. One pass, two
+anchored alternatives, elements and the model headers standing above them:
 
 ```bash
-grep -rEn '^[[:space:]]*(evidence|sub-conclusion|strategy|conclusion)[[:space:]]+[A-Za-z_][A-Za-z0-9_:]*[[:space:]]+is[[:space:]]+' <corpus> --include='*.jd'
+grep -rEn '^[[:space:]]*(justification|template)[[:space:]]+[A-Za-z_][A-Za-z0-9_]*|^[[:space:]]*(evidence|sub-conclusion|strategy|conclusion)[[:space:]]+[A-Za-z_][A-Za-z0-9_:]*[[:space:]]+is[[:space:]]+' <files> --include='*.jd'
 ```
 
-That yields `file:line: kind id is "label"` for every element, at a cost that does not scale with file
-size. Everything in this pass runs on that table. Open full files **only** for clusters you are about
-to report or ask about.
+That yields `file:line: kind id is "label"` for every element, and for every model its header line as
+written: `justification X {` for one whose argument is spelled out, `justification X is assemble(a, b) {`
+or `is refine(...)` for a composed one, `implements T` for one over a template. Cost does not scale with
+file size. Everything in this pass runs on that table. Open full files **only** for clusters you are
+about to report or ask about.
+
+The header rows earn their place twice over:
+
+- **Attribution.** An element belongs to the nearest header above it in its own file. Without that, a
+  claim about *two models* is really a claim about two `file:line`s, which is the same thing only while
+  every file holds exactly one model. It is also what keeps the boundary honest under `-m`, where one
+  file can hold a model in the closure and a model outside it. → `scope.md` §5
+- **The graph.** Whatever a header carries after the model name is an edge: `assemble` and `refine`
+  sources, an `implements` template. A header that carries nothing is a leaf, which is equally an answer,
+  so the composition graph falls out of this harvest instead of costing a read.
 
 ### 2. Cluster by the artifact, not by the string
 
@@ -55,7 +68,8 @@ costs the author anything:
 | Cluster | Certain? | Action |
 |---|---|---|
 | Byte-identical labels, same artifact | yes | Already unified. Say nothing |
-| Byte-identical labels, **different** artifacts | yes | `R03`, 🔴. Report it; do not ask |
+| Byte-identical labels, **different** artifacts, composed together | yes | `R03`, 🔴. Report it; do not ask |
+| Byte-identical labels, different artifacts, **never** composed together | yes | Nothing merges. An open question, not a 🔴 |
 | Different labels, **plausibly** one artifact | **no** | Ask. → `interview.md` |
 | Different labels, different artifacts | yes | Nothing. Move on |
 
@@ -152,6 +166,12 @@ g6_efficiency.jd:9  evidence e_metrics is "The reported metrics"   → the CI ti
 
 The tell is a label generic enough that two authors could arrive at it independently: *"the reported
 metrics"*, *"the test results"*, *"the configuration"*. Specific labels do not collide by accident.
+
+**One precondition, and it is not optional.** The merge happens *inside* a composed model, so some model
+in scope has to have both sides in its closure. Two models nothing composes together keep their own
+nodes, the merge never happens, and there this finding is not weaker but simply false: report the
+collision as an open question, a hazard waiting on a composition nobody has written. Under `-m` the
+precondition holds by construction, since the scope *is* one composition. → `scope.md` §6
 
 The fix is to disambiguate the labels, which is what a good ground needed anyway: a label too generic
 to identify its artifact was never doing its job. `unifyExclude` exempts specific ids, but treat it as

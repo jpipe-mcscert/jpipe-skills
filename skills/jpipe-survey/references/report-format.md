@@ -87,7 +87,7 @@ threads and script against them, but they are a reference number, never an argum
 
 <N> models · <M> elements · <a> serious, <b> worth fixing, <c> opportunities, <d> suggestions
 Asked you <q> questions; <answered> answered, <declined> declined.
-<what was and was not looked at, in one line>
+<which models were compared, named; under -m, which of the file's models were not>
 
 ## 🔴 Composing these models makes a claim nobody wrote (<a>)
 <R03>
@@ -139,6 +139,14 @@ Cost: <what moves, including whether a shared node is created or destroyed>  · 
 
 **What you told me** is not optional, and it is the section that makes a second run cheap: it records
 every answer, including the noes, so nobody is asked the same thing twice.
+
+**Name the scope in the third line, as models rather than as files.** A verdict covers whatever was
+compared, and the reader cannot tell what that was from a file name: `goals.jd` may hold two arguments.
+Under `-m` this is load-bearing rather than tidy, because the honest summary is *one of your arguments*,
+so say which models were in and put the file's other models in **Not looked at** by name. Say there too
+that files nothing loads and competing entry points went unexamined, since `-m` is what stopped them
+being examined (`scope.md` §6). Everything this survey did not do is a thing the reader would otherwise
+assume it did.
 
 ---
 

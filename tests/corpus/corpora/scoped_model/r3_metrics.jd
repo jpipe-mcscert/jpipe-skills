@@ -1,0 +1,15 @@
+/**
+ * expect: nothing under `-m fairness`. An open question without it, never a JD-R03.
+ * e_metrics denotes model/metrics.json. Its label is byte-identical to the leaf in goals.jd's
+ * `efficiency`, which denotes the CI timing report, so the two look exactly like an accidental
+ * unification. They are not one: no model composes r3 together with efficiency, so nothing ever
+ * merges. Report the collision as a hazard waiting on a composition nobody wrote.
+ */
+justification r3 {
+    conclusion c is "The fairness metrics were produced by the release run"
+    strategy   s is "Confront the metrics file's run id with the release commit's run record"
+    evidence   e_metrics is "The reported metrics"
+
+    s supports c
+    e_metrics supports s
+}

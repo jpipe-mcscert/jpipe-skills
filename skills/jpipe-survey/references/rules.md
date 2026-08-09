@@ -8,6 +8,9 @@ that is the engineer who built the system, and they have no reason to know what 
 Every rule here needs **at least two models** to state. That is the whole point of this skill, and it
 is also its risk: a claim about two files is twice as easy to get wrong as a claim about one.
 
+Which two models are eligible is `scope.md`, and three rules turn on it: `R03` needs a model that
+composes both sides, while `F03` and `F04` do not fire at all under `-m`, which answers what they ask.
+
 | Column | For |
 |---|---|
 | **Trigger** | you, deciding whether the rule fires |
@@ -39,7 +42,7 @@ Mixed authority, so it is per row rather than per family.
 |---|---|---|---|---|---|---|
 | R01 | duplicate-fact-not-unified | Two leaves name the same artifact but will not unify | house | Same artifact under drifted labels, confirmed by the author | Align both labels on one wording; `assemble` then merges them into one `unified_N` | 🔵 |
 | R02 | extract-shared-leg | The same fact, check and verdict is argued in two models | house | A whole `fact → check → verdict` triple repeats in ≥2 models | Extract into a requirement model; the others `refine` at their leaf (`refinement.md` F02) | 🔵 |
-| R03 | accidental-unification | Identical labels name different things, and will silently merge | **language** | Byte-identical labels in ≥2 models denote different artifacts | Disambiguate the labels (`unifyExclude` only as a workaround) | 🔴 |
+| R03 | accidental-unification | Identical labels name different things, and will silently merge | **language** | Byte-identical labels in ≥2 models denote different artifacts, **and a model in scope composes both**. Absent that, nothing merges: open question, not a finding | Disambiguate the labels (`unifyExclude` only as a workaround) | 🔴 |
 | R04 | redundant-check | Two warrants run the same check on one datum | house | Two strategies perform the same comparison on the same artifact in different words | Usually resolves once the leaves unify; rarely worth a structural change | 🔵 |
 
 **Discipline:** an `R01`/`R02` finding must name the shared artifact and quote both labels in full.
@@ -51,8 +54,8 @@ Cluster by artifact, never by string similarity (`artifacts.md` §3).
 |---|---|---|---|---|---|
 | F01 | should-be-refine | A leaf asserts what another model in the corpus proves | An evidence leaf states a claim that some model's `conclusion` establishes, and that model exists here | `refine(base, refiner) { hook: "<leaf-id>" }` | 🟠 |
 | F02 | refine-not-in-requirement-file | A refine is bound at the branch, not the requirement file | Bound under a new name at a consumer instead of exported from the requirement file under the reused name | Move it; consumers then need no change | 🟡 |
-| F03 | orphan-model | Nothing in the corpus loads, assembles, or refines this model | No `load`, `assemble` source, `implements` or `refine` anywhere names it | Report as a question: a draft, a stale consumer, or an undocumented entry point | 🟡 |
-| F04 | multiple-entry-points | Two roots compose the same sub-trees | Two models are each a root over an overlapping set of sources | Pick one root; the others become sub-trees | 🟡 |
+| F03 | orphan-model | Nothing in the corpus loads, assembles, or refines this model | No `load`, `assemble` source, `implements` or `refine` anywhere names it. **Never under `-m`** | Report as a question: a draft, a stale consumer, or an undocumented entry point | 🟡 |
+| F04 | multiple-entry-points | Two roots compose the same sub-trees | Two models are each a root over an overlapping set of sources. **Never under `-m`** | Pick one root; the others become sub-trees | 🟡 |
 
 **Discipline:** `F01` must name the model and the `conclusion` that proves the leaf, with its
 `file:line`. "Something probably argues this" is an open question.

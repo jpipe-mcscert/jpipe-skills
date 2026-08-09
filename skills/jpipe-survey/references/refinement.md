@@ -8,7 +8,10 @@ the report rather than asserting these as rules.
 `CLAUDE.md`, a `justifications/README.md`, a contributing guide. If it does, that document wins and
 this file is irrelevant.
 
-Read this at Steps 4 and 6.
+Read this at Steps 3 and 5.
+
+**`F03` and `F04` are retired under `-m`**, which answers by construction the question both of them ask.
+→ `scope.md` §6
 
 ---
 
@@ -37,9 +40,12 @@ The signature case. An evidence leaf states something a model in this corpus est
 argument. Written as a bare leaf, it asserts what could be proved: the corpus contains a proof and
 declines to use it.
 
-**How to find it.** The Step 3 survey table already holds every `conclusion` and `sub-conclusion` label
-in the corpus alongside every `evidence` label. So the match is a lookup, not a search: an evidence
-label that restates a conclusion label found in a *different* model. Two signals, in order of strength:
+**How to find it.** The Step 2 survey table already holds every `conclusion` and `sub-conclusion` label
+in the corpus alongside every `evidence` label, and holds each one's model, not merely its file. So the
+match is a lookup, not a search: an evidence label that restates a conclusion label found in a
+*different* model. Same model and there is nothing here: a leaf restating its own model's conclusion is
+that argument arguing in a circle, which is one model's own shape and so `jpipe-review`'s side of the
+line. Two signals, in order of strength:
 
 1. The leaf carries a requirement tag, `(Rnn)`, and a model whose conclusion carries the same tag
    exists. Strongest, and unambiguous.
@@ -96,6 +102,11 @@ scope is complete by construction, since anything the root reaches is in it, and
 for the repository. Outside either, a model composed by a script or loaded from another repository is
 invisible from here and looks **exactly** like an orphan. Say what you searched, and over what.
 
+**Retired under `-m`.** That flag makes every model in scope reachable from the one you named, since that
+is what put it there, and puts every unreachable model out of scope. Nothing is left for this rule to
+find but itself. Say so in **Not looked at**, because a file declaring a draft next to its goal is
+precisely where an orphan would have been worth knowing about.
+
 ## F04. Multiple entry points
 
 Exactly one model should be the root: the one compiled, rendered, and (when bindings exist) executed.
@@ -104,6 +115,10 @@ Other goal models are sub-trees, compiled for viewing but never run separately.
 This is not tidiness. `assemble` renames elements under the parent namespace, so binding at the root
 means each node is renamed **once**; binding per-goal duplicates every shared node and multiplies the
 work. Two roots over an overlapping set of sources is the tell.
+
+**Retired under `-m` too**, and for the plainer reason: you named the entry point, so the scope holds one
+root by definition. This is the rule `-m` most obviously hides, since a file with two roots is both what
+makes the flag worth having and what this rule is about. It belongs in **Not looked at** for that reason.
 
 ---
 
