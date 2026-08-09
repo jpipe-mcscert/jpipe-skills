@@ -15,6 +15,11 @@ The tree splits by what a fixture *is*: a single model, or a corpus.
 | `bad/` | `jpipe-review` | One smell per file, named in the header as `expect: JD-XNN` | Exactly that rule id, at that element |
 | `corpora/<case>/` | `jpipe-survey` | Two or more models whose relationship is the subject | Named in each file's header. Findings **must** be stated across files here |
 
+None of the `corpora/` cases has a root file that loads the others, on purpose: they are corpora, not
+composed models. So exercise them with **`--global` from inside the case directory**, which is the
+invocation for a corpus not rooted in a single model. Pointing either skill at one of the files gives a
+scope of one, which for `jpipe-survey` is an error it should report rather than work around.
+
 Files under `good/` and `bad/` are reviewed **on their own**, which is the only way `jpipe-review`
 reviews anything: a finding there stated in terms of a second fixture is a bug in the skill. Under
 `corpora/` the opposite holds, and a finding that could have been made from one file is out of scope.

@@ -100,6 +100,6 @@ The suggested **fix** order is different, and it is a dependency order:
 
 1. 🔴 `R03`: the composed model currently claims something nobody wrote
 2. `R01` label alignments: each creates a unified group, so re-render before judging the next
-3. `F01` refinements: structural, one model at a time, recompile after each
+3. `F01` refinements: structural, one file at a time, recompile after each
 4. `R02` extractions: the largest blast radius, and usually easier once `R01` has settled the wording
 5. 🟡 `F02`-`F04` and `R04`: placement and tidiness, last

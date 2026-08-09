@@ -1,26 +1,28 @@
 ---
 name: jpipe-survey
-description: "Surveys a corpus of jPipe justification models (.jd) for what no single file shows: the same fact argued twice under labels that will not unify, labels identical enough to merge into a claim nobody wrote, and leaves that assert what another model already proves. Harvests every .jd's element declarations in one pass, clusters them by the artifact each label names rather than by wording, and asks you to confirm the uncertain clusters. Emits a report with file:line, rule ids and a decision log; edits are applied only after you approve them. Use when asked about shared or duplicated evidence, reuse across models, unification hazards, consolidating an assurance case, whether a leaf should be a refine, or orphan models and entry points in a justifications/ directory. NOT for judging whether one model's argument is any good (its abstraction, atomicity, or whether its artifacts exist), which is jpipe-review's job; NOT for writing a model from scratch; NOT for syntax errors, which are jpipe diagnostic's."
-argument-hint: "[justifications/ | glob | .] [--no-refine] [--questions N] [--apply]"
+description: "Surveys a set of jPipe justification models (.jd) for what no single model shows: the same fact argued twice under labels that will not match, labels identical enough to merge into a claim nobody wrote, and leaves that assert what another model already proves. Scope is exactly one .jd file plus everything it transitively loads, or every .jd in the repository with --global. Harvests every declaration in one pass, clusters them by the artifact each label names rather than by wording, and asks you to confirm the uncertain clusters before reporting them. Emits a report written for the engineer who built the system, then a fix list; nothing is edited until you approve it. Use when asked about shared or duplicated evidence, reuse across models, merge hazards, consolidating an assurance case, whether a leaf should be a refine, or files nothing loads. NOT for judging whether one model's argument is any good, which is jpipe-review's job; NOT for writing a model from scratch; NOT for syntax errors."
+argument-hint: "<path/to/model.jd> [--global] [--no-refine] [--questions N]"
 allowed-tools: Bash, Read, Grep, Glob, Edit
 ---
 
 # jPipe Survey
 
-One model at a time hides the duplication. This reads the whole corpus at once.
+One model at a time hides the duplication. This reads the whole scope at once.
 
 ## Usage
 
 ```
-jpipe-survey <target> [--no-refine] [--questions N] [--apply]
+jpipe-survey <path/to/model.jd> [--global] [--no-refine] [--questions N]
 ```
 
-**Target**: a directory (recurse `*.jd`), a glob, or nothing (the repository root). Needs **two or
-more** models: with one, say so and stop, because every rule here compares models.
+**Scope** is **exactly one `.jd` plus everything it transitively `load`s**, or every `.jd` in the
+repository under `--global`. **No file, or more than one, is an error.** Every rule here compares models,
+so the scope needs **two or more**: a file that loads nothing is a scope of one, and `--global` is the
+invocation for a corpus not rooted in a single model.
 
 **Flags**: `--no-refine` runs sharing only, skipping the `JD-F` pass. `--questions N` changes the
-interview budget from its default of 7; `--questions 0` asks nothing and reports every uncertain
-cluster as an open question. `--apply` continues into the fix loop.
+interview budget from its default of 7; `--questions 0` asks nothing and reports every uncertain cluster
+as an open question.
 
 **References**: read on demand, not up front:
 
@@ -36,66 +38,68 @@ cluster as an open question. `--apply` continues into the fix loop.
 
 ## When to invoke
 
-Auditing a `justifications/` directory for duplicated or shareable evidence; consolidating a corpus
-that grew a model at a time; checking a corpus for unification hazards before composing it; asking
-whether a leaf should refine against an argument that already exists.
+Auditing a corpus for duplicated or shareable evidence; consolidating one that grew a model at a time;
+checking for merge hazards before composing; asking whether a leaf should refine against an argument
+that already exists.
 
 ### Do NOT invoke for
 
 - **Whether one model is a good argument.** Abstraction, atomicity, grounding: `jpipe-review`, which
-  reads one model properly rather than glancing at many. Do not restate its findings here.
-- Writing a new model from scratch.
-- Reviewing the **step library** (`steps/`, `@jpipe_link` modules) or the jPipe compiler's source.
-- Rendering a diagram: `jpipe process -m <model> -i <f> -f SVG -o <out>.svg`.
+  examines elements rather than comparing models. Do not restate its findings here.
+- Writing a new model from scratch, reviewing the **step library** (`steps/`, `@jpipe_link` modules) or
+  the jPipe compiler's source, or rendering a diagram (`jpipe process -m <model> -i <f> -f SVG`).
 
 ## Guardrails
 
-- **Read-only through Step 5.** Nothing is modified before the author approves a numbered fix list.
+- **One scope, and it is the closure**: the named file and all it transitively `load`s, or every `.jd`
+  under `--global`. Never read or cluster outside it, and never widen it to make a finding possible.
+  Nothing is modified before the author approves a numbered fix list.
 - **No version-control actions, ever.** Do not stage, commit, push, branch, merge, tag, or open a pull
   request. Report; the author integrates.
-- **Cluster by the artifact, never by the label.** String similarity and artifact identity come apart
-  in both directions (`artifacts.md` §3). A method that compares wording gets both cases backwards.
-- **A wrong merge is worse than a missed one.** It collapses a distinction the author drew on purpose,
-  and if applied it silently changes what the case claims. When torn, ask; when you cannot ask, leave
-  an open question.
-- **Ask, never guess, and ask in prose.** Artifact identity is knowledge the author has and the corpus
-  does not record. There is no interactive question tool here on purpose: a picker cannot be answered
-  headless, and an approval step built on one deadlocks instead of degrading.
-- **Never act on silence** or on an ambiguous answer, and never widen beyond what was approved.
-- **Write the report, and the questions, for the engineer who built the system.** No rule id standing
-  in for an explanation, no severity words, and no compiler vocabulary: *unify* names a pass they never
-  invoke. Say what is wrong, why it matters to them, and what their options are.
-  → `references/report-format.md`
+- **Cluster by the artifact, never by the label.** String similarity and artifact identity come apart in
+  both directions (`artifacts.md` §3), so comparing wording gets both cases backwards.
+- **A wrong merge is worse than a missed one**: it collapses a distinction the author drew on purpose, and
+  applied, it silently changes what the case claims. When torn, ask; when you cannot ask, leave a
+  question.
+- **Ask, never guess, and ask in prose.** Artifact identity is knowledge the author has and the files do
+  not record. There is no interactive question tool here on purpose: a picker cannot be answered headless,
+  and an approval step built on one deadlocks instead of degrading. Never act on silence or on an
+  ambiguous answer, and never widen beyond what was approved.
+- **Write the report, and the questions, for the engineer who built the system.** No rule id standing in
+  for an explanation, no severity words, no compiler vocabulary: *unify* names a pass they never invoke.
+  Say what is wrong, why it matters to them, and what their options are. → `references/report-format.md`
 - **Every label you propose is short**: under 10 words for a fact, under 15 for a check. It matters most
   here, because a label is shared only when two files match it **exactly**, so a long canonical wording
   is a merge that quietly never happens.
-- **Never mint a retired id** (`S01`-`S04`, `C03`, `C04`; `rules.md` translates), and **never open a
-  file under `steps/`** or any `@jpipe_link` module.
-- **Prefer an open question to a shaky finding.** Two false positives and the author stops reading.
+- **Never mint a retired id** (`S01`-`S04`, `C03`, `C04`; `rules.md` translates), never open a file under
+  `steps/`, and prefer an open question to a shaky finding: two false positives and the author stops
+  reading.
 
 ## Workflow
 
 ### Step 1. Inventory
 
-`Glob` every `*.jd` under the target. For each, record the model names it declares, the files it
-`load`s, and whether it is an operator result (`is assemble(...)` / `is refine(...)`) and over which
-sources. That graph is what Step 5 needs for `F03` and `F04`, and it is cheap to build now.
+Resolve the scope: from the named `.jd`, follow `load` declarations until nothing new appears, treating a
+cycle as already-visited; under `--global`, `Glob` every `*.jd` in the repository instead. **That set is
+the corpus**, and the two words mean the same thing below. No file or more than one: say which and stop.
+A scope of one model: say so and suggest `--global`.
 
-Fewer than two models: stop and say why.
+Per file, record the models it declares, what it `load`s, and whether it is an operator result
+(`is assemble(...)` / `is refine(...)`) and over which sources. `F03` and `F04` rest on that graph, and
+it is complete only for the scope, so say so when reporting them. → `references/refinement.md`
 
-**Do not compile anything.** A declaration clusters whether or not its file parses, so a corpus caught
+**Do not compile anything.** A declaration clusters whether or not its file parses, so a scope caught
 mid-edit is still worth surveying, and a syntax error in one model says nothing about whether two others
-share a fact. Compilation belongs at Step 6, where it verifies work this skill did. Locations come from
-the survey table below, which carries a line number per declaration.
+share a fact. Compilation belongs at Step 6. Locations come from Step 2's table, which carries a line
+number per declaration.
 
 ### Step 2. Survey, without opening files
 
-One harvest over the whole corpus, from `sharing.md` §1: a single `grep -rEn` for
-`<kind> <id> is "<label>"`, yielding `file:line: kind id is "label"` for every element. Cost does not
-scale with file size, and everything downstream runs on this table.
-
-Open a full file **only** for a cluster you are about to ask about or report. If you find yourself
-reading the corpus, the method has already failed.
+One harvest over the scope, from `sharing.md` §1: a single `grep -rEn` for `<kind> <id> is "<label>"`,
+yielding `file:line: kind id is "label"` for every element. **Pass the scope's files explicitly**, never
+a directory, so the harvest cannot reach past the boundary Step 1 drew. Cost does not scale with file
+size, and everything downstream runs on this table. Open a full file **only** for a cluster you are about
+to ask about or report; if you find yourself reading the scope, the method has already failed.
 
 ### Step 3. Cluster by artifact
 
@@ -109,51 +113,46 @@ labels: that lookup is `F01`, and Step 2's table already holds both sides. Skipp
 ### Step 4. Interview
 
 Uncertain clusters become **one batched message**: numbered prose questions, at most `--questions N`
-(default 7), ordered by how many models each touches. Quote both labels in full, name the artifact you
-believe is shared, say how confident you are, and say what a yes will cause.
-
-Clusters past the budget are **not dropped**: they go to Open questions with their labels quoted, and
-the report says how many. Record every answer, including every *no*, for **What you told me**.
-→ `references/interview.md`
+(default 7), ordered by how many models each touches. Quote both labels, name the artifact you believe
+is shared, say how confident you are, and say what a yes will cause. Clusters past the budget are **not
+dropped**: they go to Open questions with their labels quoted, and the report says how many. Record every
+answer, including every *no*, for **What you told me**. → `references/interview.md`
 
 ### Step 5. Report
 
 Confirmed clusters become findings; declined ones are recorded; unanswered ones become open questions.
 Add the `JD-F` findings, which need the Step 1 graph rather than the interview.
 
-Emit the report in exactly the shape of `references/report-format.md`. Read that file first: the reader
-is **the engineer who built the system**, and every finding owes them *what is wrong*, *why it matters
-to them*, and *the options*, in that order. Keep **What you told me**, **Open questions** and **Not
-looked at**. State the standing limit: a clean survey says nothing about whether any single model is a
-good argument.
-
-**Stop here** unless `--apply` was given.
+Emit the report in exactly the shape of `references/report-format.md`, and read that file first: the
+reader is **the engineer who built the system**, and every finding owes them *what is wrong*, *why it
+matters to them*, and *the options*, in that order. Keep **What you told me**, **Open questions** and
+**Not looked at**, and state the standing limit: a clean survey says nothing about whether any single
+model argues well.
 
 ### Step 6. Apply and verify
 
-Present a numbered fix list, each entry with its rule description, the exact before and after text for
-**every** file it touches, what it costs, and any fix it depends on. Order by dependency, not
+Present a numbered fix list in the report's voice: which finding it closes, the exact before and after
+text for **every** file it touches, what it costs, and what it depends on. Order by dependency, not
 severity (`rules.md`). Ask in prose which numbers to apply.
 
 `Edit` only the approved items. Then, the one step that compiles: per touched file,
-`jpipe --headless diagnostic -i <file>`, capturing stdout, stderr and the exit code **separately**,
-since a failed `load` reports entirely on stderr with stdout completely empty. Then
-`jpipe process -m <model> -i <file> -f SVG -o <tmp>` on the composed model if the target has one.
+`jpipe --headless diagnostic -i <file>`, capturing stdout, stderr and the exit code **separately**, since
+a failed `load` reports entirely on stderr with stdout completely empty. Then `jpipe process` on the
+scope's root to prove it still renders. If `jpipe` is not on PATH, say so and stop **before editing**: a
+cross-file edit you cannot verify is worse than a reported finding, and these edits span files. A file
+that did not build before your edit still must build after it.
 
-If `jpipe` is not on PATH, say so and stop **before editing**: a cross-file edit you cannot verify is
-worse than a reported finding, and this skill's edits span models. Everything through Step 5 runs
-without the compiler. A file that did not build before your edit still must build after it.
-
-Any applied `R01` or `R02` **creates or destroys a unified group**, which renumbers every later
-`unified_N`, possibly including ids referenced from a step library this skill does not read. Say which
-groups changed. Close with the delta: findings closed, findings remaining, anything newly introduced.
+Any applied `R01` or `R02` creates or destroys a shared node, renumbering every later `unified_N`,
+possibly including ids referenced from a step library this skill does not read. Say which changed, then
+close with the delta: findings closed, remaining, newly introduced.
 
 ## Output contract
 
-The report is the product. Every finding carries a rule id **and that rule's description quoted from
-`rules.md`**, a `file:line:col` for every element involved, the named shared artifact, both labels
-quoted, the proposed replacement, and a blast-radius line.
+The report is the product, written for the engineer who built the system. Every finding gives them a
+`file:line` on **each** side, both labels quoted, the artifact they share, what is wrong, why it matters
+to them, their options with the trade-off named, and what the edit costs. The rule id goes last, as a
+reference number.
 
-Verdicts, for the corpus: **CLEAN** · **FINDINGS**. CLEAN means these models share what they should
-and merge nothing they should not. It says nothing about whether any one of them argues well, and
-nothing about whether they compile, which this skill does not check until it has edited something.
+One verdict for the scope, **CLEAN** or **FINDINGS**. CLEAN means these models share what they should
+and merge nothing they should not. It says nothing about whether any one of them argues well, nor about
+whether they compile.

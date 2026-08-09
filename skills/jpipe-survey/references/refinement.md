@@ -90,9 +90,11 @@ of three things, and the corpus cannot tell you which:
 - a model whose consumer was renamed or deleted,
 - a genuine entry point that should be documented as such.
 
-**Report it as a question, not a defect.** Note also that the corpus you were given may not be the
-whole world: a model can be composed by something outside the target, or loaded by a script. Say what
-you searched.
+**Report it as a question, not a defect**, and state the scope limit explicitly, because this is the one
+rule where the boundary can manufacture a finding. The graph is complete only for the scope: a rooted
+scope is complete by construction, since anything the root reaches is in it, and `--global` is complete
+for the repository. Outside either, a model composed by a script or loaded from another repository is
+invisible from here and looks **exactly** like an orphan. Say what you searched, and over what.
 
 ## F04. Multiple entry points
 

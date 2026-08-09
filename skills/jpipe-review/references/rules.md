@@ -5,8 +5,10 @@ a rule fires and what to propose. Almost none of its vocabulary belongs in a rep
 that is the engineer who built the system, and they have no reason to know what a warrant is or what
 `A05` means. → `report-format.md`, which is about writing for them.
 
-Every rule here is decidable from **one model**: the file under review and the files it `load`s. A
-question that needs a second model is not in this catalogue, by construction.
+Every rule here is decidable **within the scope**: the named file and everything it transitively
+`load`s. That is one argument, however many files it spans. A rule that would need to *compare* two
+arguments is not in this catalogue, by construction, and being able to read a loaded file does not make
+comparing it fair game.
 
 | Column | For |
 |---|---|

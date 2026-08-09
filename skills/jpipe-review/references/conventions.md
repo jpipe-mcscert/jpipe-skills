@@ -30,12 +30,19 @@ this true. If an argument for R22 exists, this leaf is declining to use it.
 The fix is `refine(base, refiner) { hook: "<leaf-id>" }`, which grafts the refiner's whole argument
 where the leaf was (`language.md` §6).
 
-**Report this as a question, not as a defect.** Whether `r22.jd` exists, and whether it concludes
-what this leaf assumes, is not visible from inside this file, and this skill does not go looking.
-Say what the tag implies and let the author confirm:
+**Whether this is a finding or a question depends on the scope.** The argument for R22 may be sitting
+right there in the closure, and if it is, you can check it:
 
-> The leaf cites `(R22)`. If a requirement argument for R22 exists, this is the place to `refine`
-> against it rather than assert it. Does one?
+- **The refiner is in scope.** Some model the named file loads concludes what this leaf asserts. Then
+  this is a finding: name that model and its `conclusion` with a `file:line`, and propose the refine.
+- **It is not in scope.** Then nothing here can tell you whether it exists, and inventing an answer is
+  the failure this rule is most prone to. Report a question instead:
+
+  > The leaf cites `(R22)`. If a requirement argument for R22 exists, this is the place to `refine`
+  > against it rather than assert it. Does one?
+
+Either way, do not go looking for `r22.jd` outside the scope. If the author wants that question
+answered across a whole corpus, `jpipe-survey` is the skill that does it, and `F01` is the rule.
 
 ## C02 · Store the refine in the requirement file, under the reused name
 
