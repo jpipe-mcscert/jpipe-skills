@@ -1,0 +1,13 @@
+/**
+ * expect: JD-R01 (with r1_split.jd). The other half of that pair.
+ * e_data denotes data/train.csv. The two warrants genuinely differ, a checksum against a column
+ * set, so only the leaves may ever be aligned: sharing a fact is not sharing a check.
+ */
+justification r2 {
+    conclusion c is "No protected attribute reaches the model"
+    strategy   s is "Confront the split's column set with the protected-attribute list; the intersection is empty"
+    evidence   e_data is "The train.csv split as committed"
+
+    s supports c
+    e_data supports s
+}

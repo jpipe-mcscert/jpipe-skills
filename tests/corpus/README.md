@@ -21,6 +21,10 @@ case's root file and its scope is that file plus everything it loads. No flags. 
 `refine_available/`, `f1_consumer.jd` loads the requirement it should refine against, so it is the root
 itself.
 
+`scoped_model/` is the one case run **twice**, with `-m fairness` and without, because what it guards is
+the difference between the two. Its root file declares two arguments rather than one, which is the
+situation `-m` exists for.
+
 The roots are not scaffolding. `assemble` is the operator that would actually merge two identical
 labels, so `accidental_unification/root.jd` is what makes that case's defect real rather than
 hypothetical.
@@ -40,6 +44,7 @@ one project, so they read the same to someone who has never seen the tutorial co
 | `shared_evidence/` | The same fact under drifted labels. Exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the decoy (s3) |
 | `accidental_unification/` | Byte-identical labels denoting different artifacts. One `JD-R03`, 🔴, reported without asking |
 | `refine_available/` | A leaf asserting what a sibling model proves. One `JD-F01`, and an open question instead if the sibling is removed |
+| `scoped_model/` | One file, two arguments. `-m fairness` gives exactly one `JD-R01` and says nothing about `efficiency`; without `-m`, the same `JD-R01` plus an **open question** where a `JD-R03` would be plausible and wrong, nothing composing those two models together |
 
 `shared_evidence/` is the sharpest guard in the whole tree, because it is built so that **string
 distance and artifact identity point in opposite directions**:

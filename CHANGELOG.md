@@ -10,6 +10,32 @@ not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
 
+### Added
+
+- **`jpipe-survey` takes `-m <model>`**, narrowing the scope to one model in the named file plus the
+  models it is built from, following `assemble`, `refine` and `implements` sources transitively. A `load`
+  makes a model's name available without making it part of any particular argument, so a file that
+  composes two goals out of separate requirement files holds two arguments while the survey has been
+  treating it as one scope. Spelled as jPipe spells it, as in `jpipe process -m <model> -i <file>`. It
+  contradicts `--global`, and naming a model the file does not declare is an error that lists the ones it
+  does. The report names the models it compared, and under `-m` names the file's other models as not
+  looked at.
+- Under `-m`, `JD-F03` (files nothing loads) and `JD-F04` (competing entry points) no longer fire, since
+  that flag answers by construction the question both of them ask: everything in scope is reachable from
+  the model you named. They are listed as not looked at rather than dropped quietly, because a file
+  declaring two roots is exactly where they had something to say.
+
+### Fixed
+
+- **`JD-R03` now requires a model that composes both sides.** Identical labels merge inside a composed
+  model, so two models that nothing composes together keep their own nodes and the merge never happens.
+  Any two byte-identical labels over different artifacts anywhere in scope were previously reported as a
+  🔴, which in a file declaring two independent roots was a false positive on the one finding nobody can
+  decline. Those collisions are now open questions: a hazard waiting on a composition nobody has written.
+- **`JD-F01` compares models rather than files.** The label harvest now carries each element's enclosing
+  `justification`, so in a corpus with several models per file a leaf is no longer matched against its own
+  model's conclusion, which is one argument's internal shape and `jpipe-review`'s to judge.
+
 ## [0.1.4] - 2026-08-09
 
 ### Changed

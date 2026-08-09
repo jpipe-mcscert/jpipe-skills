@@ -35,6 +35,10 @@ Both take the same scope: **one `.jd` file plus everything it transitively `load
 assembled from four requirement files is one argument rather than four. Pass `--global` to scope either
 to every `.jd` in the repository. No file, or more than one, is an error rather than a guess.
 
+A file can hold more than one argument, though, because a `load` makes a model's name available without
+making it part of any particular one. `jpipe-survey` takes **`-m <model>`** for that case, narrowing its
+scope to one model in the file plus the models it is built from.
+
 The split between them is deliberate. **`jpipe-review` examines the elements of one argument;
 `jpipe-survey` compares separate arguments with each other.** A clean review and a clean survey are
 different claims, and a corpus wants both.

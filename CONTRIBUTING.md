@@ -103,15 +103,22 @@ Then `jpipe-survey`, whose failure modes are different because it compares files
     in the closure. Then drop the `load` line and rerun: it must become an **open question**, because the
     tag says a requirement exists, not that anyone argued it. *That pair is the whole difference between
     this rule and `jpipe-review`'s `C01`, which now behaves the same way when the refiner is in scope.*
-11. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **Decisions**, not
-    reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
+11. `corpora/scoped_model/goals.jd` **with `-m fairness`** → exactly one `JD-R01`, nothing whatever about
+    `efficiency`, and **Not looked at** naming `efficiency` along with `JD-F03` and `JD-F04`. Then the same
+    file with no `-m`: the same `JD-R01`, and the two identical `"The reported metrics"` leaves as an
+    **open question** rather than a `JD-R03`. *The reason `-m` exists. A merge happens inside a
+    composition, and nothing composes `r3` with `efficiency`, so a 🔴 there would be plainly false.*
+12. `goals.jd -m nosuchmodel` → an error that lists the models the file does declare. `-m fairness`
+    together with `--global` → an error. Neither picks one and carries on.
+13. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **What you told me**,
+    not reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
     question and the run still produces a report. *The headless-degradation path.*
-12. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
+14. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
     rather than vanishing.
-13. A scope where one file does not compile → surveyed like any other, since a declaration clusters
+15. A scope where one file does not compile → surveyed like any other, since a declaration clusters
     whether or not its file parses. After an approved fix, the post-edit check must not blame that
     file's pre-existing breakage on the edit.
-14. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
+16. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
     non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
 
 Record the outcome in `CHANGELOG.md` for the release.
