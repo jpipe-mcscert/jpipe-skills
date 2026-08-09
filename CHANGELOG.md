@@ -2,11 +2,15 @@
 
 All notable changes to this project are documented here.
 
-The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres
-to [Semantic Versioning](https://semver.org/spec/v2.0.0.html). The plugin is versioned as a whole;
-individual skills are not, so per-skill changes are grouped under the headings below.
+The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions read as
+[Semantic Versioning](https://semver.org/spec/v2.0.0.html) triples. While the repository is
+experimental it stays on `0.1.x`, so a patch bump here can carry a new skill or a changed report
+format; read the entry, not the number. The plugin is versioned as a whole and individual skills are
+not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
+
+## [0.1.3] - 2026-08-09
 
 ### Changed
 
@@ -203,5 +207,6 @@ individual skills are not, so per-skill changes are grouped under the headings b
   actually fetch a new version.
 
 [Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
-[0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
-[0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
+[0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...main
+[0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/compare/15c57b9f650c121b39bcd8a4ef28367bf8264e99...c0bef5968ed24e6da8eef07df9053d55340ee776
+[0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commit/15c57b9f650c121b39bcd8a4ef28367bf8264e99
