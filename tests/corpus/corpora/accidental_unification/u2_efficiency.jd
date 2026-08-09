@@ -1,0 +1,17 @@
+/**
+ * expect: JD-R03 (with u1_fairness.jd)
+ * The other half of the accidental unification. Same label, "The reported metrics", byte for
+ * byte. Different artifact: the recorded wall-clock timings, not the fairness figures. The
+ * strategy is what disambiguates them, and it is the only thing that does.
+ *
+ * The fix is to disambiguate both labels, which each needed anyway: a label too generic to
+ * identify its artifact was never a good ground.
+ */
+justification efficiency {
+    conclusion c is "A full run completes within the published time budget"
+    strategy   s is "Confront the recorded wall-clock duration in the reported metrics with the published budget; it is under"
+    evidence   e_metrics is "The reported metrics"
+
+    s supports c
+    e_metrics supports s
+}

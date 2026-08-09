@@ -3,7 +3,7 @@
 
 Two sources, one rule: if we show it, it must build.
 
-  * fenced ```jd blocks in the skills' markdown and in README.md
+  * fenced ```jd blocks in the shared references/, the skills' markdown, and README.md
   * every .jd file under tests/corpus/
 
 The corpus fixtures are *semantically* flawed on purpose -- that is what the
@@ -29,7 +29,7 @@ import tempfile
 from pathlib import Path
 
 FENCE_RE = re.compile(r"^```jd[ \t]*\n(.*?)^```", re.S | re.M)
-SCAN_GLOBS = ("skills/**/*.md", "README.md")
+SCAN_GLOBS = ("references/**/*.md", "skills/**/*.md", "README.md")
 
 
 def compile_one(jpipe: str, path: Path) -> tuple[bool, str]:

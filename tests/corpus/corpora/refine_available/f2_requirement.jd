@@ -1,0 +1,14 @@
+/**
+ * expect: no finding of its own. This is the argument f1_consumer.jd should refine against.
+ * Its conclusion is written to MATCH the label of f1's leaf, which is what makes a graft read
+ * continuously rather than splicing an unrelated claim into the tree (language.md section 6).
+ * That matching label is also what makes the F01 match a lookup rather than a guess.
+ */
+justification r22 {
+    conclusion c is "The identity grid is the full 27-cell one (R22)"
+    strategy   s is "Confront the committed grid's cell count and axis labels with the three-by-three-by-three specification in SPECS section 6; all 27 are present"
+    evidence   e_grid is "The committed identity grid fixture and its axis headers"
+
+    s supports c
+    e_grid supports s
+}

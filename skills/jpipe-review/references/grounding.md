@@ -33,32 +33,18 @@ Three hard limits:
 
 ## Method
 
-### 1. Extract the artifact
+### 1. Extract the artifact, and 2. classify it
 
-Read the label and ask what thing it names. Labels are prose written for a human, so the artifact is
-usually a noun phrase with a possessive or a qualifier:
+→ `references/artifacts.md`, which is the shared extraction: what noun phrase names the thing, and
+which of the six kinds it is. That file decides *what to look for*; this one decides *what its absence
+means*.
 
-| Label | Artifact |
-|---|---|
-| "The committed Pipfile and its `[packages]` dependency table" | `Pipfile`, section `[packages]` |
-| "The committed pipeline source: the `src/` package and the `run_v*.py` entry points" | `src/`, `run_v*.py` |
-| "The committed train, test and counterfactual CSV splits and their header rows" | `data/*.csv` (three of them) |
-| "The CI run record for the release commit and its coverage job log" | a CI artifact, **likely not in the tree** |
-| "The fitted classifier" | a *produced* thing, not a committed one |
+Two of its rules carry straight into this pass and are worth restating, because they are what keep the
+pass from crying wolf:
 
-### 2. Classify what kind of thing it is
-
-This decides the search, and it decides what absence means.
-
-- **Committed path**: a file or directory expected in the tree. `Glob` for it.
-- **Path with an internal section**: a file plus a named part (`[packages]`, a heading, a symbol).
-  `Glob` for the file, then `Grep` inside it for the section.
-- **Named symbol**: a function, class, or config key. `Grep` the tree.
-- **Produced artifact**: something a run creates (`model/metrics.json`, a fitted pipeline). It may
-  be git-ignored and legitimately absent from a clean checkout. Ground against **what produces it**,
-  and if that is ambiguous, it is an open question, not a finding.
-- **External**: a hosted record, a published standard, a third-party dataset. **Out of reach.** Not
-  a finding in either direction.
+- **An unresolved label is an open question, never a finding.** No searchable token, no `G01`.
+- **A produced artifact grounds against what produces it.** `model/metrics.json` being absent from a
+  clean checkout says nothing; the script that writes it is the real ground.
 
 ### 3. Search, and record the searches
 

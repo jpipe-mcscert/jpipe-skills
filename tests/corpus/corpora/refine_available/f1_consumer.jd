@@ -1,0 +1,23 @@
+/**
+ * expect: JD-F01 (against f2_requirement.jd)
+ * The leaf e_grid asserts what f2_requirement.jd proves with a whole argument, and says so
+ * itself: the trailing (R22) tag names the requirement that makes it true. The corpus
+ * contains the proof and this model declines to use it.
+ *
+ * The fix is to refine against it, storing the refine here under the reused name:
+ *     load "f2_requirement.jd"
+ *     justification consumer_base { ... }
+ *     justification consumer is refine(consumer_base, r22) { hook: "e_grid" }
+ *
+ * Delete f2_requirement.jd from the corpus and this must become an OPEN QUESTION, not a
+ * finding: the tag alone says a requirement exists, not that anyone argued it. That is the
+ * pair case, and it is the difference between this rule and jpipe-review's C01.
+ */
+justification consumer {
+    conclusion c is "The decision table is exhaustive over the input domain"
+    strategy   s is "Confront the table's row count with the size of the input domain; every combination has a row"
+    evidence   e_grid is "The identity grid is the full 27-cell one (R22)"
+
+    s supports c
+    e_grid supports s
+}

@@ -80,8 +80,9 @@ does not do.
 
 The `C` numbering keeps its gaps rather than closing them, so `C05` still means what it always meant.
 
-None of this is a gap in the review. These are corpus questions, and they belong to a corpus-scoped
-skill rather than to a reviewer holding one file.
+None of this is a gap in the review. These are corpus questions, and they belong to `jpipe-survey`,
+which reads a whole corpus, rather than to a reviewer holding one file. Its `JD-R` and `JD-F` families
+are where these checks live now, and its `rules.md` carries the translation table.
 
 ## What is *not* in this catalogue
 
@@ -89,9 +90,9 @@ Syntax, unresolved symbols, cycles, missing operator keys, illegal support pairi
 un-overridden `@support`, broken `load`s. All of it is caught by `jpipe diagnostic` and the VS Code
 extension, with better locations than a reader will produce.
 
-The compile gate reports *that* a file does not build and stops. It never re-explains, ranks, or
-catalogues what the compiler already said. `language.md` §8 lists that territory so you can recognise
-and stay off it.
+This review does not compile the model at all until it has edited it, so it has nothing to say about
+whether the file builds and should never imply otherwise. `language.md` §8 lists that territory so you
+can recognise and stay off it.
 
 ## Ordering findings
 

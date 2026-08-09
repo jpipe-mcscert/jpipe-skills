@@ -4,17 +4,20 @@
 
 ```bash
 python3 tools/validate_skills.py     # frontmatter, reference links, budgets, manifests
+python3 tools/sync_refs.py --check   # vendored references still match the canon
 python3 tools/check_jd_blocks.py     # every published .jd example must compile (needs jpipe)
 ```
 
-Both run in CI on push and pull request. The first is stdlib-only and needs no network.
+All three run in CI on push and pull request. The first two are stdlib-only and need no network.
 
-A skill is prose, so nothing executes it and it fails silently. These tools cover the two ways that
+A skill is prose, so nothing executes it and it fails silently. These tools cover the three ways that
 happens:
 
 - **Structural rot**: a renamed reference file leaving a dangling path in `SKILL.md`, a frontmatter
   `name` drifting from its directory, version skew between the two manifests. None of this raises an
   error at runtime; the skill just quietly degrades into guesswork.
+- **Divergent rot**: one skill's copy of a shared reference edited in place, so two skills quietly
+  disagree about the language they both describe.
 - **Factual rot**: an example in the documentation that no longer compiles. A published `.jd` that
   stopped building is a skill teaching a wrong pattern.
 
@@ -42,12 +45,32 @@ where an interactive picker cannot be answered and an approval step built on one
 ### Shared reference material
 
 Skills cannot share a `references/` directory; each must be self-contained so that copying one
-directory into `~/.claude/skills/` still works.
+directory into `~/.claude/skills/` still works. So shared text lives once at the root and is
+**vendored** into each skill that needs it:
 
-Today all reference material lives inside `jpipe-review`. When a second skill needs the same text,
-hoist the canon to a root `references/`, vendor copies into each skill, and add a drift check to CI.
-That is deliberately deferred rather than forgotten. With one skill it would be machinery guarding a
-problem that does not exist, and the move is mechanical when it arrives.
+| | |
+|---|---|
+| `references/*.md` | the **canon**. Edit here, and only here |
+| `skills/*/references/<same-name>.md` | a vendored copy, byte-identical, shipped with the skill |
+
+The rule is zero-config: for every file in the root `references/`, any same-named file under a skill's
+`references/` must match it byte-for-byte. A skill opts in by *having* the file, so there is no
+manifest to forget to update. `tools/sync_refs.py --check` is the CI gate, and the fix is one command:
+
+```bash
+python3 tools/sync_refs.py           # copy the canon over every vendored copy
+```
+
+Each canon file opens with an HTML-comment banner naming itself as the canon, so anyone who opens a
+vendored copy and starts typing is told where to go instead. The banner is part of the copied bytes,
+which is why byte-identity still holds. `sync_refs.py` never *creates* a copy: vendoring a file into a
+skill for the first time is a deliberate act, so do it by hand once and the tool keeps it honest after.
+
+**What belongs in the canon** is text that is true independently of who reads it: the language,
+the extraction of an artifact from a label. What does not is anything phrased as an instruction to one
+skill. When hoisting, strip the imperatives: a sentence like *"do not report any of this"* is a
+guardrail belonging in a `SKILL.md`, not a fact about jPipe. Prefer leaving material in one skill over
+hoisting something that then needs a caveat per consumer.
 
 ## Before a release
 
@@ -59,14 +82,36 @@ the assertion, never the phrasing:
 2. A known-good multi-leg model (`jpipe-tutorial-2026/justifications/requirements/r9.jd`) → 🟢, and
    its evidence grounds against the real tree. *The most important one: it guards against false
    positives, which are what make a reviewer useless.*
-3. A model that does not compile → stops at the gate, attempts no semantic review, and does not
-   re-explain the compiler's diagnostics.
-4. A model with a broken `load` → caught, even though the fatal appears **only on stderr** and stdout
-   is completely empty. *The bug most likely to ship.*
+3. A model that does not compile → **still reviewed**, and the report does not claim it builds, does
+   not re-explain the compiler's diagnostics, and does not refuse. *Nothing is compiled before an edit.*
+4. `--apply` on a model with a broken `load` → the post-edit check catches it, even though the fatal
+   appears **only on stderr** with stdout completely empty. *The bug most likely to ship: a verifier
+   reading stdout alone calls a broken file clean.*
 5. A leaf naming a nonexistent file → one `JD-G01`, citing the searches it ran.
 6. A directory of several models → N independent reviews, and **no finding stated in terms of a
    second file**. *The scope boundary: the skill reads one model at a time.*
 7. `--apply`, answering *"1 and 3 only"* → exactly two edits, re-verified, nothing written to git.
+
+Then `jpipe-survey`, whose failure modes are different because it compares files:
+
+8. `tests/corpus/corpora/shared_evidence/` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the
+   decoy. *The single most important case in the repository: the decoy is the closest label to s1 by
+   wording and the wrong answer, so this fails the moment clustering falls back to string similarity.*
+9. `tests/corpus/corpora/accidental_unification/` → one `JD-R03`, 🔴, **without a question being
+   asked**. The merge is what the compiler will do, so there is nothing to confirm.
+10. `tests/corpus/corpora/refine_available/` → one `JD-F01`. Then remove `f2_requirement.jd` and rerun:
+    it must become an **open question**, not a finding. *The tag says a requirement exists, not that
+    anyone argued it, and this is the whole difference from `jpipe-review`'s `C01`.*
+11. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **Decisions**, not
+    reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
+    question and the run still produces a report. *The headless-degradation path.*
+12. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
+    rather than vanishing.
+13. A corpus where one file does not compile → surveyed like any other, since a declaration clusters
+    whether or not its file parses. With `--apply`, the post-edit check must not blame that file's
+    pre-existing breakage on the edit.
+14. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
+    non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
 
 Record the outcome in `CHANGELOG.md` for the release.
 

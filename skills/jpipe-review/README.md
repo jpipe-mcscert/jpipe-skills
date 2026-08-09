@@ -14,8 +14,8 @@ Reviews the *argument* in an existing jPipe justification model (`.jd`).
 
 The compiler and the VS Code extension already catch syntax, unresolved symbols, cycles, and missing
 operator keys, with better line numbers than a language model will produce. This skill deliberately
-does none of that. It compiles the model once as a **gate**, and if it builds, asks the four
-questions no tool asks:
+does none of that, and does not even compile your model to check: you already know whether it builds.
+It asks the four questions no tool asks:
 
 | | |
 |---|---|
@@ -40,6 +40,9 @@ given model. Those need a corpus, and a per-model reviewer that guesses at them 
 wrong. So a **CLEAN** verdict here means *this model holds on its own terms* and says nothing about
 how it sits with any other. The report says so too, in its **Not reviewed** section.
 
+Those questions are [`jpipe-survey`](../jpipe-survey/)'s, which reads the whole corpus at once and asks
+you to confirm what the files cannot settle. A corpus wants both skills: they make different claims.
+
 ## Usage
 
 ```
@@ -49,8 +52,10 @@ jpipe-review <target> [--no-grounding] [--apply]
 `<target>` is a `.jd` file, a directory, a glob, or nothing (the `.jd` files changed in your working
 tree). Without `--apply` it reports and stops.
 
-Needs [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH`
-(`brew install jpipe`, `apt install jpipe`, or `scoop install mcscert/jpipe`).
+Reporting needs no tools at all. `--apply` needs
+[`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` (`brew install jpipe`,
+`apt install jpipe`, or `scoop install mcscert/jpipe`), because an edit it cannot verify is worse than
+a finding it merely reported: after editing it recompiles and re-renders every file it touched.
 
 ## Authority: which findings you can argue with
 
@@ -67,12 +72,17 @@ The `references/` are written to be read by people too, not only loaded by the s
 
 | | |
 |---|---|
-| [`language.md`](references/language.md) | The jPipe language, objectively: elements, the `supports` relation and its legal pairings, `load`, templates, the two operators, and the `unified_N` renumbering hazard |
+| [`language.md`](references/language.md) † | The jPipe language, objectively: elements, the `supports` relation and its legal pairings, `load`, templates, the two operators, and the `unified_N` renumbering hazard |
+| [`artifacts.md`](references/artifacts.md) † | Resolving an evidence label to the thing it names, and why string similarity is not artifact identity |
 | [`abstraction.md`](references/abstraction.md) | The argument model: Toulmin's claim / grounds / warrant mapped onto jPipe's kinds, the fact → check → verdict ladder, atomicity, and the category errors |
 | [`grounding.md`](references/grounding.md) | Checking evidence against the tree, and the discipline that keeps it from crying wolf |
 | [`conventions.md`](references/conventions.md) | McSCert house practice, the part a single file can be checked against: refine placement, altitude, provenance headers |
 | [`rules.md`](references/rules.md) | The rule catalogue: id, authority, trigger, fix |
 | [`report-format.md`](references/report-format.md) | The findings report's shape, with a worked example |
+
+† Vendored, byte-identical, from the repository's shared [`references/`](../../references/) canon, so
+the skill directory stays self-contained and copyable on its own. Edit the canon, not the copy:
+see [Shared reference material](../../CONTRIBUTING.md#shared-reference-material).
 
 ## On the argument model
 

@@ -19,7 +19,7 @@ import sys
 from pathlib import Path
 
 NAME_RE = re.compile(r"^jpipe-[a-z0-9]+(-[a-z0-9]+)*$")
-RULE_ID_RE = re.compile(r"\bJD-[AGSC]\d{2}\b")
+RULE_ID_RE = re.compile(r"\bJD-[AGSCRF]\d{2}\b")
 REF_MENTION_RE = re.compile(r"references/([A-Za-z0-9_.-]+\.md)")
 
 MAX_SKILL_LINES = 160
@@ -157,7 +157,7 @@ def check_rule_ids(skill_dir: Path, errors: list[str]) -> None:
 
     defined = set()
     for line in cat_text.splitlines():
-        m = re.match(r"\|\s*([AGSC]\d{2})\s*\|", line)
+        m = re.match(r"\|\s*([AGSCRF]\d{2})\s*\|", line)
         if m:
             defined.add("JD-" + m.group(1))
 
@@ -171,7 +171,8 @@ def check_rule_ids(skill_dir: Path, errors: list[str]) -> None:
 
     for family, authority_marker in (("A", "authority: argument"),
                                      ("G", "authority: argument"),
-                                     ("C", "authority: house")):
+                                     ("C", "authority: house"),
+                                     ("F", "authority: house")):
         header = re.search(rf"^## JD-{family} .*$", cat_text, re.M)
         if header and authority_marker not in header.group(0):
             errors.append(f"rules.md: JD-{family} section header lacks '{authority_marker}'")
@@ -210,6 +211,7 @@ def check_house_style(root: Path, errors: list[str]) -> None:
     a second sentence instead. Enforced rather than remembered, because a single
     stray one in a pull request is easy to wave through."""
     targets = sorted(root.glob("*.md"))
+    targets += sorted(root.glob("references/*.md"))
     targets += sorted(root.glob("skills/**/*.md"))
     targets += sorted(root.glob("tests/**/*.md"))
     targets += sorted(root.glob(".claude-plugin/*.json"))

@@ -1,0 +1,17 @@
+/**
+ * expect: NO FINDING. This is the decoy.
+ * The leaf shares most of its words with s1_fairness.jd's "The committed training split"
+ * but denotes an entirely different artifact -- config/train.yaml, not data/train.csv.
+ * Clustering on string similarity wrongly proposes merging this with s1;
+ * clustering on the artifact named does not. s1 is the CLOSEST label to this one by string
+ * and the wrong answer, while s2 is the FARTHEST and the right one, so the two signals are
+ * anti-correlated on purpose.
+ */
+justification reproducibility {
+    conclusion c is "The training run is reproducible from committed inputs"
+    strategy   s is "Confront the recorded run parameters with the committed training configuration; every parameter is pinned"
+    evidence   e_cfg is "The committed training configuration"
+
+    s supports c
+    e_cfg supports s
+}

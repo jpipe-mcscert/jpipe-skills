@@ -8,6 +8,74 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ## [Unreleased]
 
+### Added
+
+#### `jpipe-survey`
+
+- **New skill: surveys a whole corpus** for what no single file can show. `jpipe-review` reads one
+  model at a time on purpose, which left three questions unowned, and this skill owns them: whether
+  the same fact is argued twice under labels that will **not** unify, whether two labels are identical
+  enough to merge under `assemble` into a claim nobody wrote, and whether a leaf asserts something
+  another model in the corpus already proves. It also reports orphan models and competing entry points.
+- **It asks you questions, and that is the point.** Whether *"The committed training split"* and
+  *"The train.csv split as committed"* name the same file is knowledge you have and the corpus does not
+  record. Guessing produces a wrong merge, which is worse than finding nothing: it collapses a
+  distinction you drew on purpose and, applied, quietly changes what your case claims. So uncertain
+  clusters become numbered prose questions before anything is reported, at most 7 by default
+  (`--questions N`), ordered by how many models each touches. Anything past the budget is reported as
+  an open question rather than dropped. Answers, **including the ones where you say no**, land in a
+  `Decisions` section so a later run does not re-ask.
+- Answer nothing and the run is still useful: every uncertain cluster degrades to an open question and
+  nothing is applied. Questions are prose rather than an interactive picker for exactly this reason.
+- **Two new rule families**: `JD-R` for sharing (`R01` duplicate-fact-not-unified, `R02`
+  extract-shared-leg, `R03` accidental-unification, `R04` redundant-check) and `JD-F` for refinement
+  and structure (`F01` should-be-refine, `F02` refine-not-in-requirement-file, `F03` orphan-model,
+  `F04` multiple-entry-points). `R03` is the only one backed by `language`: the composed model already
+  asserts the merge, so it is reported without asking and cannot be declined.
+- These are new ids, not revived ones. `jpipe-review` retired `S01`-`S04` and `C03`/`C04` in 0.1.1 and
+  retired ids are never reused, so `references/rules.md` carries a translation table for anyone holding
+  an older report. `F01` is the only rule that is genuinely new rather than renumbered: `jpipe-review`'s
+  `C01` could only ask *"if an argument for R22 exists, refine against it. Does one?"*, and this skill
+  answers that question.
+- Needs **two or more** models, and says so rather than pretending: every rule here compares models.
+
+#### Shared reference material
+
+- **Reference text is now shared between skills**, via a canon at `references/` vendored byte-identically
+  into each skill. Skills still cannot share a directory, because copying one into `~/.claude/skills/`
+  has to keep working, so each ships its own copy and `tools/sync_refs.py --check` (in CI) fails if a
+  copy drifts. `python3 tools/sync_refs.py` is the fix. Consumer-visible effect: none, unless you edit
+  a vendored copy, which now fails CI with a pointer to the canon.
+- `references/language.md` is the canon for the language itself, and `references/artifacts.md` is new:
+  resolving an evidence label to the thing it names. Grounding asks *does this exist?* and sharing asks
+  *have I seen this one before?*, and both read the same noun phrase, so the extraction lives in one
+  place rather than drifting into two.
+
+### Changed
+
+- **Neither skill compiles your model before reviewing it.** `jpipe-review` used to open with a compile
+  gate and refuse to review a file that did not build. It no longer does, and `jpipe-survey` never did.
+  Whether a file compiles is the compiler's answer to give, and you already have it from
+  `jpipe diagnostic` and your editor; an argument's shape is legible long before it parses, so refusing
+  to look was friction rather than rigour. Compilation now happens in exactly one place: **after** an
+  approved edit, verifying work the skill itself did.
+- Consequences worth knowing. **Reporting needs no tools at all**, so both skills work in a checkout
+  with no compiler, and `jpipe-survey` will survey a corpus caught mid-edit. `--apply` still requires
+  `jpipe` on `PATH` and now says so and stops *before* editing, because an edit to an assurance case
+  that cannot be verified is worse than a finding merely reported. The **BLOCKED** verdict is gone from
+  `jpipe-review` and **PARTIAL** never shipped in `jpipe-survey`; a report's header no longer carries a
+  compile-gate line, and neither verdict claims anything about whether your files build.
+- Findings cite `file:line` rather than `file:line:col`. The column came from the compile gate's symbol
+  table, which is no longer read; a column is still given when the label's opening quote can be pointed
+  at directly.
+
+#### Fixtures
+
+- `tests/corpus/corpora/` holds multi-model fixtures, where a finding **must** be stated across files.
+  The single-model rule still holds for `good/` and `bad/`. `corpora/shared_evidence/` restores the
+  three fixtures retired in 0.1.1, including the decoy that shares most of its wording with a real
+  duplicate while denoting a different artifact.
+
 ## [0.1.1] - 2026-08-08
 
 ### Added

@@ -22,6 +22,10 @@ jobs:
       # runnable anywhere, including in a clone with no network.
       - name: Validate SKILL.md frontmatter, references and manifests
         run: python3 tools/validate_skills.py
+      # Skills vendor copies of the shared references/ canon so each stays
+      # self-contained. A copy edited in place would silently fork the text.
+      - name: Check vendored references match the canon
+        run: python3 tools/sync_refs.py --check
 
   compile-examples:
     name: Compile published .jd examples
