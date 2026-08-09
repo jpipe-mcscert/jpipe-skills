@@ -58,8 +58,10 @@ jpipe-survey <target> [--no-refine] [--questions N] [--apply]
 `<target>` is a directory, a glob, or nothing (the repository root). It needs **two or more** models,
 since every rule compares models. Without `--apply` it reports and stops.
 
-Needs [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH`
-(`brew install jpipe`, `apt install jpipe`, or `scoop install mcscert/jpipe`).
+Reporting needs no tools at all: the survey runs on a `grep` over label declarations, which works
+whether or not the corpus parses. `--apply` needs
+[`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` (`brew install jpipe`,
+`apt install jpipe`, or `scoop install mcscert/jpipe`), to recompile and re-render what it edited.
 
 ## Scope: the corpus, not the argument
 

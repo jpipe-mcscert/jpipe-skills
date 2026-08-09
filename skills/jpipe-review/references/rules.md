@@ -90,9 +90,9 @@ Syntax, unresolved symbols, cycles, missing operator keys, illegal support pairi
 un-overridden `@support`, broken `load`s. All of it is caught by `jpipe diagnostic` and the VS Code
 extension, with better locations than a reader will produce.
 
-The compile gate reports *that* a file does not build and stops. It never re-explains, ranks, or
-catalogues what the compiler already said. `language.md` §8 lists that territory so you can recognise
-and stay off it.
+This review does not compile the model at all until it has edited it, so it has nothing to say about
+whether the file builds and should never imply otherwise. `language.md` §8 lists that territory so you
+can recognise and stay off it.
 
 ## Ordering findings
 

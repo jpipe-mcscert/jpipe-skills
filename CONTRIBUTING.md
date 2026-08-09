@@ -82,10 +82,11 @@ the assertion, never the phrasing:
 2. A known-good multi-leg model (`jpipe-tutorial-2026/justifications/requirements/r9.jd`) → 🟢, and
    its evidence grounds against the real tree. *The most important one: it guards against false
    positives, which are what make a reviewer useless.*
-3. A model that does not compile → stops at the gate, attempts no semantic review, and does not
-   re-explain the compiler's diagnostics.
-4. A model with a broken `load` → caught, even though the fatal appears **only on stderr** and stdout
-   is completely empty. *The bug most likely to ship.*
+3. A model that does not compile → **still reviewed**, and the report does not claim it builds, does
+   not re-explain the compiler's diagnostics, and does not refuse. *Nothing is compiled before an edit.*
+4. `--apply` on a model with a broken `load` → the post-edit check catches it, even though the fatal
+   appears **only on stderr** with stdout completely empty. *The bug most likely to ship: a verifier
+   reading stdout alone calls a broken file clean.*
 5. A leaf naming a nonexistent file → one `JD-G01`, citing the searches it ran.
 6. A directory of several models → N independent reviews, and **no finding stated in terms of a
    second file**. *The scope boundary: the skill reads one model at a time.*
@@ -106,8 +107,9 @@ Then `jpipe-survey`, whose failure modes are different because it compares files
     question and the run still produces a report. *The headless-degradation path.*
 12. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
     rather than vanishing.
-13. A corpus where one file does not compile → that file is excluded from every cluster, listed under
-    **Not reviewed** verbatim, and the survey still runs on the rest.
+13. A corpus where one file does not compile → surveyed like any other, since a declaration clusters
+    whether or not its file parses. With `--apply`, the post-edit check must not blame that file's
+    pre-existing breakage on the edit.
 14. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
     non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
 

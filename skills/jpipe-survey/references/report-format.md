@@ -4,7 +4,7 @@ The report **is** the product. A fixed shape means two surveys of the same corpu
 enforces discipline: there is a slot for the rule id, its description, the locations on both sides, and
 the blast radius, so omitting one is visibly wrong rather than merely unmentioned.
 
-Emit this at Step 6 and stop, unless `--apply` was given.
+Emit this at Step 5 and stop, unless `--apply` was given.
 
 ---
 
@@ -47,7 +47,7 @@ sloppiness if phrased carelessly. Two habits:
 
 jpipe <version> · <N> models · <M> elements surveyed · <K> clusters examined
 **<a> UNSOUND · <b> STRUCTURE · <c> REUSE · <d> CONVENTION**
-Compile gate: <p> pass, <q> skipped · Questions asked: <n>, answered: <m>
+Questions asked: <n>, answered: <m>, declined: <d>
 
 ## 🔴 UNSOUND (<a>)
 <R03: labels that will merge into a claim nobody wrote>
@@ -86,7 +86,7 @@ Blast radius: <edits, and whether a unified group is created or destroyed>
 <unanswered clusters and unasked ones, both labels quoted. Not findings.>
 
 ## Not reviewed
-<files that did not compile; passes not run; what a survey cannot see>
+<passes not run; unasked clusters; what a survey cannot see>
 ```
 
 The **Decisions**, **Open questions** and **Not reviewed** sections are not optional padding. Decisions
@@ -101,7 +101,7 @@ is what stops a second run re-asking; the other two are where the survey states 
 
 jpipe 2.3.1 · 6 models · 47 elements surveyed · 9 clusters examined
 **1 UNSOUND · 1 STRUCTURE · 1 REUSE · 1 CONVENTION**
-Compile gate: 6 pass, 0 skipped · Questions asked: 3, answered: 2
+Questions asked: 3, answered: 2, declined: 1
 
 ## 🔴 UNSOUND (1)
 
@@ -201,5 +201,7 @@ unprompted and a re-run will act on it.
   is a good argument on its own.
 - **Anything outside `justifications/`.** A model composed by a script elsewhere, or a step library
   referencing `unified_N` ids, would not appear here. F03 above is stated with that limit.
+- **Whether any of this compiles.** No file was built: `jpipe diagnostic` and the editor own that, and
+  a declaration clusters whether or not its file parses. Nothing was compiled because nothing was edited.
 - `--no-refine` was not passed; both passes ran on all 6 models.
 ```

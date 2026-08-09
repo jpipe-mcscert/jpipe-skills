@@ -4,15 +4,16 @@ The report **is** the product. A fixed shape means two reviews of the same targe
 it enforces discipline: there is a slot for the rule id, the location, and the blast radius on every
 finding, so omitting one is visibly wrong rather than merely unmentioned.
 
-Emit this at Step 6 and stop, unless `--apply` was given.
+Emit this at Step 5 and stop, unless `--apply` was given.
 
 ---
 
 ## Rules for every finding
 
 1. **An id, its description, a location, a quote.** `[JD-XNN name]` followed by the rule's
-   **Description** from `rules.md`, then `file:line:col` from the compile gate's Symbol Table, and the
-   element's label quoted verbatim. A finding the author has to go hunting for is half a finding.
+   **Description** from `rules.md`, then `file:line` as you read it (plus the column of the label's
+   opening quote when you can point at it), and the element's label quoted verbatim. A finding the
+   author has to go hunting for is half a finding.
 
    Never make the id carry the meaning. `[JD-A01 claim-as-evidence]` alone is a lookup key, and an
    author reading their first review has no table to look it up in. Spell the rule out:
@@ -23,7 +24,7 @@ Emit this at Step 6 and stop, unless `--apply` was given.
    ```
 
    The description says what the rule is; the lines under it say why this element trips it. Both, every
-   time, including in the fix list at Step 7 and in the one-line summaries.
+   time, including in the fix list at Step 6 and in the one-line summaries.
 2. **Say what should replace it.** Not "this is wrong", but the actual proposed wording. For a
    three-part rewrite, give all three parts.
 3. **State the blast radius.** Label-only? New ids? Does it create or destroy a unified group? This
@@ -53,7 +54,7 @@ their code. Two habits keep it useful:
 # jPipe review: <target>
 
 jpipe <version> · <N> models reviewed independently · <M> nodes · **<a> UNSOUND · <b> ABSTRACTION · <c> CONVENTION**
-Compile gate: <p> pass, <q> skipped · Passes run: abstraction, grounding, conventions
+Passes run: abstraction, grounding, conventions
 <omit-note if any pass was skipped and why>
 
 ## 🔴 UNSOUND (<a>)
@@ -98,8 +99,8 @@ review states its own limits, and a report without them implies a completeness i
 ```markdown
 # jPipe review: justifications/
 
-jpipe 2.3.1 · 5 models reviewed independently · 24 nodes · **1 UNSOUND · 3 ABSTRACTION · 1 CONVENTION**
-Compile gate: 4 pass, 1 skipped · Passes run: abstraction, grounding, conventions
+jpipe 2.3.1 · 5 models reviewed independently · 31 nodes · **1 UNSOUND · 3 ABSTRACTION · 1 CONVENTION**
+Passes run: abstraction, grounding, conventions
 
 ## 🔴 UNSOUND (1)
 
@@ -167,7 +168,7 @@ Authority: house.
 | requirements/r3.jd | r3 | 3 | 1 | 1 | 0 | 🟡 single-leg reword |
 | requirements/r14.jd | r14 | 5 | 0 | 1 | 1 | 🟠 multi-leg |
 | g2_fates.jd | fates | 8 | 0 | 0 | 0 | 🟢 at abstraction |
-| g6_efficiency.jd | efficiency | n/a | n/a | n/a | n/a | ⏭ did not compile |
+| g6_efficiency.jd | efficiency | 7 | 0 | 0 | 0 | 🟢 at abstraction |
 
 ## Suggested fix order
 
@@ -201,15 +202,9 @@ from inside this file.
   read. So: whether two of these leaves will unify under `assemble`, whether a fact argued here is
   already argued elsewhere, and whether anything loads these models are all unanswered. A 🟢 above
   means the model holds on its own terms, nothing more. `jpipe-survey` answers those.
-- **g6_efficiency.jd**: does not compile; semantic passes skipped for this file. The compiler and
-  the VS Code extension are the authority there. Its raw output:
-  <details><summary>jpipe diagnostic</summary>
-
-  ```
-  [ERROR] g6_efficiency.jd:22:9: [unresolved-symbol] cannot execute: support('efficiency', 'e_time', 's_run')
-  ```
-  </details>
-
+- **Whether any of this compiles.** No file here was built: `jpipe diagnostic` and the editor are the
+  authority on that, and they have already told you. This review is about what the argument means, and
+  a model can mean nothing while parsing perfectly. Nothing was compiled because nothing was edited.
 - **justifications/steps/**: the Python step library is out of scope for this skill.
-- `--no-grounding` was not passed; the grounding pass ran on all 4 compiling files.
+- `--no-grounding` was not passed; the grounding pass ran on all 5 models.
 ```

@@ -28,8 +28,9 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 
 | Skill | What it does | Needs |
 |---|---|---|
-| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model, one model at a time: whether its elements sit at the right level, rest on artifacts that exist, and follow the house style. Reads only the model you give it. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` |
+| [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument* in an existing `.jd` model, one model at a time: whether its elements sit at the right level, rest on artifacts that exist, and follow the house style. Reads only the model you give it. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | nothing to report; [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` to apply fixes |
 | [**jpipe-survey**](skills/jpipe-survey/) | Surveys a *corpus* for what no single file shows: the same fact argued twice under labels that will not unify, labels identical enough to merge into a claim nobody wrote, and leaves that assert what another model already proves. Asks you to confirm what the files cannot settle | same |
+
 
 The split is deliberate. **`jpipe-review` reads one model properly; `jpipe-survey` reads how many models
 fit together.** A clean review and a clean survey are different claims, and a corpus wants both: the

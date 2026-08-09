@@ -80,8 +80,8 @@ model properly rather than glancing at many. Do not restate its findings here, e
 makes one obvious.
 
 Syntax, unresolved symbols, cycles, operator errors and broken `load`s belong to `jpipe diagnostic`
-and the VS Code extension (`language.md` §8). The compile gate reports *that* a file does not build
-and stops.
+and the VS Code extension (`language.md` §8). This skill does not compile anything until it has edited
+something, and a label declaration clusters whether or not its file parses.
 
 ## Ordering findings
 

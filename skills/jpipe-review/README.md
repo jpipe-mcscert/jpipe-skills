@@ -14,8 +14,8 @@ Reviews the *argument* in an existing jPipe justification model (`.jd`).
 
 The compiler and the VS Code extension already catch syntax, unresolved symbols, cycles, and missing
 operator keys, with better line numbers than a language model will produce. This skill deliberately
-does none of that. It compiles the model once as a **gate**, and if it builds, asks the four
-questions no tool asks:
+does none of that, and does not even compile your model to check: you already know whether it builds.
+It asks the four questions no tool asks:
 
 | | |
 |---|---|
@@ -52,8 +52,10 @@ jpipe-review <target> [--no-grounding] [--apply]
 `<target>` is a `.jd` file, a directory, a glob, or nothing (the `.jd` files changed in your working
 tree). Without `--apply` it reports and stops.
 
-Needs [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH`
-(`brew install jpipe`, `apt install jpipe`, or `scoop install mcscert/jpipe`).
+Reporting needs no tools at all. `--apply` needs
+[`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` (`brew install jpipe`,
+`apt install jpipe`, or `scoop install mcscert/jpipe`), because an edit it cannot verify is worse than
+a finding it merely reported: after editing it recompiles and re-renders every file it touched.
 
 ## Authority: which findings you can argue with
 

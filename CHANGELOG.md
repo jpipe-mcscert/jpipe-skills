@@ -51,6 +51,24 @@ individual skills are not, so per-skill changes are grouped under the headings b
   *have I seen this one before?*, and both read the same noun phrase, so the extraction lives in one
   place rather than drifting into two.
 
+### Changed
+
+- **Neither skill compiles your model before reviewing it.** `jpipe-review` used to open with a compile
+  gate and refuse to review a file that did not build. It no longer does, and `jpipe-survey` never did.
+  Whether a file compiles is the compiler's answer to give, and you already have it from
+  `jpipe diagnostic` and your editor; an argument's shape is legible long before it parses, so refusing
+  to look was friction rather than rigour. Compilation now happens in exactly one place: **after** an
+  approved edit, verifying work the skill itself did.
+- Consequences worth knowing. **Reporting needs no tools at all**, so both skills work in a checkout
+  with no compiler, and `jpipe-survey` will survey a corpus caught mid-edit. `--apply` still requires
+  `jpipe` on `PATH` and now says so and stops *before* editing, because an edit to an assurance case
+  that cannot be verified is worse than a finding merely reported. The **BLOCKED** verdict is gone from
+  `jpipe-review` and **PARTIAL** never shipped in `jpipe-survey`; a report's header no longer carries a
+  compile-gate line, and neither verdict claims anything about whether your files build.
+- Findings cite `file:line` rather than `file:line:col`. The column came from the compile gate's symbol
+  table, which is no longer read; a column is still given when the label's opening quote can be pointed
+  at directly.
+
 #### Fixtures
 
 - `tests/corpus/corpora/` holds multi-model fixtures, where a finding **must** be stated across files.

@@ -26,13 +26,13 @@ cluster as an open question. `--apply` continues into the fix loop.
 
 | Read | When |
 |---|---|
-| `references/rules.md` | any time you cite a rule id (Steps 4–7) |
-| `references/artifacts.md` | Step 4, before clustering anything |
-| `references/sharing.md` | Steps 4 and 5, for the `JD-R` family |
-| `references/refinement.md` | Steps 4 and 6, for the `JD-F` family |
-| `references/interview.md` | Step 5, before writing a single question |
+| `references/rules.md` | any time you cite a rule id (Steps 3–6) |
+| `references/artifacts.md` | Step 3, before clustering anything |
+| `references/sharing.md` | Steps 3 and 4, for the `JD-R` family |
+| `references/refinement.md` | Steps 3 and 5, for the `JD-F` family |
+| `references/interview.md` | Step 4, before writing a single question |
 | `references/language.md` | whenever a fix touches a label that may unify, or adds a `refine` |
-| `references/report-format.md` | Step 6 |
+| `references/report-format.md` | Step 5 |
 
 ## When to invoke
 
@@ -50,7 +50,7 @@ whether a leaf should refine against an argument that already exists.
 
 ## Guardrails
 
-- **Read-only through Step 6.** Nothing is modified before the author approves a numbered fix list.
+- **Read-only through Step 5.** Nothing is modified before the author approves a numbered fix list.
 - **No version-control actions, ever.** Do not stage, commit, push, branch, merge, tag, or open a pull
   request. Report; the author integrates.
 - **Cluster by the artifact, never by the label.** String similarity and artifact identity come apart
@@ -74,27 +74,19 @@ whether a leaf should refine against an argument that already exists.
 
 `Glob` every `*.jd` under the target. For each, record the model names it declares, the files it
 `load`s, and whether it is an operator result (`is assemble(...)` / `is refine(...)`) and over which
-sources. That graph is what Step 6 needs for `F03` and `F04`, and it is cheap to build now.
-
-Run `jpipe --version` and record it for the report header; if `jpipe` is not on PATH, say so and stop,
-because the compile gate is not optional. Note the repository root.
+sources. That graph is what Step 5 needs for `F03` and `F04`, and it is cheap to build now.
 
 Fewer than two models: stop and say why.
 
-### Step 2. Compile gate
+**Do not compile anything.** Whether each file builds is the compiler's answer to give, and the author
+already has it. It is also beside the point here: a label declaration is harvestable and clusterable
+whether or not its file parses, so a corpus caught mid-edit is still worth surveying, and a syntax
+error in one model says nothing about whether two others share a fact. Compilation belongs at Step 6,
+where it verifies work this skill did.
 
-Per file: `jpipe --headless diagnostic -i <file>`, capturing stdout, stderr and the exit code
-separately.
+Locations therefore come from the survey table below, which carries a line number per declaration.
 
-A file passes only if the exit code is `0` **and** stderr is empty. A failed `load` is fatal and reports
-**entirely on stderr, leaving stdout completely empty**, not even a Diagnostics header. A gate that
-reads stdout alone will call a broken file clean.
-
-A file that does not build is excluded from every cluster and listed under **Not reviewed**, verbatim.
-Never re-explain the compiler's diagnostics. Do not stop the survey: the rest of the corpus is still
-worth surveying, and say in the report which models were missing from it.
-
-### Step 3. Survey, without opening files
+### Step 2. Survey, without opening files
 
 One harvest over the whole corpus, from `sharing.md` §1: a single `grep -rEn` for
 `<kind> <id> is "<label>"`, yielding `file:line: kind id is "label"` for every element. Cost does not
@@ -103,16 +95,16 @@ scale with file size, and everything downstream runs on this table.
 Open a full file **only** for a cluster you are about to ask about or report. If you find yourself
 reading the corpus, the method has already failed.
 
-### Step 4. Cluster by artifact
+### Step 3. Cluster by artifact
 
 Resolve every `evidence` label to the thing it names (`artifacts.md`), then cluster on **that**. Sort
 each cluster into certain-nothing, certain-defect (`R03`), or uncertain (`sharing.md` §3).
 
 In the same pass, match `evidence` labels against the `conclusion` and `sub-conclusion` labels of
-*other* models: that lookup is `F01`, and the table from Step 3 already holds both sides. Skipped under
+*other* models: that lookup is `F01`, and the table from Step 2 already holds both sides. Skipped under
 `--no-refine`. → `references/sharing.md`, `references/refinement.md`
 
-### Step 5. Interview
+### Step 4. Interview
 
 Uncertain clusters become **one batched message**: numbered prose questions, at most `--questions N`
 (default 7), ordered by how many models each touches. Quote both labels in full, name the artifact you
@@ -122,7 +114,7 @@ Clusters past the budget are **not dropped**: they go to Open questions with the
 the report says how many. Record every answer, including every *no*, for the report's Decisions section.
 → `references/interview.md`
 
-### Step 6. Report
+### Step 5. Report
 
 Confirmed clusters become findings; declined ones become Decisions entries; unanswered ones become open
 questions. Add the `JD-F` findings, which need the Step 1 graph rather than the interview.
@@ -133,14 +125,20 @@ any single model is a good argument.
 
 **Stop here** unless `--apply` was given.
 
-### Step 7. Apply and re-verify
+### Step 6. Apply and verify
 
 Present a numbered fix list, each entry with its rule description, the exact before and after text for
 **every** file it touches, the blast radius, and any fix it depends on. Order by dependency, not
 severity (`rules.md`). Ask in prose which numbers to apply.
 
-`Edit` only the approved items. Then re-run the Step 2 gate on every touched file, and
+`Edit` only the approved items. Then, the one step that compiles: per touched file,
+`jpipe --headless diagnostic -i <file>`, capturing stdout, stderr and the exit code **separately**,
+since a failed `load` reports entirely on stderr with stdout completely empty. Then
 `jpipe process -m <model> -i <file> -f SVG -o <tmp>` on the composed model if the target has one.
+
+If `jpipe` is not on PATH, say so and stop **before editing**: a cross-file edit you cannot verify is
+worse than a reported finding, and this skill's edits span models. Everything through Step 5 runs
+without the compiler. A file that did not build before your edit still must build after it.
 
 Any applied `R01` or `R02` **creates or destroys a unified group**, which renumbers every later
 `unified_N`, possibly including ids referenced from a step library this skill does not read. Say which
@@ -152,6 +150,6 @@ The report is the product. Every finding carries a rule id **and that rule's des
 `rules.md`**, a `file:line:col` for every element involved, the named shared artifact, both labels
 quoted, the proposed replacement, and a blast-radius line.
 
-Verdicts, for the corpus: **CLEAN** · **FINDINGS** · **PARTIAL** (one or more files did not compile).
-CLEAN means these models share what they should and merge nothing they should not. It says nothing
-about whether any one of them argues well.
+Verdicts, for the corpus: **CLEAN** · **FINDINGS**. CLEAN means these models share what they should
+and merge nothing they should not. It says nothing about whether any one of them argues well, and
+nothing about whether they compile, which this skill does not check until it has edited something.
