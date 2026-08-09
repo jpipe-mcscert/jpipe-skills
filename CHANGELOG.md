@@ -10,6 +10,8 @@ not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
 
+## [0.1.4] - 2026-08-09
+
 ### Changed
 
 - **Both skills now take exactly one `.jd` file as their scope**, together with everything that file
@@ -239,6 +241,7 @@ not, so per-skill changes are grouped under the headings below.
   actually fetch a new version.
 
 [Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
-[0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...main
+[0.1.4]: https://github.com/jpipe-mcscert/jpipe-skills/compare/00295157ff39c658efd568b0b245fda1847a9df6...main
+[0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...00295157ff39c658efd568b0b245fda1847a9df6
 [0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/compare/15c57b9f650c121b39bcd8a4ef28367bf8264e99...c0bef5968ed24e6da8eef07df9053d55340ee776
 [0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commit/15c57b9f650c121b39bcd8a4ef28367bf8264e99
