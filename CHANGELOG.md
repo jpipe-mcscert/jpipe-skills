@@ -8,6 +8,8 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-08-09
+
 ### Added
 
 #### `jpipe-survey`
@@ -157,4 +159,5 @@ individual skills are not, so per-skill changes are grouped under the headings b
   actually fetch a new version.
 
 [Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
+[0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
 [0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
