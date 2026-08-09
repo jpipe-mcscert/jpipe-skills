@@ -34,7 +34,7 @@ Each skill's directory has its own README.
 
 ## Install
 
-Install as a plugin, which keeps itself updated:
+Install as a plugin:
 
 ```
 /plugin marketplace add jpipe-mcscert/jpipe-skills
@@ -44,6 +44,49 @@ Install as a plugin, which keeps itself updated:
 > [!NOTE]
 > `/plugin` is a command of the `claude` terminal CLI. The VS Code and JetBrains extensions do not
 > have it and answer `/plugin isn't available in this environment`. Install by hand there.
+
+## Update
+
+Claude Code disables auto-update for third-party marketplaces by default, so a plugin install of this
+repository does **not** keep itself current. Refresh the catalog, then update the plugin:
+
+```
+/plugin marketplace update jpipe
+/plugin update jpipe-skills@jpipe
+```
+
+Then `/reload-plugins` to apply it in the session you are in, or start a new one.
+
+To stop doing that by hand, turn auto-update on for this marketplace: run `/plugin`, go to
+**Marketplaces**, select **jpipe**, and choose **Enable auto-update**. Claude Code then refreshes
+after startup, with a random delay of up to ten minutes, and prompts you to `/reload-plugins` when
+something changed.
+
+<details>
+<summary>Checking, and updating a hand install</summary>
+
+Which version you have, next to what the catalog offers:
+
+```
+/plugin list
+```
+
+A hand install is a copy, so it does not update. Re-copy over it, from a fresh clone:
+
+```bash
+git -C jpipe-skills pull --ff-only
+cp -r jpipe-skills/skills/jpipe-review ~/.claude/skills/
+```
+
+If you symlinked instead of copying, the `git pull` is the whole update.
+
+</details>
+
+> [!IMPORTANT]
+> Updates are gated on the `version` field in `.claude-plugin/plugin.json`. Claude Code ships a new
+> version to installed plugins only when that field changes, so pushing to `main` alone reaches
+> nobody. Anyone releasing here bumps it: see the checklist in
+> [CONTRIBUTING.md](CONTRIBUTING.md#releasing).
 
 <details>
 <summary>Installing by hand (works in every host)</summary>

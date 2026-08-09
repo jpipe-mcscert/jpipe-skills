@@ -70,6 +70,33 @@ the assertion, never the phrasing:
 
 Record the outcome in `CHANGELOG.md` for the release.
 
+## Releasing
+
+**Bump the version, or the release reaches nobody.** Claude Code ships an update to installed plugins
+only when the `version` field in `.claude-plugin/plugin.json` changes. Pushing to `main` is not a
+release; an unbumped push is invisible to everyone who installed the plugin.
+
+Three fields move together, and `claude plugin tag` refuses to tag if the first two disagree:
+
+| File | Field |
+|---|---|
+| `.claude-plugin/plugin.json` | `version` |
+| `.claude-plugin/marketplace.json` | `plugins[].version` for `jpipe-skills` |
+| `.claude-plugin/marketplace.json` | `metadata.version`, the catalog's own version |
+
+Then:
+
+1. Move the `[Unreleased]` entries in `CHANGELOG.md` under a dated `[x.y.z]` heading, and add its
+   link reference at the bottom of the file.
+2. `python3 tools/validate_skills.py && python3 tools/check_jd_blocks.py`, plus `claude plugin
+   validate .` for the manifests.
+3. Merge to `main`. Users pick it up with `/plugin marketplace update jpipe`, or automatically if they
+   enabled auto-update, which is **off** by default for third-party marketplaces.
+
+Rule ids are a public interface, so retiring one is a breaking change even when nothing else moves.
+Retired ids are never reused: `rules.md` keeps a **Retired ids** section, and the numbering keeps its
+gaps rather than closing them.
+
 ## Changelog
 
 `CHANGELOG.md` describes the net user-facing effect of a change, not the commit history. New skills,

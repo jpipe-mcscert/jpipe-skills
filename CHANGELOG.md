@@ -8,6 +8,8 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-08-08
+
 ### Added
 
 - **Stated scope: these skills review arguments, they do not write them.** Generative AI should not
@@ -71,4 +73,20 @@ individual skills are not, so per-skill changes are grouped under the headings b
   documentation and every fixture under `tests/corpus/`.
 - Both run in CI on push and pull request.
 
-[Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
+#### Documentation
+
+- **How to update an installed copy**, in the README. Both paths: `/plugin marketplace update jpipe`
+  then `/plugin update jpipe-skills@jpipe` for a plugin install, and re-copying or `git pull` for a
+  hand install. Also how to turn auto-update on for this marketplace, and a `Releasing` checklist in
+  `CONTRIBUTING.md` for the three version fields that have to move together.
+
+### Fixed
+
+- **The README claimed a plugin install "keeps itself updated". It does not.** Claude Code enables
+  marketplace auto-update by default only for official Anthropic marketplaces; third-party ones, this
+  repository included, have it **disabled** by default. Anyone who read that line was running whatever
+  version they first installed. The `Update` section above replaces the claim with the commands that
+  actually fetch a new version.
+
+[Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
+[0.1.1]: https://github.com/jpipe-mcscert/jpipe-skills/commits/main
