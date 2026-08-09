@@ -85,8 +85,8 @@ threads and script against them, but they are a reference number, never an argum
 ```markdown
 # Survey: <target>
 
-<N> models · <M> elements · <a> serious, <b> worth fixing, <c> suggestions
-Asked you <n> questions; <m> answered, <d> declined.
+<N> models · <M> elements · <a> serious, <b> worth fixing, <c> opportunities, <d> suggestions
+Asked you <q> questions; <answered> answered, <declined> declined.
 <what was and was not looked at, in one line>
 
 ## 🔴 Composing these models makes a claim nobody wrote (<a>)

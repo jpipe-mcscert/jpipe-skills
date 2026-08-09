@@ -11,7 +11,7 @@ is also its risk: a claim about two files is twice as easy to get wrong as a cla
 | Column | For |
 |---|---|
 | **Trigger** | you, deciding whether the rule fires |
-| **Description** | you, as the one-line summary of what the rule is about. Do not paste it at the reader as an explanation; say what is wrong with *their* two elements instead |
+| **Description** | you, as the one-line summary of what the rule is about. Do not paste it into the report as an explanation; say what is wrong with *their* two elements instead |
 | **Typical fix** | the starting point for the options you offer, never the whole of them |
 
 | Authority | Declinable? | Say to the reader |

@@ -54,7 +54,7 @@ outside it: whether the same fact is argued twice under labels that will not uni
 identical labels will merge under `assemble` into a node nobody wrote, whether anything still loads a
 given model. Those need a corpus, and a per-model reviewer that guesses at them from one file guesses
 wrong. So a **CLEAN** verdict here means *this model holds on its own terms* and says nothing about
-how it sits with any other. The report says so too, in its **Not reviewed** section.
+how it sits with any other. The report says so too, in its **Not looked at** section.
 
 Those questions are [`jpipe-survey`](../jpipe-survey/)'s, which reads the whole corpus at once and asks
 you to confirm what the files cannot settle. A corpus wants both skills: they make different claims.

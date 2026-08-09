@@ -11,7 +11,7 @@ question that needs a second model is not in this catalogue, by construction.
 | Column | For |
 |---|---|
 | **Trigger** | you, deciding whether the rule fires |
-| **Description** | you, as the one-line summary of what the rule is about. Do not paste it at the reader as an explanation; say what is wrong with *their* element instead |
+| **Description** | you, as the one-line summary of what the rule is about. Do not paste it into the report as an explanation; say what is wrong with *their* element instead |
 | **Typical fix** | the starting point for the options you offer. **Where it says decompose, decomposing is the recommendation**, not one alternative among two |
 
 | Authority | Backed by | Declinable? | Say to the reader |
