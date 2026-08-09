@@ -121,22 +121,49 @@ Record the outcome in `CHANGELOG.md` for the release.
 only when the `version` field in `.claude-plugin/plugin.json` changes. Pushing to `main` is not a
 release; an unbumped push is invisible to everyone who installed the plugin.
 
-Three fields move together, and `claude plugin tag` refuses to tag if the first two disagree:
+Three fields move together:
 
-| File | Field |
-|---|---|
-| `.claude-plugin/plugin.json` | `version` |
-| `.claude-plugin/marketplace.json` | `plugins[].version` for `jpipe-skills` |
-| `.claude-plugin/marketplace.json` | `metadata.version`, the catalog's own version |
+| File | Field | Enforced by |
+|---|---|---|
+| `.claude-plugin/plugin.json` | `version` | this is the one Claude Code reads |
+| `.claude-plugin/marketplace.json` | `plugins[].version` for `jpipe-skills` | `validate_skills.py`, which fails if it disagrees with the above |
+| `.claude-plugin/marketplace.json` | `metadata.version`, the catalog's own version | convention only, for a single-plugin repository |
 
 Then:
 
 1. Move the `[Unreleased]` entries in `CHANGELOG.md` under a dated `[x.y.z]` heading, and add its
    link reference at the bottom of the file.
-2. `python3 tools/validate_skills.py && python3 tools/check_jd_blocks.py`, plus `claude plugin
-   validate .` for the manifests.
+2. `python3 tools/validate_skills.py && python3 tools/sync_refs.py --check && python3
+   tools/check_jd_blocks.py`, plus `claude plugin validate .` for the manifests.
 3. Merge to `main`. Users pick it up with `/plugin marketplace update jpipe`, or automatically if they
    enabled auto-update, which is **off** by default for third-party marketplaces.
+
+### Versions are `0.1.x` while experimental
+
+A patch bump here can carry a new skill or a changed report format. That departs from semantic
+versioning on purpose, and `CHANGELOG.md` says so rather than claiming a discipline the numbers do not
+follow: read the entry, not the number. Reconsider at 1.0.
+
+### No git tags before 1.0
+
+**Tagging is not part of releasing yet.** It starts at 1.0 and applies to every release after it.
+
+Nothing in the plugin system needs a tag. Claude Code resolves a plugin's version from `plugin.json`
+first, falling back to the marketplace entry, then the commit SHA
+([version management](https://code.claude.com/docs/en/plugins-reference#version-management)), so
+bumping `version` is the entire delivery mechanism. Tags do exactly one job: they let **another**
+plugin depend on this one with a semver range, resolved against `{plugin-name}--v{version}` tags
+([dependency versions](https://code.claude.com/docs/en/plugin-dependencies)). Nothing depends on
+`jpipe-skills`, so there is nothing for a tag to resolve.
+
+Consequences while this holds:
+
+- `CHANGELOG.md` version links are **compare ranges between release commits**, not tag URLs. They
+  resolve today and need no tags. A release cannot link to its own commit, since writing the link
+  changes the SHA, so the newest entry ends at `main` until the next release pins it.
+- From 1.0, use `claude plugin tag --push`, which derives `jpipe-skills--v<version>` from the manifest
+  and refuses unless `plugin.json` and the marketplace entry agree and the tree is clean. Switch the
+  changelog links to tag URLs at the same time.
 
 Rule ids are a public interface, so retiring one is a breaking change even when nothing else moves.
 Retired ids are never reused: `rules.md` keeps a **Retired ids** section, and the numbering keeps its
