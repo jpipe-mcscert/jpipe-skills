@@ -67,12 +67,17 @@ The `references/` are written to be read by people too, not only loaded by the s
 
 | | |
 |---|---|
-| [`language.md`](references/language.md) | The jPipe language, objectively: elements, the `supports` relation and its legal pairings, `load`, templates, the two operators, and the `unified_N` renumbering hazard |
+| [`language.md`](references/language.md) † | The jPipe language, objectively: elements, the `supports` relation and its legal pairings, `load`, templates, the two operators, and the `unified_N` renumbering hazard |
+| [`artifacts.md`](references/artifacts.md) † | Resolving an evidence label to the thing it names, and why string similarity is not artifact identity |
 | [`abstraction.md`](references/abstraction.md) | The argument model: Toulmin's claim / grounds / warrant mapped onto jPipe's kinds, the fact → check → verdict ladder, atomicity, and the category errors |
 | [`grounding.md`](references/grounding.md) | Checking evidence against the tree, and the discipline that keeps it from crying wolf |
 | [`conventions.md`](references/conventions.md) | McSCert house practice, the part a single file can be checked against: refine placement, altitude, provenance headers |
 | [`rules.md`](references/rules.md) | The rule catalogue: id, authority, trigger, fix |
 | [`report-format.md`](references/report-format.md) | The findings report's shape, with a worked example |
+
+† Vendored, byte-identical, from the repository's shared [`references/`](../../references/) canon, so
+the skill directory stays self-contained and copyable on its own. Edit the canon, not the copy:
+see [Shared reference material](../../CONTRIBUTING.md#shared-reference-material).
 
 ## On the argument model
 

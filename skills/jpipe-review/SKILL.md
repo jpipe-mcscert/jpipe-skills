@@ -25,7 +25,7 @@ A directory target is **N independent reviews**, not one review of a corpus. **F
 |---|---|
 | `references/rules.md` | any time you cite a rule id (Steps 3–6) |
 | `references/abstraction.md` | Step 3, and Step 7 when writing a replacement label |
-| `references/grounding.md` | Step 4 |
+| `references/grounding.md`, then `references/artifacts.md` | Step 4 |
 | `references/conventions.md` | Step 5 |
 | `references/language.md` | whenever a fix adds, moves, or re-ids an element, or touches a label that may unify |
 | `references/report-format.md` | Step 6 |
