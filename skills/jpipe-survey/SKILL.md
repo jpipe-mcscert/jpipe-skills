@@ -138,7 +138,8 @@ severity (`rules.md`). Ask in prose which numbers to apply.
 `Edit` only the approved items. Then, the one step that compiles: per touched file,
 `jpipe --headless diagnostic -i <file>`, capturing stdout, stderr and the exit code **separately**, since
 a failed `load` reports entirely on stderr with stdout completely empty. Then `jpipe process` on the
-scope's root to prove it still renders. If `jpipe` is not on PATH, say so and stop **before editing**: a
+scope's root to prove it still renders, or, under `--global` where there is no single root, on each root
+whose closure a touched file belongs to. If `jpipe` is not on PATH, say so and stop **before editing**: a
 cross-file edit you cannot verify is worse than a reported finding, and these edits span files. A file
 that did not build before your edit still must build after it.
 

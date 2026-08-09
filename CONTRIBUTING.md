@@ -94,14 +94,15 @@ the assertion, never the phrasing:
 
 Then `jpipe-survey`, whose failure modes are different because it compares files:
 
-8. `tests/corpus/corpora/shared_evidence/` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the
-   decoy. *The single most important case in the repository: the decoy is the closest label to s1 by
-   wording and the wrong answer, so this fails the moment clustering falls back to string similarity.*
-9. `tests/corpus/corpora/accidental_unification/` → one `JD-R03`, 🔴, **without a question being
-   asked**. The merge is what the compiler will do, so there is nothing to confirm.
-10. `tests/corpus/corpora/refine_available/` → one `JD-F01`. Then remove `f2_requirement.jd` and rerun:
-    it must become an **open question**, not a finding. *The tag says a requirement exists, not that
-    anyone argued it, and this is the whole difference from `jpipe-review`'s `C01`.*
+8. `corpora/shared_evidence/root.jd` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the decoy.
+   *The single most important case in the repository: the decoy is the closest label to s1 by wording
+   and the wrong answer, so this fails the moment clustering falls back to string similarity.*
+9. `corpora/accidental_unification/root.jd` → one `JD-R03`, 🔴, **without a question being asked**. The
+   merge is what the compiler will do, so there is nothing to confirm.
+10. `corpora/refine_available/f1_consumer.jd` → one `JD-F01`, since the model it should refine against is
+    in the closure. Then drop the `load` line and rerun: it must become an **open question**, because the
+    tag says a requirement exists, not that anyone argued it. *That pair is the whole difference between
+    this rule and `jpipe-review`'s `C01`, which now behaves the same way when the refiner is in scope.*
 11. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **Decisions**, not
     reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
     question and the run still produces a report. *The headless-degradation path.*
