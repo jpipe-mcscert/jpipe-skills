@@ -42,35 +42,41 @@ cluster, one question, answerable with a yes or a no.
 
 Never ask:
 
-- **anything the files answer.** Byte-identical labels naming the same artifact are already unified;
-  byte-identical labels naming different ones are `R03` and get reported, not asked about.
+- **anything the files answer.** Two labels that are already character-for-character identical and
+  name the same thing already share a node; identical labels naming *different* things are `R03` and
+  get reported rather than asked about.
 - **anything the author would have to research.** If they have to go read a third file to answer,
   the question is really an open question in disguise.
 - **for permission to think.** "Shall I look for shared evidence?" wastes the budget below.
-- **the same thing twice.** Answers are recorded (see Decisions) precisely so a second run does not
+- **the same thing twice.** Answers are recorded (see below) precisely so a second run does not
   re-litigate them.
 
 ## Shape of a question
 
-Quote both labels in full, give both locations, name the artifact you believe is shared, and say what
-a yes will cause. The author should be able to answer without opening a file:
+These are the most reader-facing sentences this skill writes, so the audience rule in
+`report-format.md` applies to them hardest: **the reader is the engineer who built the system.** Ask
+about their files in their words. Never make them decode *artifact*, *unify* or a rule id to answer a
+yes/no.
+
+Quote both labels in full, give both locations, name the file you believe both mean, and say what a yes
+will cause. They should be able to answer without opening anything:
 
 ```text
-1. Same artifact?
-   r13.jd:11  `e_train`  "The committed training split"
-   r20.jd:9   `e_data`   "The train.csv split as committed"
-   I read both as data/train.csv. If yes, I will align both labels on
-   "The committed data/train.csv split and its header row", and assemble will unify them
-   into one node, so the check runs once for both goals.
+1. Are these the same file?
+   requirements/r13.jd:11  `e_train`  "The committed training split"
+   requirements/r20.jd:9   `e_data`   "The train.csv split as committed"
+   I read both as data/train.csv. If that is right, I will put both on one wording, and
+   the two become a single box when the models are composed, so whatever checks the
+   training split runs once instead of twice.
 
-2. Same artifact?
-   g4_perf.jd:8   `e_report`  "The benchmark report"
+2. Are these the same thing?
+   g4_perf.jd:8    `e_report`  "The benchmark report"
    g6_green.jd:12  `e_timing`  "The recorded run timings"
    Less sure about this one: "report" may be the published summary rather than the raw
-   timings. If they are different things, say no and I will leave both alone.
+   timings. If they are two different things, say no and I will leave both alone.
 ```
 
-Note the second one. **Say how confident you are**, because it tells the author how much attention the
+Note the second one. **Say how confident you are**, because it tells them how much attention the
 question deserves, and a question you are 55% sure about is more valuable than one you are 95% sure
 about.
 
@@ -94,14 +100,15 @@ twenty merges would only paper over.
 
 ## Recording answers
 
-The report carries a **Decisions** section listing every question, its answer, and what followed:
+The report carries a **What you told me** section listing every question, the answer, and what followed:
 
 ```text
-## Decisions
+## What you told me
 
-1. `data/train.csv` shared by r13 `e_train` and r20 `e_data` → **yes**. Became R1.
-2. `g4_perf` `e_report` vs `g6_green` `e_timing` → **no**, different artifacts. Not reported.
-3. r9 `e_env` and r14 `e_deps` → *unanswered*. In Open questions as O2.
+1. r13 `e_train` and r20 `e_data`, both `data/train.csv`? → **yes**. Became finding 3.
+2. g4 `e_report` and g6 `e_timing`, both the benchmark record? → **no**, different things.
+   Dropped, and I will not ask again on this corpus.
+3. r9 `e_env` and r14 `e_deps`, both the `Pipfile`? → *not answered*. See open questions.
 ```
 
 This exists so the work is not repeated. A declined cluster is a real result: it says a human looked
@@ -112,6 +119,6 @@ same corpus, and never quietly promote one to a finding because a later question
 
 - **yes** → the cluster becomes an `R01`/`R02`/`F01` finding, citing the answer as its authority for
   artifact identity.
-- **no** → recorded in Decisions as declined. Not a finding, not an open question.
+- **no** → recorded under **What you told me** as declined. Not a finding, not an open question.
 - **unanswered, or an ambiguous answer** → an open question. Never act on silence, and never read a
   partial answer ("the first two look right") as covering the rest.

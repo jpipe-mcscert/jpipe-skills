@@ -22,9 +22,25 @@ question it cannot answer, because the evidence is spread across files:
 | **Available refinements** | A leaf asserts something another model in the corpus proves with a whole argument. The proof exists and the model declines to use it |
 | **Structure** | Models nothing loads, and corpora with two roots where there should be one |
 
-Nothing is edited until you approve a numbered fix list. Every finding names the shared artifact, both
-locations, both labels, and its blast radius, because aligning two labels creates a unified group and
-renumbers every `unified_N` after it.
+Nothing is edited until you approve a numbered fix list.
+
+## The report is written for you, not for a safety auditor
+
+Findings are phrased for **the engineer who built the system**. No internal rule names, no severity
+jargon, and no compiler vocabulary: nothing in a report should require you to look up what "unify"
+means. Each finding gives you three things:
+
+1. **What's wrong**, naming both places and quoting both labels.
+2. **Why it matters**, in terms of your system: work done twice, a check that will not run once, or a
+   claim the composed case makes that neither of your files says.
+3. **Your options**, usually more than one, with the trade-off named and a recommendation. You choose.
+
+Rule ids appear once, at the end of each finding, because people cite them in review threads. They are
+a reference number, never the explanation.
+
+Duplication is normal, and the report says so. Two engineers writing two goals months apart will word
+the same fact differently; that is the absence of a mechanism, not carelessness, and supplying the
+mechanism is what this skill is for.
 
 ## It asks you questions
 
@@ -36,15 +52,16 @@ if applied, quietly changes what your case claims.
 So the skill asks, in prose, before concluding:
 
 ```text
-1. Same artifact?
-   r13.jd:11  `e_train`  "The committed training split"
-   r20.jd:9   `e_data`   "The train.csv split as committed"
-   I read both as data/train.csv. If yes, I will align both labels and assemble will unify
-   them into one node, so the check runs once for both goals.
+1. Are these the same file?
+   requirements/r13.jd:11  `e_train`  "The committed training split"
+   requirements/r20.jd:9   `e_data`   "The train.csv split as committed"
+   I read both as data/train.csv. If that is right, I will put both on one wording, and the
+   two become a single box when the models are composed, so whatever checks the training
+   split runs once instead of twice.
 ```
 
-Answers land in a **Decisions** section of the report, including the ones where you said no, so a later
-run does not re-litigate them. At most 7 questions by default (`--questions N` to change it), ordered
+Answers land in a **What you told me** section of the report, including the ones where you said no, so a
+later run does not re-litigate them. At most 7 questions by default (`--questions N` to change it), ordered
 by how many models each touches; anything past the budget is reported as an open question rather than
 silently dropped. Answer none of them and the report is still useful: every uncertain cluster becomes
 an open question and nothing is applied.
@@ -71,12 +88,15 @@ in the tree: all of that is [`jpipe-review`](../jpipe-review/), which reads one 
 than glancing at many. **A CLEAN survey and a CLEAN review are different claims**, and a corpus wants
 both.
 
-## Authority: which findings you can argue with
+## Which findings you can argue with
 
-- **`language`**: the compiler decides. Only `R03` is here, and it is not negotiable: the composed
-  model already asserts the merge.
-- **`house`**: McSCert practice, and *irrelevant* if your project states its own conventions in a
-  `CLAUDE.md` or a `justifications/README.md`. Those win.
+Every finding says, in plain words, how much room you have to disagree. Here there are two kinds:
+
+- **The compiler decides.** Exactly one finding is this: two identical labels *will* become one node
+  when the models are composed, so there is nothing to agree or disagree with.
+- **Everything else is a proposal**, whether an opportunity to share work or a convention about
+  placement. Decline any of it. Conventions are *irrelevant* if your project states its own in a
+  `CLAUDE.md` or a `justifications/README.md`; those win.
 
 ## Reference material
 

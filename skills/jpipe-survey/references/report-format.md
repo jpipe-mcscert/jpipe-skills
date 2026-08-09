@@ -1,162 +1,269 @@
 # The survey report
 
-The report **is** the product. A fixed shape means two surveys of the same corpus are diffable, and it
-enforces discipline: there is a slot for the rule id, its description, the locations on both sides, and
-the blast radius, so omitting one is visibly wrong rather than merely unmentioned.
-
 Emit this at Step 5 and stop, unless `--apply` was given.
+
+## Who reads this
+
+**The engineer who built the system.** Not a safety specialist, not an assurance consultant, and not
+someone who has read this skill. They know their pipeline, their requirements and their CI. They have
+never heard of Toulmin, do not know what a warrant is, and have no idea what `R01` means, and none of
+that is a gap in their competence: it is vocabulary internal to this tool.
+
+So the report is written in their terms, about their system. Three things per finding, in this order:
+
+| | |
+|---|---|
+| **What's wrong** | stated concretely, naming both places and quoting both labels |
+| **Why it matters** | the consequence *for them*: work done twice, a check that will not run once, a claim the composed model makes that nobody wrote |
+| **Options** | more than one where more than one exists, with the trade-off named. They choose |
+
+A finding that stops after "what's wrong" is a complaint. One that stops after "why" is a lecture. The
+options are what makes it useful.
+
+This skill has an extra reason to care. Its findings are all of the form *"these two things you wrote
+months apart are really the same thing"*, which reads as an accusation of sloppiness unless the writing
+is careful. It is not sloppiness: it is the absence of a mechanism, which is what this skill is.
+
+### Never write these words
+
+| Not this | This |
+|---|---|
+| "these leaves will not unify" | "worded differently, so the composed model keeps them as two nodes and runs the check twice" |
+| "accidental unification" | "when these are composed, the two become one node, and the merged node says something neither file says" |
+| "duplicate-fact-not-unified" | "both of these are about `data/train.csv`" |
+| "extract a shared leg" | "this whole argument is written out twice; move it to one file and point both at it" |
+| "should be a refine" | "r22 already argues this. This file could use that argument instead of asserting it" |
+| "orphan model" | "nothing in the corpus loads this file" |
+| "UNSOUND", "STRUCTURE", "REUSE", "CONVENTION" | the section headings below, which say what they mean |
+| "authority: house" | "a convention rather than a defect: take it or leave it" |
+| "`R01` at r13.jd:11" *as the explanation* | say what is wrong; the id goes at the end, for reference |
+
+Two words are worth keeping, because they are the reader's own domain rather than ours: **`assemble`**
+and **`refine`** are jPipe keywords they write, so use them. *"Unify"* is not: it names a compiler pass
+they never invoke, so say what it does instead.
+
+Rule ids still appear, once, at the end of each finding. They stay because people cite them in review
+threads and script against them, but they are a reference number, never an argument.
 
 ---
 
 ## Rules for every finding
 
-1. **An id, its description, both locations, both quotes.** `[JD-XNN name]`, the rule's **Description**
-   from `rules.md`, and `file:line:col` for *every* element involved. A cross-model finding names at
-   least two places, and a reader who cannot see both cannot check you.
+1. **Point at both places.** `file:line` and the element id on each side, with both labels quoted
+   verbatim. A cross-model finding a reader cannot see both halves of is a claim they must take on
+   trust, which is the one thing an assurance case is against.
 2. **Name the shared artifact.** Not "these look similar": the thing itself, `data/train.csv`. If you
-   cannot name one artifact both leaves denote, this is an open question.
-3. **Cite the answer that confirmed it.** Where a finding rests on an interview answer, say so
-   (*"confirmed in answer to question 1"*). It tells the reader the identity claim came from the author,
-   not from you.
-4. **Say what should replace it**, in full, for both sides. A merge proposal that quotes only the new
-   wording leaves the reader diffing in their head.
-5. **State the blast radius**, and for anything that unifies, say so explicitly: aligning labels creates
-   a unified group and renumbers every later `unified_N`.
-6. **Name the authority when it is not `language`.** `house` findings are proposals the author declines
-   freely.
-7. **Never report a bare count.** "12 possible duplicates" is noise.
-8. **Never report what one model shows.** Abstraction, atomicity, whether the artifacts exist: that is
-   `jpipe-review`'s work, and duplicating it here trains authors to run one skill instead of both.
+   cannot name one artifact both leaves denote, this is an open question, not a finding.
+3. **Say the answer came from them.** Where a finding rests on an interview answer, say so (*"you
+   confirmed these are the same file"*). It tells the reader the identity claim is theirs, not a guess
+   of yours, which is exactly the distinction that makes the finding safe to act on.
+4. **Give the wording for both sides**, in full. A merge proposal that quotes only the new label leaves
+   the reader diffing in their head.
+5. **Every label you propose is short**: under 10 words for a fact, under 15 for a check. This matters
+   more here than anywhere else, because a label is only shared when two files match it **exactly**. A
+   long canonical wording is one nobody types twice, so it is a merge that quietly does not happen.
+6. **Say what the edit costs**, and where labels are aligned say the specific thing: this creates a
+   shared node, and the ids of later shared nodes shift, which matters if anything outside the models
+   refers to them.
+7. **Never report a bare count.** "12 possible duplicates" is not actionable.
+8. **Never report what one model shows.** Whether a leaf asserts a verdict, whether it fuses two facts,
+   whether the artifacts exist: that is `jpipe-review`'s work, per model. Duplicating it here teaches
+   people to run one skill instead of both.
 
 ## Tone
 
-Surveying someone's corpus means telling them their arguments overlap, which reads as an accusation of
-sloppiness if phrased carelessly. Two habits:
-
-- **Duplication is normal.** Two authors writing two goals months apart *will* word the same fact
-  differently. That is not carelessness, it is the absence of a mechanism, which is what this skill is.
-- **Say what the sharing buys.** "The check runs once and supports both goals" is a reason. "These are
-  duplicates" is a complaint.
+- **Duplication is normal, and say so.** Two engineers writing two goals months apart *will* word the
+  same fact differently. Nobody did anything wrong.
+- **Say what the sharing buys**, not that the duplication exists. *"The check runs once and covers both
+  requirements"* is a reason. *"These are duplicates"* is a complaint.
+- **No scores or grades.** Counts of findings, yes. A letter for their corpus, no.
 
 ---
 
 ## Template
 
 ```markdown
-# jPipe survey: <target>
+# Survey: <target>
 
-jpipe <version> · <N> models · <M> elements surveyed · <K> clusters examined
-**<a> UNSOUND · <b> STRUCTURE · <c> REUSE · <d> CONVENTION**
-Questions asked: <n>, answered: <m>, declined: <d>
+<N> models · <M> elements · <a> serious, <b> worth fixing, <c> suggestions
+Asked you <n> questions; <m> answered, <d> declined.
+<what was and was not looked at, in one line>
 
-## 🔴 UNSOUND (<a>)
-<R03: labels that will merge into a claim nobody wrote>
+## 🔴 Composing these models makes a claim nobody wrote (<a>)
+<R03>
 
-## 🟠 STRUCTURE (<b>)
-<F01: leaves asserting what the corpus proves>
+## 🟠 An argument the corpus already contains is being asserted instead (<b>)
+<F01>
 
-## 🔵 REUSE (<c>)
+## 🔵 The same work is being done twice (<c>)
 <R01, R02, R04: opportunities, always declinable>
 
-## 🟡 CONVENTION (<d>)
-<F02-F04: placement, orphans, entry points. Irrelevant if the project states its own conventions>
+## 🟡 Suggestions (<d>)
+<F02-F04: placement, files nothing loads, competing entry points>
 
-<each finding:>
-**<n> · `[JD-XNN name]` · <file>:<line>:<col> ⇄ <file>:<line>:<col>**
-*<the rule's Description, verbatim from rules.md>*
-Shared artifact: `<the thing>`<, confirmed in answer to question N>.
-  <model> `<id>`  "<label>"
-  <model> `<id>`  "<label>"
-→ <the proposed wording or structure, in full>
-Authority: <house>            <omitted when the authority is language>
-Blast radius: <edits, and whether a unified group is created or destroyed>
+<each finding, in every section:>
+### <n>. <the problem in one plain sentence>
 
-## Corpus map
+`<file>:<line>` `<id>` · "<label>"
+`<file>:<line>` `<id>` · "<label>"
+
+**What's wrong.** <the defect, concretely, naming the artifact both sides denote>
+
+**Why it matters.** <the consequence: work done twice, a check that will not run once, a claim the
+composed model makes that neither file says>
+
+**Options.**
+  **a.** <the first option, with the exact wording for both sides>
+  **b.** <the second, with its trade-off named>
+  <which you would pick, and why, in one clause>
+
+Cost: <what moves, including whether a shared node is created or destroyed>  ·  Reference: `[JD-XNN]`
+
+## The corpus
 
 | File | Model | Root? | Composed by | Elements | 🔴 | 🟠 | 🔵 | 🟡 |
 |---|---|---|---|--:|--:|--:|--:|--:|
 
-## Decisions
-<every question, its answer, and what followed. Declined clusters belong here, not in Open questions>
+## What you told me
+<every question, your answer, and what followed. Declined clusters belong here, not in Open questions>
 
-## Suggested fix order
-<dependency order, not importance order; see rules.md>
+## What to do first
+<dependency order, in plain words: what unblocks what>
 
 ## Open questions
 <unanswered clusters and unasked ones, both labels quoted. Not findings.>
 
-## Not reviewed
-<passes not run; unasked clusters; what a survey cannot see>
+## Not looked at
+<what this survey did not cover, so a clean report is not mistaken for a broad one>
 ```
 
-The **Decisions**, **Open questions** and **Not reviewed** sections are not optional padding. Decisions
-is what stops a second run re-asking; the other two are where the survey states its own limits.
+**What you told me** is not optional, and it is the section that makes a second run cheap: it records
+every answer, including the noes, so nobody is asked the same thing twice.
 
 ---
 
 ## Worked example
 
 ```markdown
-# jPipe survey: justifications/
+# Survey: justifications/
 
-jpipe 2.3.1 · 6 models · 47 elements surveyed · 9 clusters examined
-**1 UNSOUND · 1 STRUCTURE · 1 REUSE · 1 CONVENTION**
-Questions asked: 3, answered: 2, declined: 1
+6 models · 47 elements · 1 serious, 1 worth fixing, 1 opportunity, 1 suggestion
+Asked you 3 questions; 2 answered, 1 declined.
+Read every .jd under justifications/ and compared them. Did not judge any model on its own.
 
-## 🔴 UNSOUND (1)
+## 🔴 Composing these models makes a claim nobody wrote (1)
 
-**U1 · `[JD-R03 accidental-unification]` · g2_fates.jd:14:19 ⇄ g6_efficiency.jd:9:19**
-*Identical labels name different things, and will silently merge.*
-Both leaves are labelled *"The reported metrics"*, byte for byte, but denote different artifacts:
-  g2_fates      `e_metrics` → `model/v2/metrics.json`, the fairness figures (per `s_flip`)
-  g6_efficiency `e_metrics` → the CI timing report (per `s_runtime`)
-→ Under `assemble` these merge into one `unified_N`, and the composed model then claims one artifact
-  grounds both legs, which neither file says. Disambiguate both:
-  g2_fates      → "The reported fairness metrics in model/v2/metrics.json"
-  g6_efficiency → "The CI timing report for the release run"
-Authority: language. This is what the compiler will do, not a matter of taste.
-Blast radius: two labels; **removes** a unified group, so later `unified_N` ids shift down.
+### 1. Two different files are both called "The reported metrics"
 
-## 🟠 STRUCTURE (1)
+`g2_fates.jd:14` `e_metrics` · "The reported metrics"
+`g6_efficiency.jd:9` `e_metrics` · "The reported metrics"
 
-**F1 · `[JD-F01 should-be-refine]` · requirements/r20.jd:11:19 · `evidence e_grid`**
-*A leaf asserts what another model in the corpus proves.*
-Leaf: *"The identity grid is the full 27-cell one (R22)"*.
-Proved by: `requirements/r22.jd:4` `conclusion c`, *"The identity grid is the full 27-cell one (R22)"*.
-→ The corpus contains the argument and r20 declines to use it. Refine against it, storing the refine
-  in the requirement file under the reused name:
-    load "r22.jd"
-    justification r20_base { … evidence e_grid is "… (R22)" … }
-    justification r20 is refine(r20_base, r22) { hook: "e_grid" }
-Authority: house.
-Blast radius: r20.jd only. Every branch that assembles `r20` picks up the refined form with no change.
-  Structural: recompile and re-render.
+**What's wrong.** These labels are identical, character for character, but they are about different
+files. The strategies above them say which: g2 compares per-group selection rates, so it means
+`model/v2/metrics.json`; g6 compares wall-clock duration, so it means the CI timing report.
 
-## 🔵 REUSE (1)
+**Why it matters.** When these models are composed with `assemble`, anything with the same label
+becomes a single node. So the composed case will show one box, feeding both the fairness leg and the
+efficiency leg, claiming one file grounds both. Neither of your files says that. Whoever reads the
+composed diagram sees an argument nobody wrote, and it looks tidier than the truth.
 
-**R1 · `[JD-R01 duplicate-fact-not-unified]` · requirements/r13.jd:11:19 ⇄ requirements/r20.jd:9:19**
-*Two leaves name the same artifact but will not unify.*
-Shared artifact: `data/train.csv`, confirmed in answer to question 1.
-  r13 `e_train`  "The committed training split"
-  r20 `e_data`   "The train.csv split as committed"
-→ Align both on "The committed data/train.csv split and its header row". `assemble` then unifies them,
-  so the fact is stated once and the check runs once for both goals. The two strategies stay as they
-  are: r13 confronts a column set, r20 confronts a checksum, and sharing a fact is not sharing a check.
-Authority: house.
-Blast radius: two label edits, no id changes, **but this creates a unified group**, so every later
-  `unified_N` shifts. Re-render the composed model after applying.
+**Options.**
+  **a.** Give each its own name, which is worth doing anyway since neither currently says which file
+     it means:
+     `g2_fates.jd` `e_metrics`      → "The fairness metrics in model/v2/metrics.json"
+     `g6_efficiency.jd` `e_metrics` → "The CI timing report for the release run"
+  **b.** Leave the labels and list the ids in `unifyExclude` when you compose. This stops the merge
+     without fixing the ambiguity, so the next person to read either file still cannot tell which
+     file it means.
+  (a). (b) suppresses the symptom, and you would be carrying that config forever.
 
-## 🟡 CONVENTION (1)
+This one is not a matter of taste: the merge is what the compiler does, so there is nothing here to
+agree or disagree with.
 
-**C1 · `[JD-F03 orphan-model]` · g5_draft.jd:6 · model `draft_safety`**
-*Nothing in the corpus loads, assembles, or refines this model.*
-Searched all 6 models for `load "g5_draft.jd"`, for `draft_safety` as an `assemble` source, and for it
-as a `refine` base or refiner. No consumer.
-→ A draft, a stale consumer, or an undocumented second entry point. Reported as a question: the corpus
-  cannot tell which, and a model composed by a script outside `justifications/` would look identical.
-Authority: house.
+Cost: two labels. Removes a shared node, so the ids of later shared nodes shift down
+  ·  Reference: `[JD-R03]`
 
-## Corpus map
+## 🟠 An argument the corpus already contains is being asserted instead (1)
+
+### 2. r20 states something r22 already proves
+
+`requirements/r20.jd:11` `e_grid` · "The identity grid is the full 27-cell one (R22)"
+`requirements/r22.jd:4` `c` · "The identity grid is the full 27-cell one (R22)"
+
+**What's wrong.** r20 takes this as a given. r22 is a whole argument that establishes it, with its own
+evidence, and it concludes the same sentence.
+
+**Why it matters.** Right now the two are only connected by the `(R22)` you typed in the label. If
+r22's argument ever stops holding, r20 carries on asserting its conclusion as a fact, and nothing
+links the two so nothing tells you. You also cannot see the connection in either diagram.
+
+**Options.**
+  **a.** Point r20 at r22's argument with `refine`, so r22's whole tree is grafted where the leaf is.
+     Conventionally this lives in r20's own file, under the same name, so nothing that uses r20 has
+     to change:
+     ```
+     load "r22.jd"
+     justification r20_base { ... evidence e_grid is "... (R22)" ... }
+     justification r20 is refine(r20_base, r22) { hook: "e_grid" }
+     ```
+  **b.** Leave it as a leaf and treat the `(R22)` tag as the link. Cheaper, and the link stays
+     invisible to both the compiler and the diagram.
+  (a). It is the reason `refine` exists, and it is one file's change.
+
+Cost: r20.jd only. Everything that composes `r20` picks up the fuller argument with no change.
+  Structural, so recompile and re-render  ·  Reference: `[JD-F01]`
+
+## 🔵 The same work is being done twice (1)
+
+### 3. r13 and r20 are both about data/train.csv, worded differently
+
+`requirements/r13.jd:11` `e_train` · "The committed training split"
+`requirements/r20.jd:9` `e_data` · "The train.csv split as committed"
+
+**What's wrong.** Both are `data/train.csv`, which you confirmed when I asked. The wordings differ, so
+nothing connects them.
+
+**Why it matters.** Sharing in jPipe happens by exact label match, so as written these stay two
+separate boxes when the models are composed. Whatever checks that the training split is what it should
+be runs twice, and if you ever automate it, you will wire it up twice and can update one and forget
+the other. Matched, it runs once and covers both requirements.
+
+**Options.**
+  **a.** Put both on one wording. Neither of the current two names the file, so this is a good moment
+     to fix that as well:
+     `r13.jd` `e_train` → "The committed data/train.csv and its header row"
+     `r20.jd` `e_data`  → "The committed data/train.csv and its header row"
+  **b.** Leave them. The cost is one duplicated check, which is small today and grows with each
+     requirement that touches the training data.
+  (a), and note the two strategies stay exactly as they are: r13 checks the column set, r20 checks a
+  checksum. Sharing the fact is not sharing the check, and those are genuinely different questions.
+
+Cost: two labels, no ids change. Creates a shared node, so the ids of later shared nodes shift
+  ·  Reference: `[JD-R01]`
+
+## 🟡 Suggestions (1)
+
+### 4. Nothing in the corpus loads g5_draft.jd
+
+`g5_draft.jd:6` · model `draft_safety`
+
+**What's wrong.** Searched all six models for `load "g5_draft.jd"`, for `draft_safety` as an
+`assemble` source, and for it as a `refine` base or refiner. Nothing references it.
+
+**Why it matters.** Probably nothing, but it is worth a look: either it is a draft you can delete, or
+its consumer was renamed and something you meant to be in the case is silently outside it. Those two
+have very different consequences and the corpus cannot tell them apart.
+
+**Options.**
+  **a.** Delete it if it is a leftover.
+  **b.** Wire it in if it was meant to be part of the case.
+  **c.** Leave it and note in its header that it is a separate entry point on purpose.
+  I cannot tell which, and a model composed by a script outside `justifications/` would look exactly
+  like this from here.
+
+Cost: nothing, this needs a decision rather than an edit  ·  Reference: `[JD-F03]`
+
+## The corpus
 
 | File | Model | Root? | Composed by | Elements | 🔴 | 🟠 | 🔵 | 🟡 |
 |---|---|---|---|--:|--:|--:|--:|--:|
@@ -167,41 +274,42 @@ Authority: house.
 | requirements/r20.jd | r20 | no | g2_fates | 5 | 0 | 1 | 1 | 0 |
 | g5_draft.jd | draft_safety | no | **nothing** | 6 | 0 | 0 | 0 | 1 |
 
-## Decisions
+## What you told me
 
-1. `data/train.csv` shared by r13 `e_train` and r20 `e_data` → **yes**. Became R1.
-2. g4 `e_report` vs g6 `e_timing`, possibly one benchmark record → **no**, different artifacts.
-   Not reported, and not re-asked on a later run over this corpus.
-3. r9 `e_env` and r14 `e_deps`, possibly both the `Pipfile` → *unanswered*. See O1.
+1. r13 `e_train` and r20 `e_data`, both `data/train.csv`? → **yes**. Became finding 3.
+2. g4 `e_report` and g6 `e_timing`, both the benchmark record? → **no**, different things. Dropped,
+   and I will not ask again on this corpus.
+3. r9 `e_env` and r14 `e_deps`, both the `Pipfile`? → *not answered*. See open questions.
 
-## Suggested fix order
+## What to do first
 
-1. **U1**, accidental-unification. The composed model already claims something nobody wrote, so
-   nothing else here is trustworthy until it is settled.
-2. **R1**, the label alignment. Creates a unified group; re-render before judging anything downstream.
-3. **F1**, the refinement. Structural, one file, recompile after.
-4. **C1**, the orphan. Needs a decision from a person, not an edit.
+1. **Finding 1.** The composed case currently claims something neither file says, so nothing built
+   from these models is trustworthy until it is settled.
+2. **Finding 3**, the two labels. Re-render afterwards: matching them creates a shared node.
+3. **Finding 2**, the refine. Structural, one file, recompile after.
+4. **Finding 4.** Needs a decision from you, not an edit.
 
 ## Open questions
 
-**O1 · requirements/r9.jd:12 ⇄ requirements/r14.jd:15**: r9 `e_env` *"The committed Pipfile and the
-pipeline source files"* and r14 `e_deps` *"The dependency manifest as committed"*. These may both be
-the `Pipfile`, but r9's leaf names two artifacts at once, so there is no single artifact to match
-against. `jpipe-review` would flag that leaf as non-atomic; split it first, then this becomes answerable.
+**`requirements/r9.jd:12` and `requirements/r14.jd:15`**: r9 `e_env` is "The committed Pipfile and the
+pipeline source files" and r14 `e_deps` is "The dependency manifest as committed". These may both be
+the `Pipfile`, but r9's label names two things at once, so there is no single thing to match against.
+Run `jpipe-review` on r9 first: it will flag that leaf as covering two facts, and once it is split
+this becomes answerable.
 
-**O2 · 4 further clusters not asked about**, the question budget being 7 and these ranking below it:
-r3 `e_split` ⇄ r18 `e_data`; g3 `e_log` ⇄ g4 `e_log`; r7 `e_model` ⇄ r11 `e_fitted`;
-r22 `e_grid` ⇄ r24 `e_matrix`. Both labels for each are in the survey table above; answer any of them
-unprompted and a re-run will act on it.
+**Four more pairs I did not ask about**, the budget being 7 questions and these ranking below it:
+r3 `e_split` and r18 `e_data`; g3 `e_log` and g4 `e_log`; r7 `e_model` and r11 `e_fitted`; r22
+`e_grid` and r24 `e_matrix`. Both labels for each are quoted above. Answer any of them unprompted and
+a re-run will act on it.
 
-## Not reviewed
+## Not looked at
 
-- **What one model shows.** Abstraction, atomicity, and whether the named artifacts exist in the tree
-  are `jpipe-review`'s work, per model. A clean survey says nothing about whether any of these models
-  is a good argument on its own.
+- **Whether any single model is a good argument.** This survey only compared models with each other.
+  Whether a leaf states a verdict where it should name a fact, or names a file that does not exist,
+  is `jpipe-review`'s job, one model at a time. A clean survey and a clean review are different
+  claims, and a corpus wants both.
 - **Anything outside `justifications/`.** A model composed by a script elsewhere, or a step library
-  referencing `unified_N` ids, would not appear here. F03 above is stated with that limit.
-- **Whether any of this compiles.** No file was built: `jpipe diagnostic` and the editor own that, and
-  a declaration clusters whether or not its file parses. Nothing was compiled because nothing was edited.
-- `--no-refine` was not passed; both passes ran on all 6 models.
+  referring to shared-node ids, would not show up here. Finding 4 is stated with that limit.
+- **Whether any of this compiles.** Nothing was built, because nothing was edited. `jpipe diagnostic`
+  and your editor are the authority there.
 ```

@@ -1,25 +1,33 @@
 # Rule catalogue
 
-The lookup table. Every finding cites an id from here **and quotes its description**, because a bare
-`JD-R01` means nothing to an author who has not read this file. Every id also carries an **authority**
-saying what backs it, which decides whether the author can decline it.
+**This file is for you, not for the reader of the report.** It is the lookup table that decides whether
+a rule fires and what to propose. Almost none of its vocabulary belongs in a report: the person reading
+that is the engineer who built the system, and they have no reason to know what `R01` means or what
+"unify" is. → `report-format.md`, which is about writing for them.
 
 Every rule here needs **at least two models** to state. That is the whole point of this skill, and it
 is also its risk: a claim about two files is twice as easy to get wrong as a claim about one.
 
-| Authority | Backed by | Declinable? |
-|---|---|---|
-| `language` | the grammar and the compiler | No; the composed model already claims something unintended |
-| `house` | McSCert practice (`refinement.md`) | Yes, and irrelevant if the project states its own conventions |
+| Column | For |
+|---|---|
+| **Trigger** | you, deciding whether the rule fires |
+| **Description** | you, as the one-line summary of what the rule is about. Do not paste it at the reader as an explanation; say what is wrong with *their* two elements instead |
+| **Typical fix** | the starting point for the options you offer, never the whole of them |
 
-Severity is about whether the argument survives, not about how much work the fix is:
-
-| | | |
+| Authority | Declinable? | Say to the reader |
 |---|---|---|
-| 🔴 | **UNSOUND** | The composed model asserts something nobody wrote |
-| 🟠 | **STRUCTURE** | The argument holds, but declines a proof the corpus already contains |
-| 🔵 | **REUSE** | An opportunity, never a defect |
-| 🟡 | **CONVENTION** | Fine as it stands; sits oddly in the corpus |
+| `language` | No | "this is what the compiler does when it composes them, so there is nothing here to agree or disagree with" |
+| `house` | Yes, and irrelevant if the project states its own conventions | "a convention rather than a defect: take it or leave it" |
+
+Severity is about whether the argument survives, not about how much work the fix is. The right-hand
+column is what a report says out loud; the middle column never appears in one:
+
+| | Internal | In the report |
+|---|---|---|
+| 🔴 | UNSOUND | **Composing these models makes a claim nobody wrote** |
+| 🟠 | STRUCTURE | **An argument the corpus already contains is being asserted instead** |
+| 🔵 | REUSE | **The same work is being done twice.** An opportunity, never a defect |
+| 🟡 | CONVENTION | **Suggestions.** Fine as it stands; these would make the corpus easier to live with |
 
 ---
 

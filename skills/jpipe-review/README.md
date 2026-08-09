@@ -73,14 +73,15 @@ Reporting needs no tools at all. `--apply` needs
 `apt install jpipe`, or `scoop install mcscert/jpipe`), because an edit it cannot verify is worse than
 a finding it merely reported: after editing it recompiles and re-renders every file it touched.
 
-## Authority: which findings you can argue with
+## Which findings you can argue with
 
-Every finding says what backs it, so you can tell a fact from an opinion:
+Every finding says, in plain words, how much room you have to disagree. There are three kinds:
 
-- **`language`**: the compiler decides. Not negotiable.
-- **`argument`**: the Toulmin reading below. Declinable, with a rationale.
-- **`house`**: McSCert house practice, and *irrelevant* if your project states its own conventions
-  in a `CLAUDE.md` or a `justifications/README.md`. Those win.
+- **The compiler decides.** Not a matter of taste: the tool will do this whether or not you agree.
+- **A judgement about the argument.** Declinable with a rationale. Most findings are these, and a
+  report saying so is telling you it has an opinion rather than a fact.
+- **A convention.** Take it or leave it, and *irrelevant* if your project states its own conventions in
+  a `CLAUDE.md` or a `justifications/README.md`. Those win, and the review defers to them.
 
 ## Reference material
 

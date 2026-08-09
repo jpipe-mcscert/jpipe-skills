@@ -10,7 +10,7 @@ individual skills are not, so per-skill changes are grouped under the headings b
 
 ### Changed
 
-#### `jpipe-review`
+#### Both skills
 
 - **Reports are now written for the engineer who built the system**, not for a safety specialist. If
   you have never heard of Toulmin, never read this skill, and have no idea what `A05` means, nothing in
@@ -23,6 +23,18 @@ individual skills are not, so per-skill changes are grouped under the headings b
   say what they mean: *the argument does not hold*, *the argument will not tell you when it breaks*,
   *suggestions*. Rule ids still appear, once, at the end of each finding, because people cite them in
   review threads and script against them; they are a reference number, never the explanation.
+- In `jpipe-survey` the same rule reaches further, because its **questions** are the most reader-facing
+  text either skill produces. They now ask *"Are these the same file?"* rather than *"Same artifact?"*,
+  and explain the consequence in terms of the reader's system: two boxes instead of one when the models
+  are composed, so a check that runs twice. Compiler vocabulary is out, `unify` included, since it names
+  a pass nobody invokes; `assemble` and `refine` stay, because those are keywords the reader writes.
+  The report's `Decisions` section is now called **What you told me**.
+- Survey section headings say what they mean too: *composing these models makes a claim nobody wrote*,
+  *an argument the corpus already contains is being asserted instead*, *the same work is being done
+  twice*, *suggestions*.
+
+#### `jpipe-review`
+
 - **Decomposition is now the recommendation, not one option among two.** Where an element does two jobs,
   the review leads with splitting it into legs, and gives the reason that matters to you: a split
   argument tells you *which* half failed, and each half can be checked on its own. Reworking a label in
@@ -36,6 +48,9 @@ individual skills are not, so per-skill changes are grouped under the headings b
   diagram nobody reads; and unification is exact string equality, so long labels accumulate incidental
   wording and never collide, which is what shared nodes need. A long label is also usually a *structural*
   tell rather than a writing one, since the words are long because the element is doing two jobs.
+- `jpipe-survey` holds proposed labels to the same limits, where the reason is sharper still: a label is
+  shared only when two files match it **exactly**, so a long canonical wording is a merge that quietly
+  never happens.
 
 ## [0.1.2] - 2026-08-09
 

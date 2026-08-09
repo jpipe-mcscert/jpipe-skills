@@ -62,10 +62,15 @@ whether a leaf should refine against an argument that already exists.
   does not record. There is no interactive question tool here on purpose: a picker cannot be answered
   headless, and an approval step built on one deadlocks instead of degrading.
 - **Never act on silence** or on an ambiguous answer, and never widen beyond what was approved.
-- **Never mint a retired id.** The `S01`-`S04`, `C03` and `C04` ids are burned; `rules.md` has the
-  translation table.
-- **Never open a file under `steps/`** or any `@jpipe_link` module. Out of scope, and its contents can
-  never be a finding.
+- **Write the report, and the questions, for the engineer who built the system.** No rule id standing
+  in for an explanation, no severity words, and no compiler vocabulary: *unify* names a pass they never
+  invoke. Say what is wrong, why it matters to them, and what their options are.
+  → `references/report-format.md`
+- **Every label you propose is short**: under 10 words for a fact, under 15 for a check. It matters most
+  here, because a label is shared only when two files match it **exactly**, so a long canonical wording
+  is a merge that quietly never happens.
+- **Never mint a retired id** (`S01`-`S04`, `C03`, `C04`; `rules.md` translates), and **never open a
+  file under `steps/`** or any `@jpipe_link` module.
 - **Prefer an open question to a shaky finding.** Two false positives and the author stops reading.
 
 ## Workflow
@@ -78,13 +83,10 @@ sources. That graph is what Step 5 needs for `F03` and `F04`, and it is cheap to
 
 Fewer than two models: stop and say why.
 
-**Do not compile anything.** Whether each file builds is the compiler's answer to give, and the author
-already has it. It is also beside the point here: a label declaration is harvestable and clusterable
-whether or not its file parses, so a corpus caught mid-edit is still worth surveying, and a syntax
-error in one model says nothing about whether two others share a fact. Compilation belongs at Step 6,
-where it verifies work this skill did.
-
-Locations therefore come from the survey table below, which carries a line number per declaration.
+**Do not compile anything.** A declaration clusters whether or not its file parses, so a corpus caught
+mid-edit is still worth surveying, and a syntax error in one model says nothing about whether two others
+share a fact. Compilation belongs at Step 6, where it verifies work this skill did. Locations come from
+the survey table below, which carries a line number per declaration.
 
 ### Step 2. Survey, without opening files
 
@@ -100,9 +102,9 @@ reading the corpus, the method has already failed.
 Resolve every `evidence` label to the thing it names (`artifacts.md`), then cluster on **that**. Sort
 each cluster into certain-nothing, certain-defect (`R03`), or uncertain (`sharing.md` §3).
 
-In the same pass, match `evidence` labels against the `conclusion` and `sub-conclusion` labels of
-*other* models: that lookup is `F01`, and the table from Step 2 already holds both sides. Skipped under
-`--no-refine`. → `references/sharing.md`, `references/refinement.md`
+In the same pass, match `evidence` labels against *other* models' `conclusion` and `sub-conclusion`
+labels: that lookup is `F01`, and Step 2's table already holds both sides. Skipped under `--no-refine`.
+→ `references/sharing.md`, `references/refinement.md`
 
 ### Step 4. Interview
 
@@ -111,24 +113,26 @@ Uncertain clusters become **one batched message**: numbered prose questions, at 
 believe is shared, say how confident you are, and say what a yes will cause.
 
 Clusters past the budget are **not dropped**: they go to Open questions with their labels quoted, and
-the report says how many. Record every answer, including every *no*, for the report's Decisions section.
+the report says how many. Record every answer, including every *no*, for **What you told me**.
 → `references/interview.md`
 
 ### Step 5. Report
 
-Confirmed clusters become findings; declined ones become Decisions entries; unanswered ones become open
-questions. Add the `JD-F` findings, which need the Step 1 graph rather than the interview.
+Confirmed clusters become findings; declined ones are recorded; unanswered ones become open questions.
+Add the `JD-F` findings, which need the Step 1 graph rather than the interview.
 
-Emit the report in exactly the shape of `references/report-format.md`, including **Decisions**, **Open
-questions** and **Not reviewed**. State the standing limit: a clean survey says nothing about whether
-any single model is a good argument.
+Emit the report in exactly the shape of `references/report-format.md`. Read that file first: the reader
+is **the engineer who built the system**, and every finding owes them *what is wrong*, *why it matters
+to them*, and *the options*, in that order. Keep **What you told me**, **Open questions** and **Not
+looked at**. State the standing limit: a clean survey says nothing about whether any single model is a
+good argument.
 
 **Stop here** unless `--apply` was given.
 
 ### Step 6. Apply and verify
 
 Present a numbered fix list, each entry with its rule description, the exact before and after text for
-**every** file it touches, the blast radius, and any fix it depends on. Order by dependency, not
+**every** file it touches, what it costs, and any fix it depends on. Order by dependency, not
 severity (`rules.md`). Ask in prose which numbers to apply.
 
 `Edit` only the approved items. Then, the one step that compiles: per touched file,
