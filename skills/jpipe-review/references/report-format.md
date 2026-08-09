@@ -79,7 +79,7 @@ their code. Three habits:
 # Review: <target>
 
 <N> models · <M> elements · <a> serious, <b> worth fixing, <c> suggestions
-<what was and was not looked at, in one line>
+<which models were reviewed, named; under -m, which of the file's models were not>
 
 ## 🔴 The argument does not hold (<a>)
 <a reader could take this as assurance and get none>
@@ -121,6 +121,11 @@ Cost: <what moves: labels only, new ids, or a re-render>  ·  Reference: `[JD-XN
 ## Not looked at
 <what this review did not cover, so a clean report is not mistaken for a broad one>
 ```
+
+**Name the scope as models, not as one file.** A verdict covers whatever was reviewed, and a file name
+does not say what that was: `goals.jd` may hold two arguments. Under `-m` this carries weight rather than
+tidiness, since the honest summary is *one of your arguments*, so say which models were in and list the
+file's others under **Not looked at** by name. → `scope.md` §7
 
 ---
 

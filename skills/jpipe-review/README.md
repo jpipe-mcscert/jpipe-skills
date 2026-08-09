@@ -44,7 +44,7 @@ Proposed labels are kept short (under 10 words for a fact, 15 for a check) for t
 labels are the node text in a rendered diagram, and jPipe unifies shared nodes by exact string match,
 so a long label is both unreadable and unshareable.
 
-## Scope: one file, and everything it loads
+## Scope: one file, or one argument inside it
 
 You point the review at **one `.jd` file**. Its scope is that file plus everything the file
 transitively `load`s, because a goal assembled from four requirement files is one argument rather than
@@ -53,6 +53,21 @@ closure**, so pointing at your top-level goal reviews the whole tree beneath it.
 
 Passing no file, or more than one, is an error rather than a guess. A review of something you did not
 name is a review of the wrong thing.
+
+One file can hold more than one argument, because a `load` makes a model's name available without making
+it part of any particular one. **`-m <model>`** is for that case, narrowing the scope to one model in the
+file plus the models it is built from:
+
+```text
+justification fairness   is assemble(r13, r20) { ... }
+justification efficiency is assemble(r31, r32) { ... }
+```
+
+`-m fairness` reviews the elements of `fairness`, `r13` and `r20`, and leaves `efficiency` and its
+requirements alone. Without it you get both arguments in one report, which is right when that is what you
+asked for and noise when it is not. One consequence worth knowing: a leaf tagged with a requirement is
+reported as a **finding** when the argument that proves it is in scope and as a **question** when it is
+not, so a narrower scope can turn one into the other.
 
 What stays outside: **how your models relate to each other.** Whether the same fact is argued twice
 under wordings that will not match, whether two labels merge when composed into a claim nobody wrote,
@@ -64,11 +79,13 @@ they make different claims.
 ## Usage
 
 ```
-jpipe-review <path/to/model.jd> [--global] [--no-grounding]
+jpipe-review <path/to/model.jd> [-m <model>] [--global] [--no-grounding]
 ```
 
-`--global` scopes the review to every `.jd` in the repository instead, examining each element once, so
-a requirement file used by three goals is still reviewed once.
+`-m <model>` narrows the scope to one model in the file plus the models it is built from. `--global`
+scopes the review to every `.jd` in the repository instead, examining each element once, so a requirement
+file used by three goals is still reviewed once. The two contradict each other and passing both is an
+error, as is naming a model the file does not declare.
 
 Reporting needs no tools at all. Approving a fix needs
 [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` (`brew install jpipe`,

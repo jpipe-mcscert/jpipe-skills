@@ -10,6 +10,28 @@ not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
 
+### Added
+
+- **`jpipe-review` takes `-m <model>` too**, so both skills now scope the same way in all three forms:
+  a file's `load` closure, one model's closure under `-m`, or the repository under `--global`. Point the
+  review at a file that declares two roots and you previously got both arguments in one report, with a
+  verdict covering more than you asked about. `-m fairness` reviews the elements of `fairness` and the
+  models it is built from, names the file's other models as not reviewed, and errors the same way on an
+  undeclared model or on `-m` together with `--global`.
+
+### Changed
+
+- **Scope is now defined once**, in a new `references/scope.md` vendored into both skills, joining
+  `language.md` and `artifacts.md` in the canon. It was written for `jpipe-survey` in 0.1.5 and would
+  otherwise have been duplicated with a second wording, which is how two skills come to disagree about
+  the boundary they both depend on.
+- **`jpipe-review`'s `C01`** (a leaf tagged with a requirement that should be a `refine`) resolves
+  against the scope, so `-m` can turn what would be a finding back into a question: a requirement model
+  the file `load`s but the named argument is not built from is outside the scope. When one was seen while
+  resolving `load`s, the question now names it and says it is outside, which is more use than a bare
+  *"does an argument exist?"*. Its catalogue entry had also gone stale in 0.1.4, still saying the rule is
+  always a question after it became a finding when the refiner is in scope.
+
 ## [0.1.5] - 2026-08-09
 
 ### Added

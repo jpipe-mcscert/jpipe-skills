@@ -23,7 +23,9 @@ itself.
 
 `scoped_model/` is the one case run **twice**, with `-m fairness` and without, because what it guards is
 the difference between the two. Its root file declares two arguments rather than one, which is the
-situation `-m` exists for.
+situation `-m` exists for. It is also the only `corpora/` case that exercises **both** skills, since `-m`
+narrows a review the same way: `jpipe-review goals.jd -m fairness` must examine the elements of
+`fairness`, `r1`, `r2` and `r3` and say nothing about `efficiency`'s.
 
 The roots are not scaffolding. `assemble` is the operator that would actually merge two identical
 labels, so `accidental_unification/root.jd` is what makes that case's defect real rather than

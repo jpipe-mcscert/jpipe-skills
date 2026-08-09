@@ -66,8 +66,9 @@ vendored copy and starts typing is told where to go instead. The banner is part 
 which is why byte-identity still holds. `sync_refs.py` never *creates* a copy: vendoring a file into a
 skill for the first time is a deliberate act, so do it by hand once and the tool keeps it honest after.
 
-**What belongs in the canon** is text that is true independently of who reads it: the language,
-the extraction of an artifact from a label. What does not is anything phrased as an instruction to one
+**What belongs in the canon** is text that is true independently of who reads it: the language, the
+extraction of an artifact from a label, what a scope is. What does not is anything phrased as an
+instruction to one
 skill. When hoisting, strip the imperatives: a sentence like *"do not report any of this"* is a
 guardrail belonging in a `SKILL.md`, not a fact about jPipe. Prefer leaving material in one skill over
 hoisting something that then needs a caveat per consumer.
@@ -90,35 +91,40 @@ the assertion, never the phrasing:
 5. A leaf naming a nonexistent file → one `JD-G01`, citing the searches it ran.
 6. A goal file that loads three requirement files → **one** review of all four, with findings landing in
    the loaded files too. Then no file, and two files: both are errors that stop. *The scope contract.*
-7. Answering *"1 and 3 only"* to the fix list → exactly two edits, re-verified, nothing written to git.
+7. `corpora/scoped_model/goals.jd -m fairness` → the elements of `fairness`, `r1`, `r2` and `r3`
+   examined, **nothing** about `efficiency`'s, and `efficiency` named as not reviewed. Then a leaf tagged
+   `(Rnn)` whose requirement model the file `load`s but the named model is not built from → `C01` is a
+   **question**, not a finding. *The half of the scope contract a file with two roots depends on, and the
+   one rule whose verdict the flag can change.*
+8. Answering *"1 and 3 only"* to the fix list → exactly two edits, re-verified, nothing written to git.
 
 Then `jpipe-survey`, whose failure modes are different because it compares files:
 
-8. `corpora/shared_evidence/root.jd` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the decoy.
+9. `corpora/shared_evidence/root.jd` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the decoy.
    *The single most important case in the repository: the decoy is the closest label to s1 by wording
    and the wrong answer, so this fails the moment clustering falls back to string similarity.*
-9. `corpora/accidental_unification/root.jd` → one `JD-R03`, 🔴, **without a question being asked**. The
-   merge is what the compiler will do, so there is nothing to confirm.
-10. `corpora/refine_available/f1_consumer.jd` → one `JD-F01`, since the model it should refine against is
+10. `corpora/accidental_unification/root.jd` → one `JD-R03`, 🔴, **without a question being asked**. The
+    merge is what the compiler will do, so there is nothing to confirm.
+11. `corpora/refine_available/f1_consumer.jd` → one `JD-F01`, since the model it should refine against is
     in the closure. Then drop the `load` line and rerun: it must become an **open question**, because the
     tag says a requirement exists, not that anyone argued it. *That pair is the whole difference between
     this rule and `jpipe-review`'s `C01`, which now behaves the same way when the refiner is in scope.*
-11. `corpora/scoped_model/goals.jd` **with `-m fairness`** → exactly one `JD-R01`, nothing whatever about
+12. `corpora/scoped_model/goals.jd` **with `-m fairness`** → exactly one `JD-R01`, nothing whatever about
     `efficiency`, and **Not looked at** naming `efficiency` along with `JD-F03` and `JD-F04`. Then the same
     file with no `-m`: the same `JD-R01`, and the two identical `"The reported metrics"` leaves as an
     **open question** rather than a `JD-R03`. *The reason `-m` exists. A merge happens inside a
     composition, and nothing composes `r3` with `efficiency`, so a 🔴 there would be plainly false.*
-12. `corpora/scoped_model/goals.jd -m nosuchmodel` → an error that lists the models the file does
+13. `corpora/scoped_model/goals.jd -m nosuchmodel` → an error that lists the models the file does
     declare. The same file with `-m fairness --global` → an error. Neither picks one and carries on.
-13. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **What you told me**,
+14. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **What you told me**,
     not reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
     question and the run still produces a report. *The headless-degradation path.*
-14. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
+15. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
     rather than vanishing.
-15. A scope where one file does not compile → surveyed like any other, since a declaration clusters
+16. A scope where one file does not compile → surveyed like any other, since a declaration clusters
     whether or not its file parses. After an approved fix, the post-edit check must not blame that
     file's pre-existing breakage on the edit.
-16. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
+17. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
     non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
 
 Record the outcome in `CHANGELOG.md` for the release.
