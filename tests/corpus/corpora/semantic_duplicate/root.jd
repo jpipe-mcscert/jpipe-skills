@@ -1,0 +1,14 @@
+/**
+ * expect: no finding of its own. The scope root, and the operator that would merge the two leaves
+ * once they match.
+ * The case the rewrite exists for: neither leaf names a path, so neither resolves to an artifact and
+ * the pre-0.2.0 method reported nothing at all. One JD-M01 at medium confidence, with the reading
+ * stated ("I read both of these as the source tree"), and no path invented for either.
+ */
+load "a1_review.jd"
+load "b2_build.jd"
+
+justification quality is assemble(a1, b2) {
+    conclusionLabel: "The delivered code is fit for release"
+    strategyLabel:   "Review and build coverage together cover the code"
+}

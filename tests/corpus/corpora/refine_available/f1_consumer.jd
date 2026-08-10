@@ -1,5 +1,5 @@
 /**
- * expect: JD-F01 (against f2_requirement.jd)
+ * expect: JD-P01 (against f2_requirement.jd)
  * The leaf e_grid asserts what f2_requirement.jd proves with a whole argument, and says so
  * itself: the trailing (R22) tag names the requirement that makes it true. The corpus
  * contains the proof and this model declines to use it.

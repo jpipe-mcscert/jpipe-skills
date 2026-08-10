@@ -1,0 +1,15 @@
+/**
+ * expect: JD-D01 (with r14_tests.jd). The fused side.
+ * e_code names two things needing two different checks, one over the source tree and one over the
+ * test tree, so it is unique by construction and can never be shared with anything. Its test half is
+ * r14's leaf verbatim. Splitting it is what makes the merge possible, which is why the split comes
+ * first and why this skill proposes it here rather than deferring to jpipe-review.
+ */
+justification g3 {
+    conclusion c is "The delivered code is maintainable"
+    strategy   s is "Confront the source and test trees with the style and coverage gates"
+    evidence   e_code is "The source and test code are available"
+
+    s supports c
+    e_code supports s
+}

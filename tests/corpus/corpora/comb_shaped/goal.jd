@@ -1,0 +1,19 @@
+/**
+ * expect: JD-P01 at e_grid (with r22_grid.jd). Nothing at the other three leaves.
+ * The comb: one strategy, four bare leaves, no depth anywhere. Every leaf may be true and none of
+ * them is argued. r22 argues the third one, so that leaf can stop being an assertion.
+ */
+justification goal {
+    conclusion c is "The release satisfies its identity requirements"
+    strategy   s is "Confront each identity requirement with its recorded check"
+    evidence   e_specs is "The committed specs/identity.md"
+    evidence   e_log is "The recorded identity check log"
+    evidence   e_grid is "The identity grid is the full 27-cell one (R22)"
+    evidence   e_sign is "The committed sign-off record"
+
+    s supports c
+    e_specs supports s
+    e_log supports s
+    e_grid supports s
+    e_sign supports s
+}

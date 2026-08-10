@@ -1,0 +1,22 @@
+/**
+ * expect: no finding of its own. The scope root, and the composition that makes JD-N01 real: the
+ * mixing of moments only exists once these three are assembled.
+ *
+ * Two findings. JD-N01: this composition rests on leaves that exist at different moments, and
+ * performance's e_timings gives no way to tell which. JD-N02: provenance and performance disagree
+ * about the metrics, one treating them as committed and one as written by a run, which also BLOCKS
+ * the JD-M01 those two leaves would otherwise be, since aligning them would silently pick a winner.
+ *
+ * The negative, and the reason this case exists: performance's e_metrics names a file that appears
+ * nowhere in this repository, and it must draw **nothing at all**. It is well named, it says when it
+ * exists, and a case discharged from CI would find it exactly where it says. Any finding about a
+ * missing file means the skill has started searching the tree, which it must never do.
+ */
+load "quality.jd"
+load "provenance.jd"
+load "performance.jd"
+
+justification release is assemble(quality, provenance, performance) {
+    conclusionLabel: "The release meets its quality and performance targets"
+    strategyLabel:   "Specification, provenance and performance together cover the release"
+}

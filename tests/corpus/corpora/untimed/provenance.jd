@@ -1,0 +1,14 @@
+/**
+ * expect: JD-N02 (with performance.jd). The "committed" half of the disagreement.
+ * e_metrics treats the metrics as a file in the tree. performance's leaf treats the same metrics as
+ * something a run writes. One of the two is wrong about the artifact and the corpus cannot say which,
+ * which is why the merge those two labels invite has to wait for an answer.
+ */
+justification provenance {
+    conclusion c is "The reported figures come from the release commit"
+    strategy   s is "Confront the metrics file's commit field with the release tag"
+    evidence   e_metrics is "The committed model/metrics.json"
+
+    s supports c
+    e_metrics supports s
+}

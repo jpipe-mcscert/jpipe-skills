@@ -1,0 +1,19 @@
+/**
+ * expect: no finding of its own. The argument goal declines to use.
+ * The matching (R22) tag makes this the strongest signal P01 has, though the rule no longer needs it:
+ * the conclusion establishing the leaf is what makes the finding true.
+ *
+ * Note the two labels are close but not identical, which is both realistic and necessary. Applying
+ * the refine means rewording this conclusion to match the hooked leaf, and the finding has to say so.
+ * Making them identical here would not compile: assemble merges byte-identical labels, so this
+ * conclusion and that leaf would become one node with two strategies under it. That the composition
+ * only works through `refine` is the point of the rule.
+ */
+justification r22 {
+    conclusion c is "The identity grid covers all 27 combinations (R22)"
+    strategy   s is "Confront the grid's row count with the 27 combinations SPECS section 3 lists"
+    evidence   e_grid is "The committed specs/identity_grid.csv"
+
+    s supports c
+    e_grid supports s
+}

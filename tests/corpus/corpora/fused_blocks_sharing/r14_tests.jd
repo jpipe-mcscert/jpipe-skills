@@ -1,0 +1,13 @@
+/**
+ * expect: no finding of its own. The partner that makes g3's fusion worth reporting.
+ * e_tests is atomic and names one thing. Remove this file from the scope and the JD-D01 on g3 must
+ * fall silent.
+ */
+justification r14 {
+    conclusion c is "The changed paths are covered by tests"
+    strategy   s is "Confront the coverage report's per-file figures with the changed file list"
+    evidence   e_tests is "The committed tests/ directory"
+
+    s supports c
+    e_tests supports s
+}

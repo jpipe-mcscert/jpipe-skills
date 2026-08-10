@@ -1,0 +1,16 @@
+/**
+ * expect: no finding of its own. The scope root.
+ * One JD-D01: g3's leaf covers two separate things, and the test half is the leaf r14 already has.
+ * The finding must name the partner, propose the split, and align only the test half.
+ *
+ * The negative half of this case matters as much: delete r14_tests.jd from the scope and the finding
+ * must disappear entirely rather than degrade into a bare atomicity complaint. A fused leaf with no
+ * partner is jpipe-review's A05, decided from one file, and repeating it here would buy nothing.
+ */
+load "g3_quality.jd"
+load "r14_tests.jd"
+
+justification release is assemble(g3, r14) {
+    conclusionLabel: "The release is fit to ship"
+    strategyLabel:   "Code quality and test coverage together cover the release"
+}

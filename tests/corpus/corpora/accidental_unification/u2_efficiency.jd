@@ -1,5 +1,5 @@
 /**
- * expect: JD-R03 (with u1_fairness.jd)
+ * expect: JD-M03 (with u1_fairness.jd)
  * The other half of the accidental unification. Same label, "The reported metrics", byte for
  * byte. Different artifact: the recorded wall-clock timings, not the fairness figures. The
  * strategy is what disambiguates them, and it is the only thing that does.

@@ -2,15 +2,15 @@
  * expect: no finding of its own. This is the file to point at, and the case is about which
  * argument you point at *inside* it. Two models here are two arguments, not one.
  *
- * With `-m fairness`: the scope is fairness, r1, r2 and r3. Exactly one JD-R01 (r1 and r2 both
+ * With `-m fairness`: the scope is fairness, r1, r2 and r3. Exactly one JD-M01 (r1 and r2 both
  * denote data/train.csv), and nothing at all about `efficiency`, which this file declares but
  * fairness is not built from. The report must name efficiency under Not looked at, along with
- * JD-F03 and JD-F04, which `-m` answers by construction.
+ * JD-T01 and JD-T02, which `-m` answers by construction.
  *
  * Without `-m`: the scope is all five models, and the extra material is a trap. r3's e_metrics and
  * efficiency's e_metrics are byte-identical over different artifacts, but nothing composes those
- * two models together, so the merge never happens and a JD-R03 would be false. It is an open
- * question. `efficiency` also draws a JD-F03 question, being a root nothing composes.
+ * two models together, so the merge never happens and a JD-M03 would be false. It is an open
+ * question. `efficiency` also draws a JD-T01 question, being a root nothing composes.
  */
 load "r1_split.jd"
 load "r2_columns.jd"

@@ -1,5 +1,5 @@
 /**
- * expect: JD-R01 (with s2_provenance.jd)
+ * expect: JD-M01 (with s2_provenance.jd)
  * Grounds on data/train.csv. Pairs with s2_provenance.jd, which denotes the same artifact
  * under a drifted label -- so the two leaves will NOT unify under assemble, and the same
  * fact is stated twice. The artifact identity is not visible in the labels, so a survey

@@ -1,5 +1,5 @@
 /**
- * expect: nothing under `-m fairness`. An open question without it, never a JD-R03.
+ * expect: nothing under `-m fairness`. A reported candidate without it, never a JD-M03.
  * e_metrics denotes model/metrics.json. Its label is byte-identical to the leaf in goals.jd's
  * `efficiency`, which denotes the CI timing report, so the two look exactly like an accidental
  * unification. They are not one: no model composes r3 together with efficiency, so nothing ever

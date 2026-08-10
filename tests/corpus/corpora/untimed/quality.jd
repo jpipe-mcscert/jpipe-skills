@@ -1,0 +1,13 @@
+/**
+ * expect: no finding of its own. The "exists now" side of the composition.
+ * A committed path, so the label says when it exists without anybody having to think about it. This
+ * is what the other leaves are being compared against.
+ */
+justification quality {
+    conclusion c is "The release meets its stated specification"
+    strategy   s is "Confront each specified requirement with its recorded acceptance result"
+    evidence   e_specs is "The committed SPECS section 4"
+
+    s supports c
+    e_specs supports s
+}
