@@ -29,7 +29,7 @@ Reference [Agent Skills](https://docs.claude.com/en/docs/claude-code/skills) for
 | Skill | What it does | Needs |
 |---|---|---|
 | [**jpipe-review**](skills/jpipe-review/) | Reviews the *argument*: whether its elements sit at the right level, rest on artifacts that exist, and follow the house style. Syntax is left to the compiler. Proposes fixes; edits nothing until you approve them | nothing to report; [`jpipe`](https://github.com/jpipe-mcscert/jpipe-compiler) on `PATH` to apply fixes |
-| [**jpipe-survey**](skills/jpipe-survey/) | Surveys how models *relate*: the same fact argued twice under wordings that will not match, labels identical enough to merge into a claim nobody wrote, and leaves that assert what another model already proves. Asks you to confirm what the files cannot settle | same |
+| [**jpipe-survey**](skills/jpipe-survey/) | Surveys what elements *mean*: one claim written two ways, one leaf covering two things, a bare leaf some model here would prove, one claim written at two different rungs, and labels that disagree about when their artifact exists. Ranks every candidate by what fixing it buys, with a stated confidence | same |
 
 Both take the same scope, resolved the same way from one shared definition
 ([`references/scope.md`](references/scope.md)). By default that is **one `.jd` file plus everything it
@@ -43,8 +43,14 @@ model in the file plus the models it is built from. It is jPipe's own flag, spel
 `jpipe process -m <model> -i <file>`, and it contradicts `--global`.
 
 The split between them is deliberate. **`jpipe-review` examines the elements of one argument;
-`jpipe-survey` compares separate arguments with each other.** A clean review and a clean survey are
+`jpipe-survey` compares elements with each other across models.** A clean review and a clean survey are
 different claims, and a corpus wants both.
+
+One consequence is worth stating up front, because it is the question people ask first: only
+`jpipe-review` looks for the files your evidence names, and it reports absence only for a concrete
+committed path that turned up nothing. `jpipe-survey` never searches the tree at all. A justification can
+be discharged at design time or from CI, so evidence that a run produces is *supposed* to be missing from
+a clean checkout, and neither skill will call that a defect.
 
 Each skill's directory has its own README.
 

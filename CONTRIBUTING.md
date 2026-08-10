@@ -68,10 +68,9 @@ skill for the first time is a deliberate act, so do it by hand once and the tool
 
 **What belongs in the canon** is text that is true independently of who reads it: the language, the
 extraction of an artifact from a label, what a scope is. What does not is anything phrased as an
-instruction to one
-skill. When hoisting, strip the imperatives: a sentence like *"do not report any of this"* is a
-guardrail belonging in a `SKILL.md`, not a fact about jPipe. Prefer leaving material in one skill over
-hoisting something that then needs a caveat per consumer.
+instruction to one skill. When hoisting, strip the imperatives: a sentence like *"do not report any of
+this"* is a guardrail belonging in a `SKILL.md`, not a fact about jPipe. Prefer leaving material in one
+skill over hoisting something that then needs a caveat per consumer.
 
 ## Before a release
 
@@ -98,34 +97,53 @@ the assertion, never the phrasing:
    one rule whose verdict the flag can change.*
 8. Answering *"1 and 3 only"* to the fix list → exactly two edits, re-verified, nothing written to git.
 
-Then `jpipe-survey`, whose failure modes are different because it compares files:
+Then `jpipe-survey`, whose failure modes are different because it compares elements across models:
 
-9. `corpora/shared_evidence/root.jd` → exactly one `JD-R01` (s1 ⇄ s2) and **nothing** on the decoy.
-   *The single most important case in the repository: the decoy is the closest label to s1 by wording
-   and the wrong answer, so this fails the moment clustering falls back to string similarity.*
-10. `corpora/accidental_unification/root.jd` → one `JD-R03`, 🔴, **without a question being asked**. The
-    merge is what the compiler will do, so there is nothing to confirm.
-11. `corpora/refine_available/f1_consumer.jd` → one `JD-F01`, since the model it should refine against is
-    in the closure. Then drop the `load` line and rerun: it must become an **open question**, because the
-    tag says a requirement exists, not that anyone argued it. *That pair is the whole difference between
-    this rule and `jpipe-review`'s `C01`, which now behaves the same way when the refiner is in scope.*
-12. `corpora/scoped_model/goals.jd` **with `-m fairness`** → exactly one `JD-R01`, nothing whatever about
-    `efficiency`, and **Not looked at** naming `efficiency` along with `JD-F03` and `JD-F04`. Then the same
-    file with no `-m`: the same `JD-R01`, and the two identical `"The reported metrics"` leaves as an
-    **open question** rather than a `JD-R03`. *The reason `-m` exists. A merge happens inside a
-    composition, and nothing composes `r3` with `efficiency`, so a 🔴 there would be plainly false.*
-13. `corpora/scoped_model/goals.jd -m nosuchmodel` → an error that lists the models the file does
+9. `corpora/semantic_duplicate/root.jd` → one `JD-M01`, at **medium** confidence, with the reading stated
+   and **no path invented** for either label. *The case the 0.2.0 rewrite exists for: neither leaf resolves
+   to an artifact, so the method it replaced reported nothing here at all.*
+10. `corpora/shared_evidence/root.jd` → exactly one `JD-M01` (s1 ⇄ s2) and **nothing** on the decoy.
+    *The regression that matters most, and the pair to run with case 9: comparing meanings must not
+    collapse into comparing strings. The decoy is the closest label to s1 by wording and the wrong answer.*
+11. `corpora/fused_blocks_sharing/root.jd` → one `JD-D01` naming the partner half and the merge that
+    follows the split. Then remove `r14_tests.jd` from the scope and rerun: **silence**, not a bare
+    atomicity complaint. *A fused leaf with no partner is `jpipe-review`'s `A05`, and the named partner is
+    the whole of what separates the two skills here.*
+12. `corpora/comb_shaped/root.jd` → one `JD-P01`, at `e_grid` only, naming the model to graft and the
+    hook. It must **not** report the other three leaves, and must **not** report the flatness itself, which
+    is `jpipe-review`'s `A03`.
+13. `corpora/kind_mismatch/root.jd` → one `JD-L01` that proposes **no edit**, says which side looks wrong
+    and why, and hands the re-level to `jpipe-review`. An `L01` must never appear in a fix list.
+14. `corpora/untimed/root.jd` → one `JD-N01` naming which leaves exist when, one `JD-N02`, and **nothing
+    whatever** about `model/metrics.json`, which exists in no checkout of this repository. Then point the
+    skill at a real corpus in a tree where several named files genuinely do not exist: still nothing.
+    *A survey that reports a missing file has become a grounding pass, and a wrong one, since a case may
+    be discharged from CI where that file is the output rather than the input.*
+15. `corpora/accidental_unification/root.jd` → one `JD-M03`, 🔴, at high confidence. The merge is what the
+    compiler will do, so it is the one finding nobody can decline.
+16. `corpora/refine_available/f1_consumer.jd` → one `JD-P01`, since the model it should refine against is
+    in the closure. Then drop the `load` line and rerun: it must become a **low-confidence candidate** with
+    no edit proposed, because the tag says a requirement exists, not that anyone argued it.
+17. `corpora/scoped_model/goals.jd` **with `-m fairness`** → exactly one `JD-M01`, nothing whatever about
+    `efficiency`, and **Not looked at** naming `efficiency` along with `JD-T01` and `JD-T02`. Then the same
+    file with no `-m`: the same `JD-M01`, and the two identical `"The reported metrics"` leaves as a
+    **candidate** rather than a `JD-M03`. *A merge happens inside a composition, and nothing composes `r3`
+    with `efficiency`, so a 🔴 there would be plainly false.*
+18. `corpora/scoped_model/goals.jd -m nosuchmodel` → an error that lists the models the file does
     declare. The same file with `-m fairness --global` → an error. Neither picks one and carries on.
-14. A corpus with an uncertain cluster, answered *"no"* → recorded as declined in **What you told me**,
-    not reported, and **zero edits**. Answer nothing at all → every uncertain cluster becomes an open
-    question and the run still produces a report. *The headless-degradation path.*
-15. More than 7 uncertain clusters → at most 7 questions, and the remainder named in **Open questions**
-    rather than vanishing.
-16. A scope where one file does not compile → surveyed like any other, since a declaration clusters
-    whether or not its file parses. After an approved fix, the post-edit check must not blame that
-    file's pre-existing breakage on the edit.
-17. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
-    non-atomic leaf, or a review that compares two files, has crossed the line the split exists for.
+19. **Zero questions before the report**, on every case above, and zero edits before a numbered fix list
+    is approved. Then decline one numbered fix and rerun: it must appear under **What you decided** and
+    must not be proposed again. *What the interview used to protect, now carried by confidence, the
+    approval gate and the record of declines.*
+20. A report on a real corpus → **Worth your time, in order** comes first, its top entry is defensible,
+    and every finding carries a `Confidence:` sentence with a reason and an `Impact:` line. A finding at
+    low confidence must propose no edit.
+21. A scope where one file does not compile → surveyed like any other, since an element is comparable
+    whether or not its file parses. After an approved fix, the post-edit check must not blame that file's
+    pre-existing breakage on the edit.
+22. Either skill on a corpus → **no finding that belongs to the other**. A survey that reports a
+    non-atomic leaf with no partner, or a review that compares two models, has crossed the line the split
+    exists for.
 
 Record the outcome in `CHANGELOG.md` for the release.
 
@@ -182,6 +200,17 @@ Consequences while this holds:
 Rule ids are a public interface, so retiring one is a breaking change even when nothing else moves.
 Retired ids are never reused: `rules.md` keeps a **Retired ids** section, and the numbering keeps its
 gaps rather than closing them.
+
+**Retiring burns the letter, not just the number.** Twelve ids have gone across two rounds, `S01`-`S04`
+and `C03`/`C04` when `jpipe-review` narrowed to one model, then `R01`-`R04` and `F01`-`F04` when
+`jpipe-survey` re-keyed its families to the edit each finding asks for. So `S`, `C`, `R` and `F` are all
+spent, and a new family takes a fresh letter. Two consequences for anyone adding one:
+
+- Add the letter to `RULE_ID_RE` **and** to the definitions regex in `tools/validate_skills.py`. Missing
+  either means the id is silently neither a citation nor a definition, and the dangling-reference check
+  passes while checking nothing.
+- Retired letters stay in that character class on purpose, so a prefixed retired id reads as a dangling
+  citation and fails. That is why the catalogues spell retired ids **bare**, without `JD-`.
 
 ## Changelog
 

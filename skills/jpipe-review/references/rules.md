@@ -91,8 +91,9 @@ does not do.
 The `C` numbering keeps its gaps rather than closing them, so `C05` still means what it always meant.
 
 None of this is a gap in the review. These are corpus questions, and they belong to `jpipe-survey`,
-which reads a whole corpus, rather than to a reviewer holding one file. Its `JD-R` and `JD-F` families
-are where these checks live now, and its `rules.md` carries the translation table.
+which reads a whole corpus, rather than to a reviewer holding one file. Its families are keyed to the
+edit each finding asks for (`JD-D` split, `JD-M` merge, `JD-P` prove, `JD-L` re-level, `JD-N` name,
+`JD-T` topology), and its `rules.md` carries the translation table for every id it has retired.
 
 ## What is *not* in this catalogue
 

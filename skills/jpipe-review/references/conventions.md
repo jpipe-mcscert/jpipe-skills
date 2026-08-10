@@ -48,7 +48,7 @@ outside the scope: that is more use than a bare *"does one?"*, and it still leav
 belongs, since adopting it would change what this argument is built from.
 
 Either way, do not go looking for `r22.jd` outside the scope. If the author wants that question
-answered across a whole corpus, `jpipe-survey` is the skill that does it, and `F01` is the rule.
+answered across a whole corpus, `jpipe-survey` is the skill that does it, and `P01` is the rule.
 
 ## C02 · Store the refine in the requirement file, under the reused name
 
