@@ -115,7 +115,8 @@ Then `jpipe-survey`, whose failure modes are different because it compares eleme
 13. `corpora/kind_mismatch/root.jd` → one `JD-L01` that proposes **no edit**, says which side looks wrong
     and why, and hands the re-level to `jpipe-review`. An `L01` must never appear in a fix list.
 14. `corpora/untimed/root.jd` → one `JD-N01` naming which leaves exist when, one `JD-N02`, and **nothing
-    whatever** about `model/metrics.json`, which exists in no checkout of this repository. Then point the
+    whatever** about any file it names, none of which exists in this repository, `provenance.jd`'s
+    committed `model/metrics.json` included. Then point the
     skill at a real corpus in a tree where several named files genuinely do not exist: still nothing.
     *A survey that reports a missing file has become a grounding pass, and a wrong one, since a case may
     be discharged from CI where that file is the output rather than the input.*

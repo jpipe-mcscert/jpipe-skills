@@ -7,10 +7,11 @@
  * about the metrics, one treating them as committed and one as written by a run, which also BLOCKS
  * the JD-M01 those two leaves would otherwise be, since aligning them would silently pick a winner.
  *
- * The negative, and the reason this case exists: performance's e_metrics names a file that appears
- * nowhere in this repository, and it must draw **nothing at all**. It is well named, it says when it
- * exists, and a case discharged from CI would find it exactly where it says. Any finding about a
- * missing file means the skill has started searching the tree, which it must never do.
+ * The negative, and the reason this case exists: **not one file named here exists in this repository**,
+ * and none of them may draw a finding. That includes provenance's `model/metrics.json`, whose label
+ * claims it is committed, so a skill that searched would fire on it and would be right to by
+ * jpipe-review's standard. Survey does not search, so absence never reaches it. Any finding about a
+ * missing file means it has grown a grounding pass, which it must never do.
  */
 load "quality.jd"
 load "provenance.jd"

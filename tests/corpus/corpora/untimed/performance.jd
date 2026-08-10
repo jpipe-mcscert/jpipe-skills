@@ -4,9 +4,10 @@
  * to tell whether it means a committed log or the output of the run being argued about: that is the
  * leaf JD-N01 points at.
  *
- * e_metrics is the negative assertion of this case. `model/metrics.json` exists nowhere in this
- * repository and that is correct: the label says a run writes it, so a clean checkout is exactly
- * where it should be absent. It must draw no finding of its own.
+ * e_metrics carries this case's negative assertion. It names `metrics.json` and no path, and says a
+ * run writes it, so a clean checkout is exactly where that file should be absent. It must draw no
+ * finding of its own. Note it is deliberately less specific than provenance.jd's
+ * `model/metrics.json`: the disagreement between the two is about the moment, not the path.
  */
 justification performance {
     conclusion c is "The release meets its performance budget"

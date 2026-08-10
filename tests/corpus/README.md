@@ -61,9 +61,15 @@ one project, so they read the same to someone who has never seen the tutorial co
 
 Two of those are negative assertions, and they are the ones that fail quietly. `fused_blocks_sharing/`
 without its partner must produce **no** finding rather than a bare atomicity complaint, which belongs to
-`jpipe-review`. `untimed/` names `model/metrics.json`, which is in no checkout of this repository, and
-must say nothing about it: the label says a run writes it, so its absence is correct. A finding there
-means the skill has started searching the tree, which it must never do.
+`jpipe-review`.
+
+`untimed/` guards the stronger rule: **`jpipe-survey` never checks whether any named file exists.** Not
+one path in that case resolves anywhere in this repository, and that includes `provenance.jd`'s
+`model/metrics.json`, which its label claims is *committed*. A skill that searched would fire on exactly
+that leaf, and would be right to by `jpipe-review`'s standard, since a committed path that turns up
+nothing is what `JD-G01` is for. Survey must still say nothing about any of them. What it reads is what
+the labels claim about **when** their artifacts exist, so the findings here are `JD-N01` and `JD-N02`, and
+absence never enters it.
 
 `shared_evidence/` is the sharpest guard in the whole tree, because it is built so that **string
 distance and artifact identity point in opposite directions**:
