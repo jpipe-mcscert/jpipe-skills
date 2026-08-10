@@ -1,0 +1,17 @@
+/**
+ * expect: no finding of its own. The scope root.
+ * One JD-L01: m1 writes the coverage comparison as a check and m2 writes the same comparison as a
+ * fact. At least one of them is on the wrong rung, and m2 is the one that looks wrong, since a leaf
+ * asserting that a comparison was performed is a verdict standing where a fact belongs.
+ *
+ * The negative: this finding proposes no edit. Which rung is right is a judgement about one model's
+ * internal shape, so it names the discrepancy, says which side looks wrong and why, and hands the
+ * re-level to jpipe-review. An L01 never appears in a fix list.
+ */
+load "m1_coverage.jd"
+load "m2_release.jd"
+
+justification release is assemble(m1, m2) {
+    conclusionLabel: "The release is fit to ship"
+    strategyLabel:   "Coverage and release checks together cover the testing claim"
+}

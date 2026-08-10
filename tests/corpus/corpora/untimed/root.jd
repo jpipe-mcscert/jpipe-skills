@@ -1,0 +1,23 @@
+/**
+ * expect: no finding of its own. The scope root, and the composition that makes JD-N01 real: the
+ * mixing of moments only exists once these three are assembled.
+ *
+ * Two findings. JD-N01: this composition rests on leaves that exist at different moments, and
+ * performance's e_timings gives no way to tell which. JD-N02: provenance and performance disagree
+ * about the metrics, one treating them as committed and one as written by a run, which also BLOCKS
+ * the JD-M01 those two leaves would otherwise be, since aligning them would silently pick a winner.
+ *
+ * The negative, and the reason this case exists: **not one file named here exists in this repository**,
+ * and none of them may draw a finding. That includes provenance's `model/metrics.json`, whose label
+ * claims it is committed, so a skill that searched would fire on it and would be right to by
+ * jpipe-review's standard. Survey does not search, so absence never reaches it. Any finding about a
+ * missing file means it has grown a grounding pass, which it must never do.
+ */
+load "quality.jd"
+load "provenance.jd"
+load "performance.jd"
+
+justification release is assemble(quality, provenance, performance) {
+    conclusionLabel: "The release meets its quality and performance targets"
+    strategyLabel:   "Specification, provenance and performance together cover the release"
+}

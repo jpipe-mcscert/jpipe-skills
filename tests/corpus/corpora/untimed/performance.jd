@@ -1,0 +1,31 @@
+/**
+ * expect: JD-N01 at e_timings, JD-N02 at e_metrics (with provenance.jd).
+ * Two legs at two different moments. e_timings says "recorded" and nothing more, so there is no way
+ * to tell whether it means a committed log or the output of the run being argued about: that is the
+ * leaf JD-N01 points at.
+ *
+ * e_metrics carries this case's negative assertion. It names `metrics.json` and no path, and says a
+ * run writes it, so a clean checkout is exactly where that file should be absent. It must draw no
+ * finding of its own. Note it is deliberately less specific than provenance.jd's
+ * `model/metrics.json`: the disagreement between the two is about the moment, not the path.
+ */
+justification performance {
+    conclusion c is "The release meets its performance budget"
+    strategy   s is "Timing and reported figures are independent, and together they cover the budget"
+
+    sub-conclusion sc_time is "Every stage ran inside its budget"
+    strategy       s_time is "Confront the durations with the budget in SPECS section 9"
+    evidence       e_timings is "The recorded per-stage durations"
+
+    sub-conclusion sc_fig is "The reported figures belong to the release run"
+    strategy       s_fig is "Confront the metrics run id with the release run record"
+    evidence       e_metrics is "The metrics.json written by the release run"
+
+    s supports c
+    sc_time supports s
+    sc_fig supports s
+    s_time supports sc_time
+    e_timings supports s_time
+    s_fig supports sc_fig
+    e_metrics supports s_fig
+}

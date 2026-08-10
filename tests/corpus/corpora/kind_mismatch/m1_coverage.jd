@@ -1,0 +1,13 @@
+/**
+ * expect: JD-L01 (with m2_release.jd). The side that has it right.
+ * s_cov states the comparison as a check, which is where a comparison belongs: it has a pass and a
+ * fail, and the verdict it reaches is written above it rather than inside it.
+ */
+justification m1 {
+    conclusion c is "The changed paths are covered by tests"
+    strategy   s_cov is "Confront the coverage report with the changed file list"
+    evidence   e_report is "The committed coverage report and its per-file figures"
+
+    s_cov supports c
+    e_report supports s_cov
+}

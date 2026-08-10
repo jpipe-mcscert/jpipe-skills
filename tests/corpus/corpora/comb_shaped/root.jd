@@ -1,0 +1,18 @@
+/**
+ * expect: no finding of its own. The scope root.
+ * One JD-P01: r22 is a whole argument for what `goal`'s e_grid takes as given, so it grafts under
+ * that leaf with refine(goal_base, r22) { hook: "e_grid" }.
+ *
+ * Two negatives are part of the case. The finding must name exactly one leaf, not all four: the
+ * other three have nothing in this corpus that would prove them, and reporting them would be
+ * speculation. And the flatness itself must not be reported: four bare leaves under one strategy is
+ * jpipe-review's A03, decided from goal.jd alone. The comb is why P01 is worth ranking high, not a
+ * finding of its own.
+ */
+load "goal.jd"
+load "r22_grid.jd"
+
+justification release is assemble(goal, r22) {
+    conclusionLabel: "The release is fit to ship"
+    strategyLabel:   "The identity checks and the release gates together cover the release"
+}

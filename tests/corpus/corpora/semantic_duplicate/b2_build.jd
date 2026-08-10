@@ -1,0 +1,14 @@
+/**
+ * expect: JD-M01 (with a1_review.jd). The other half.
+ * "The code is available" shares almost no wording with a1's "The source is available" and means the
+ * same thing. Note the two strategies genuinely differ, a review record against a compiler run, so
+ * only the leaves may ever be aligned: sharing a fact is not sharing a check.
+ */
+justification b2 {
+    conclusion c is "The delivered code compiles from source"
+    strategy   s is "Confront the release tag with a clean build of it; the build succeeds"
+    evidence   e_code is "The code is available"
+
+    s supports c
+    e_code supports s
+}

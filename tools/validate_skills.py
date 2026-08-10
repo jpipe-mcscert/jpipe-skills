@@ -19,7 +19,10 @@ import sys
 from pathlib import Path
 
 NAME_RE = re.compile(r"^jpipe-[a-z0-9]+(-[a-z0-9]+)*$")
-RULE_ID_RE = re.compile(r"\bJD-[AGSCRF]\d{2}\b")
+# Live families plus every retired letter. Retired ids stay in the class on
+# purpose: written with the JD- prefix they are dangling citations and must be
+# caught, which is why the catalogues spell them bare.
+RULE_ID_RE = re.compile(r"\bJD-[ACDFGLMNPRST]\d{2}\b")
 REF_MENTION_RE = re.compile(r"references/([A-Za-z0-9_.-]+\.md)")
 
 MAX_SKILL_LINES = 160
@@ -157,7 +160,7 @@ def check_rule_ids(skill_dir: Path, errors: list[str]) -> None:
 
     defined = set()
     for line in cat_text.splitlines():
-        m = re.match(r"\|\s*([AGSCRF]\d{2})\s*\|", line)
+        m = re.match(r"\|\s*([ACDFGLMNPRST]\d{2})\s*\|", line)
         if m:
             defined.add("JD-" + m.group(1))
 
@@ -169,10 +172,17 @@ def check_rule_ids(skill_dir: Path, errors: list[str]) -> None:
                 f"which is not defined in references/rules.md"
             )
 
+    # Single-authority families declare it once, in the section header. JD-M is
+    # deliberately absent: it is mixed, so it carries a per-row Authority column
+    # instead and a section-level marker there would be a lie.
     for family, authority_marker in (("A", "authority: argument"),
                                      ("G", "authority: argument"),
                                      ("C", "authority: house"),
-                                     ("F", "authority: house")):
+                                     ("D", "authority: house"),
+                                     ("P", "authority: house"),
+                                     ("L", "authority: argument"),
+                                     ("N", "authority: house"),
+                                     ("T", "authority: house")):
         header = re.search(rf"^## JD-{family} .*$", cat_text, re.M)
         if header and authority_marker not in header.group(0):
             errors.append(f"rules.md: JD-{family} section header lacks '{authority_marker}'")

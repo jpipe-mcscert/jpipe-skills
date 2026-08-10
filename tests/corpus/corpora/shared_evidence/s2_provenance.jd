@@ -1,5 +1,5 @@
 /**
- * expect: JD-R01 (with s1_fairness.jd)
+ * expect: JD-M01 (with s1_fairness.jd)
  * Grounds on the same artifact as s1_fairness.jd -- data/train.csv -- but words the leaf
  * differently. The warrant is genuinely different, and that is fine: sharing a fact does
  * not mean sharing the check. Only the leaves should be aligned.

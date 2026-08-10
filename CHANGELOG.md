@@ -10,6 +10,80 @@ not, so per-skill changes are grouped under the headings below.
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-09
+
+`jpipe-survey` is rewritten. It now compares what elements **mean** rather than which artifact their
+labels resolve to, which is what it was asked for and could not do.
+
+### Changed
+
+- **Breaking: every `jpipe-survey` rule id has changed.** `R01`-`R04` and `F01`-`F04` are retired, and
+  retired ids are never reused. The six new families are keyed to the edit a finding asks for, because
+  that is what a reader has to decide about: **`JD-D`** split, **`JD-M`** merge, **`JD-P`** prove,
+  **`JD-L`** re-level, **`JD-N`** name, **`JD-T`** topology. `references/rules.md` translates all twelve
+  retired ids. Two are not straight renames: `M01` no longer needs a resolvable artifact, and `P01` fires
+  when one element would *establish* another rather than restate it. `R04` is dropped rather than
+  renamed, since two checks making one claim is now just `M01` between strategies.
+- **The method compares propositions, not artifacts.** Each label is read as a subject and an assertion,
+  for all four element kinds rather than for leaves alone, and pairs are classified by the relation
+  between them. Concretely, *"The source is available"* and *"The code is available"* are now one
+  candidate: neither label names a path, so neither resolved to an artifact and the old method reported
+  nothing at all. → `references/semantics.md`
+- **Breaking: no questions are asked before the report.** `--questions N` is removed along with the
+  interview it configured. Every candidate is reported with a stated confidence and the reading behind
+  it, so the reader calibrates instead of answering. What the interview protected is now carried by three
+  things: a finding states a *reading* rather than a fact, a low-confidence candidate proposes no edit at
+  all, and declined fixes are recorded so a rerun does not re-propose them. **`What you told me` is now
+  `What you decided`.**
+- **Breaking: `--no-refine` is removed.** Skipping a rule family was a setting nobody wanted.
+- **The report leads with priorities and scopes the damage.** A `Worth your time, in order` section comes
+  before any finding, ranked by what the corpus gains rather than by severity, since the one serious
+  finding is often a two-label edit while the one that restructures three goals is the real work. Every
+  finding carries a `Confidence:` sentence with its reason and an `Impact:` line naming the files, whether
+  a shared node appears or disappears, and what recompiles.
+- **`jpipe-survey` proposes decomposition now**, where it used to refuse. It reports a fused leaf only
+  when it can name the element the freed half would merge with, so the finding names its payoff. A fused
+  leaf with no partner remains `jpipe-review`'s `A05` and draws nothing here.
+
+### Added
+
+- **New: a leaf covering two things, blocking a merge** (`D01`, `D02`). Splitting it is what makes the
+  rest possible, so this test runs first.
+- **New: one claim written at two different rungs** (`L01`). The same proposition as a `strategy` in one
+  model and an `evidence` in another means one of them cannot fail properly. This is the only rule that
+  proposes no edit: which rung is right is one model's own business, so it hands the re-level to
+  `jpipe-review`.
+- **New: labels that disagree about when their artifact exists** (`JD-N`). A justification may be
+  discharged at design time or from CI, so evidence a run produces is *supposed* to be absent from a clean
+  checkout. `N01` reports a composition resting on leaves from different moments, since there is then no
+  time at which the whole argument can be discharged; `N02` reports two models disagreeing about one
+  subject, which also blocks the merge those labels invite. **`jpipe-survey` never searches the tree**, so
+  a missing file is never a finding here: absence stays `jpipe-review`'s question, asked with recorded
+  searches and only about a concrete committed path.
+- **Comb-shaped arguments** get a name and an argument in `references/prove.md`. One strategy with a row
+  of bare leaves cannot fail informatively and shares nothing. `jpipe-review` can only propose local depth,
+  a `sub-conclusion` per leg; `P01` proposes imported depth, grafting an argument the corpus already has.
+- Five fixtures, one per capability, two of which assert **silence**: `fused_blocks_sharing/` must say
+  nothing once its partner is removed, and `untimed/` must say nothing about a file that exists in no
+  checkout here.
+- **`jpipe-review` takes `-m <model>` too**, so both skills now scope the same way in all three forms:
+  a file's `load` closure, one model's closure under `-m`, or the repository under `--global`. Point the
+  review at a file that declares two roots and you previously got both arguments in one report, with a
+  verdict covering more than you asked about. `-m fairness` reviews the elements of `fairness` and the
+  models it is built from, names the file's other models as not reviewed, and errors the same way on an
+  undeclared model or on `-m` together with `--global`. In `jpipe-survey`, `T01` and `T02` do not fire
+  under it, since that flag answers by construction the question both of them ask.
+- **Scope is now defined once**, in a new `references/scope.md` vendored into both skills, joining
+  `language.md` and `artifacts.md` in the canon. It was written for `jpipe-survey` in 0.1.5 and would
+  otherwise have been duplicated with a second wording, which is how two skills come to disagree about
+  the boundary they both depend on.
+- **`jpipe-review`'s `C01`** (a leaf tagged with a requirement that should be a `refine`) resolves
+  against the scope, so `-m` can turn what would be a finding back into a question: a requirement model
+  the file `load`s but the named argument is not built from is outside the scope. When one was seen while
+  resolving `load`s, the question now names it and says it is outside, which is more use than a bare
+  *"does an argument exist?"*. Its catalogue entry had also gone stale in 0.1.4, still saying the rule is
+  always a question after it became a finding when the refiner is in scope.
+
 ## [0.1.5] - 2026-08-09
 
 ### Added
@@ -269,7 +343,8 @@ not, so per-skill changes are grouped under the headings below.
   actually fetch a new version.
 
 [Unreleased]: https://github.com/jpipe-mcscert/jpipe-skills/compare/main...HEAD
-[0.1.5]: https://github.com/jpipe-mcscert/jpipe-skills/compare/074251e56519460a4e3e8a51e9272aa6ddcb1633...main
+[0.2.0]: https://github.com/jpipe-mcscert/jpipe-skills/compare/b69d67503175828510a96dcd6fed7dbb53187aa5...main
+[0.1.5]: https://github.com/jpipe-mcscert/jpipe-skills/compare/074251e56519460a4e3e8a51e9272aa6ddcb1633...b69d67503175828510a96dcd6fed7dbb53187aa5
 [0.1.4]: https://github.com/jpipe-mcscert/jpipe-skills/compare/00295157ff39c658efd568b0b245fda1847a9df6...074251e56519460a4e3e8a51e9272aa6ddcb1633
 [0.1.3]: https://github.com/jpipe-mcscert/jpipe-skills/compare/c0bef5968ed24e6da8eef07df9053d55340ee776...00295157ff39c658efd568b0b245fda1847a9df6
 [0.1.2]: https://github.com/jpipe-mcscert/jpipe-skills/compare/15c57b9f650c121b39bcd8a4ef28367bf8264e99...c0bef5968ed24e6da8eef07df9053d55340ee776

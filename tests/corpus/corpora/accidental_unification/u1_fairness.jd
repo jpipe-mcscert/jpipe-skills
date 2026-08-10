@@ -1,13 +1,13 @@
 /**
- * expect: JD-R03 (with u2_efficiency.jd)
+ * expect: JD-M03 (with u2_efficiency.jd)
  * Pairs with u2_efficiency.jd. Both leaves carry the BYTE-IDENTICAL label "The reported
  * metrics", so assemble will merge them into one unified_N node, but they denote different
  * artifacts: this one is the fairness figures, u2's is a timing report. The composed model
  * would then claim one artifact grounds both legs, which neither file says.
  *
- * No question needed for this one: the merge is what the compiler will do, so it is reported
- * as a defect rather than asked about. What DOES need checking is that the two artifacts
- * really differ, which the two strategies make plain.
+ * This is the one finding in the skill nobody can decline: the merge is what the compiler does,
+ * so it is stated as a defect at high confidence. What still has to be established is that the
+ * two artifacts really do differ, which the two strategies above the leaves make plain.
  */
 justification fairness {
     conclusion c is "Outcomes do not differ across the protected groups"

@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Claude Code skills for jPipe, the justification / assurance-case language.",
-    "version": "0.1.5"
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "jpipe-skills",
       "source": "./",
-      "description": "EXPERIMENTAL, not part of jPipe core. Skills for reviewing and operating jPipe justification models (.jd). One reviews a single model's argument; one surveys a corpus for shared evidence and available refinements. These review an argument a human wrote; they do not write assurance cases.",
-      "version": "0.1.5",
+      "description": "EXPERIMENTAL, not part of jPipe core. Skills for reviewing and operating jPipe justification models (.jd). One reviews a single model's argument; one compares elements across a corpus for duplicated claims, splits and available refinements. These review an argument a human wrote; they do not write assurance cases.",
+      "version": "0.2.0",
       "homepage": "https://www.jpipe.org",
       "repository": "https://github.com/jpipe-mcscert/jpipe-skills",
       "license": "MIT",

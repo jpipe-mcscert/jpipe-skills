@@ -6,15 +6,16 @@
 done with it mechanically, it has to be resolved to **the thing it names**. This file is that one
 step, and nothing else.
 
-It is shared because two different questions turn out to need the same answer:
+It is shared because three different questions turn out to need the same answer:
 
 | Question | Asked by | What it does with the artifact |
 |---|---|---|
 | *Does this exist?* | grounding | searches the repository for it |
-| *Have I seen this one before?* | sharing | clusters leaves that name the same one |
+| *Have I seen this one before?* | merging | groups leaves that name the same one |
+| *When does this exist?* | naming | reads §2's kind as a claim about the moment |
 
-Both read the same noun phrase, and both are wrong in the same way if they read it carelessly. Keeping
-the extraction in one place is what keeps the two answers consistent.
+All three read the same noun phrase, and all three are wrong in the same way if they read it
+carelessly. Keeping the extraction in one place is what keeps the answers consistent.
 
 ---
 

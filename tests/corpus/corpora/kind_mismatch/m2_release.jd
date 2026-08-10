@@ -1,0 +1,14 @@
+/**
+ * expect: JD-L01 (with m1_coverage.jd). The side that looks wrong.
+ * e_cov puts m1's check in a leaf, so this argument rests on the claim that a comparison was carried
+ * out rather than on anything anybody can inspect. Nothing in m2 can now fail except by
+ * contradicting itself, and the strategy above the leaf has no work left to do.
+ */
+justification m2 {
+    conclusion c is "The release is adequately tested"
+    strategy   s is "Testing is demonstrated by the coverage comparison"
+    evidence   e_cov is "The coverage report is confronted with the changed file list"
+
+    s supports c
+    e_cov supports s
+}

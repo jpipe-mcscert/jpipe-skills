@@ -1,5 +1,5 @@
 /**
- * expect: JD-R01 (with r2_columns.jd). In fairness's closure, so it is in scope either way.
+ * expect: JD-M01 (with r2_columns.jd). In fairness's closure, so it is in scope either way.
  * e_train denotes data/train.csv, and so does r2's e_data under a drifted label. Neither label
  * says so, which is why a survey has to ask before reporting it.
  */

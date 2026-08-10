@@ -1,0 +1,14 @@
+/**
+ * expect: JD-M01 (with b2_build.jd). Half of the pair.
+ * "The source is available" names no path on purpose. It cannot be resolved to an artifact, so the
+ * only way to pair it with b2's leaf is to read both subjects as the same thing, which is exactly
+ * what the method now does and what it must state as a reading rather than a fact.
+ */
+justification a1 {
+    conclusion c is "Every change was reviewed before merge"
+    strategy   s is "Confront each merge commit with its review record; every one has an approval"
+    evidence   e_src is "The source is available"
+
+    s supports c
+    e_src supports s
+}

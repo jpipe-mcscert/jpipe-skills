@@ -33,16 +33,22 @@ where the leaf was (`language.md` §6).
 **Whether this is a finding or a question depends on the scope.** The argument for R22 may be sitting
 right there in the closure, and if it is, you can check it:
 
-- **The refiner is in scope.** Some model the named file loads concludes what this leaf asserts. Then
-  this is a finding: name that model and its `conclusion` with a `file:line`, and propose the refine.
+- **The refiner is in scope.** Some model in the scope concludes what this leaf asserts. Then this is a
+  finding: name that model and its `conclusion` with a `file:line`, and propose the refine.
 - **It is not in scope.** Then nothing here can tell you whether it exists, and inventing an answer is
   the failure this rule is most prone to. Report a question instead:
 
   > The leaf cites `(R22)`. If a requirement argument for R22 exists, this is the place to `refine`
   > against it rather than assert it. Does one?
 
+**Under `-m` the scope is one model's closure**, so a requirement model the file happens to `load` but
+this argument is not built from sits **outside** it, and this rule drops back to the question. If
+resolving the `load`s put such a model in front of you anyway, name it in the question and say it is
+outside the scope: that is more use than a bare *"does one?"*, and it still leaves the decision where it
+belongs, since adopting it would change what this argument is built from.
+
 Either way, do not go looking for `r22.jd` outside the scope. If the author wants that question
-answered across a whole corpus, `jpipe-survey` is the skill that does it, and `F01` is the rule.
+answered across a whole corpus, `jpipe-survey` is the skill that does it, and `P01` is the rule.
 
 ## C02 · Store the refine in the requirement file, under the reused name
 

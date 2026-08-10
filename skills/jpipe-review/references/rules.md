@@ -5,10 +5,14 @@ a rule fires and what to propose. Almost none of its vocabulary belongs in a rep
 that is the engineer who built the system, and they have no reason to know what a warrant is or what
 `A05` means. → `report-format.md`, which is about writing for them.
 
-Every rule here is decidable **within the scope**: the named file and everything it transitively
-`load`s. That is one argument, however many files it spans. A rule that would need to *compare* two
-arguments is not in this catalogue, by construction, and being able to read a loaded file does not make
-comparing it fair game.
+Every rule here is decidable **within the scope**, and the scope is `scope.md`: the named file's closure,
+one model's closure under `-m`, or the repository under `--global`. That is one argument, however many
+files it spans. A rule that would need to *compare* two arguments is not in this catalogue, by
+construction, and being able to read a loaded file does not make comparing it fair game.
+
+One rule turns on which of those was chosen. `C01` is a **finding** when the model that proves the tagged
+requirement is in scope and a **question** when it is not, so `-m` can turn one back into the other by
+leaving that model outside. Everything else here is decided from a single element and its neighbours.
 
 | Column | For |
 |---|---|
@@ -61,7 +65,7 @@ finding; it is an open question. Never report against `steps/` or outside the re
 
 | Id | Name | Description | Trigger | Typical fix | Sev |
 |---|---|---|---|---|---|
-| C01 | should-be-refine | A leaf asserts a tagged requirement instead of refining against it | A leaf carries a requirement tag (house tell: a trailing `(Rnn)`), so the author has written down that a requirement is what makes it true | `refine(base, refiner) { hook: "<leaf-id>" }`. Report as a question: whether an argument for that requirement exists is not visible from here | 🟡 (🟠 if also A01) |
+| C01 | should-be-refine | A leaf asserts a tagged requirement instead of refining against it | A leaf carries a requirement tag (house tell: a trailing `(Rnn)`), so the author has written down that a requirement is what makes it true | `refine(base, refiner) { hook: "<leaf-id>" }`. A finding when the model that proves the requirement is in scope, a question when it is not | 🟡 (🟠 if also A01) |
 | C02 | refine-not-in-requirement-file | The refine is bound at the branch instead of the requirement file | The refine is bound at a branch under a new name instead of exported from the requirement file under the reused name | Move it; consumers then need no change | 🟡 |
 | C05 | concludes-below-goal-level | A goal file concludes at requirement altitude | A goal file concludes at requirement altitude | Raise the conclusion to the goal | 🟡 |
 | C06 | missing-header | No provenance header tracing the argument to what it serves | No `/** */` block tracing the argument to its goals / requirements / decisions | Add one. This is also where **backing** belongs | 🟡 |
@@ -87,8 +91,9 @@ does not do.
 The `C` numbering keeps its gaps rather than closing them, so `C05` still means what it always meant.
 
 None of this is a gap in the review. These are corpus questions, and they belong to `jpipe-survey`,
-which reads a whole corpus, rather than to a reviewer holding one file. Its `JD-R` and `JD-F` families
-are where these checks live now, and its `rules.md` carries the translation table.
+which reads a whole corpus, rather than to a reviewer holding one file. Its families are keyed to the
+edit each finding asks for (`JD-D` split, `JD-M` merge, `JD-P` prove, `JD-L` re-level, `JD-N` name,
+`JD-T` topology), and its `rules.md` carries the translation table for every id it has retired.
 
 ## What is *not* in this catalogue
 
